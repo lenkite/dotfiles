@@ -2,7 +2,16 @@
 
 My new dotfiles that leverages the non-VIM portions of yadr dotfiles. The ZSH and other configurations of YADR https://github.com/skwp/dotfiles are great. The VIM portions are too heavyweight and most un-forgivably YARD hardcodes the leader key to ',' explicitly in all its keybindings  which makes it a noogo for me. I use SPACE as the leader key. 
 
+== Setup
+* Install YADR with the following command.
+----
+sh -c "`curl -fsSL https://raw.githubusercontent.com/skwp/dotfiles/master/install.sh`" -s ask
+----
+* Then link ~/.zsh.after to dotfiles/zsh-after
+
+
+
 == YADR ZSH  customizations
-Link to ~/.zsh.after to this repos zsh.after
+
 
 
