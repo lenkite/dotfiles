@@ -1,17 +1,70 @@
 = dotfiles
 
-My new dotfiles that leverages the non-VIM portions of yadr dotfiles. The ZSH and other configurations of YADR https://github.com/skwp/dotfiles are great. The VIM portions are too heavyweight and most un-forgivably YARD hardcodes the leader key to ',' explicitly in all its keybindings  which makes it a noogo for me. I use SPACE as the leader key. 
+My new dotfiles that leverages the non-VIM portions of YADR dotfiles. The ZSH and other configurations of YADR `https://github.com/skwp/dotfiles` are great. The VIM portions are too heavyweight and most unforgivably YARD hard-codes the leader key to ',' explicitly in all its keybindings  which makes it a no-go for me. I use SPACE as the leader key. 
+Also contains settings for Intellij Idea for OSX and Windows.
 
 == Setup
+
+=== ZSH Setup
 * Install YADR with the following command.
 ----
 sh -c "`curl -fsSL https://raw.githubusercontent.com/skwp/dotfiles/master/install.sh`" -s ask
 ----
-* Then link ~/.zsh.after to dotfiles/zsh-after
+* Check out dotfiles to your home directory
+----
+cd ~
+git clone https://github.com/lenkite/dotfiles.git
+----
+* Then link `~/.zsh.after` to `dotfiles/zsh-after`, so we can override and fix YADR zsh.
+----
+rm -rf ~/.zsh.after
+ln -s ~/dotfiles/zsh-after ~/.zsh.after
+----
+
+=== Notes
+* Note that after doing the above you can put your custom zsh files in `~/.zsh.after` and they will be run automatically at shell startup. 
+
+=== YADR ZSH  customizations
+
+TODO fill me up later
+
+
+=== VIM Setup
+* Install vim-plug. See `https://github.com/junegunn/vim-plug`
+* Then link ~/.vimrc
+-----
+ln -s ~/dotfiles/vimrc ~/.vimrc
+-----
+* Start VIM and call :PlugInstall
+
+=== Spacemacs Setup
+* Spacemacs is emacs with VIM wizardry and the space leader key
+* See  http://spacemacs.org/
+* `brew cask install emacs`
+* Install Spacemacs:
+ ** `git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d`
+ ** Launch emacs (Make sure your internet connection is working)
+* Link all my private layers
+----
+find ~/dotfiles/spacemacs-layers -depth 1 -type d -exec ln -s '{}' ~/.emacs.d/private \;
+----
+
+== Common Editor Shortcuts Table
+
+Please note that VIM has _hundreds_ of motion commands and in some cases shorter alternatives to the below. Also Emacs has more functionality than an entire operating system! Intellij has thousands of actions. So, comprehensive coverage would take a very long time. Only some useful shortcuts are covered.
+
+|=====================================================
+| Category   | ACTION IDEA     | ACTION VIM              | OSX GUI    | OSX Terminal | Windows  
+| Navigation | Navigate > File | `:Unite file_rec/async` | `Cmd-p`    | `<Leader>p`  | `Alt-p`  
+| Navigation | Navigate > Type | `:Unite tag`            | `Cmd-t`    | `<Leader>p`  | `Alt-t`  
+| Doc        | Show Param Info | `:Unite tag`            | `Cmd-i`    | `<Leader>i`  | `Alt-i`  
+| Motion     | Move EOL        | Move EOL in insert mode | `Ctrl-E`   | same         | same     
+| Transform  | Line Comment    | Shortcut for gc<Motion> | `Cmd-/`   | `<Leader>/`   | `Alt-/`  
+| Transform  | Block Comment   | Visual block gc operator| `Cmd-S-/` | `<Leader>-?`  | `Alt-S-/`
+|===
 
 
 
-== YADR ZSH  customizations
-
+=== Vim specific shortcuts added by plugins
 
 

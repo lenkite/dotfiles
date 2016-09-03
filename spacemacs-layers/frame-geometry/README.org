@@ -1,0 +1,20 @@
+#+TITLE: frame-geometry layer
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="../css/readtheorg.css" />
+
+#+CAPTION: logo
+
+* Table of Contents                                        :TOC_4_org:noexport:
+ - [[Description][Description]]
+ - [[Install][Install]]
+
+* Description
+Restores frame size/location on start.
+
+Borrowed from https://gist.github.com/synic/0357fdc2dcc777d89d1e
+
+* Install
+To use this contribution add it to your =~/.spacemacs=
+
+#+begin_src emacs-lisp
+  (setq-default dotspacemacs-configuration-layers '(frame-geometry))
+#+end_src
