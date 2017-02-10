@@ -30,12 +30,7 @@ TODO fill me up later
 
 
 === VIM Setup
-* Install vim-plug. See `https://github.com/junegunn/vim-plug`
-* Then link ~/.vimrc
------
-ln -s ~/dotfiles/vimrc ~/.vimrc
------
-* Start VIM and call :PlugInstall
+* Install the _Ultimate VIM Distribution_ following instructions at http://vim.spf13.com/#install
 
 === Spacemacs Setup
 * Spacemacs is emacs with VIM wizardry and the space leader key
@@ -50,21 +45,5 @@ find ~/dotfiles/spacemacs-layers -depth 1 -type d -exec ln -s '{}' ~/.emacs.d/pr
 ----
 
 == Common Editor Shortcuts Table
-
-Please note that VIM has _hundreds_ of motion commands and in some cases shorter alternatives to the below. Also Emacs has more functionality than an entire operating system! Intellij has thousands of actions. So, comprehensive coverage would take a very long time. Only some useful shortcuts are covered.
-
-|=====================================================
-| Category   | ACTION IDEA     | ACTION VIM              | OSX GUI    | OSX Terminal | Windows  
-| Navigation | Navigate > File | `:Unite file_rec/async` | `Cmd-p`    | `<Leader>p`  | `Alt-p`  
-| Navigation | Navigate > Type | `:Unite tag`            | `Cmd-t`    | `<Leader>p`  | `Alt-t`  
-| Doc        | Show Param Info | `:Unite tag`            | `Cmd-i`    | `<Leader>i`  | `Alt-i`  
-| Motion     | Move EOL        | Move EOL in insert mode | `Ctrl-E`   | same         | same     
-| Transform  | Line Comment    | Shortcut for gc<Motion> | `Cmd-/`   | `<Leader>/`   | `Alt-/`  
-| Transform  | Block Comment   | Visual block gc operator| `Cmd-S-/` | `<Leader>-?`  | `Alt-S-/`
-|===
-
-
-
-=== Vim specific shortcuts added by plugins
 
 
