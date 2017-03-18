@@ -28,6 +28,11 @@ Plug 'Shougo/neosnippet-snippets'
 Plug 'honza/vim-snippets'
 " }
 
+" Navigation: Fuzzy Find, Nerd Tree, Tag Bar, etc{
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'scrooloose/nerdtree'
+"
+" "}
 " Syntax Checking
 Plug 'scrooloose/syntastic'
 
@@ -39,12 +44,15 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-fireplace'
+
+
 
 " UNITE Plugins {
-Plug 'Shougo/unite.vim'
-Plug 'Shougo/unite-outline'
-Plug 'tsukkee/unite-tag'
-Plug 'Shougo/vimfiler'
+"Plug 'Shougo/unite.vim'
+"Plug 'Shougo/unite-outline'
+"Plug 'tsukkee/unite-tag'
+"Plug 'Shougo/vimfiler'
 "}
 
 " Motion and Text Objects {
@@ -71,6 +79,7 @@ Plug 'terryma/vim-expand-region'
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+
 Plug 'justinmk/vim-sneak'
 
 Plug 'airblade/vim-rooter'

@@ -3,6 +3,12 @@
 My new dotfiles that leverages the non-VIM portions of YADR dotfiles. The ZSH and other configurations of YADR `https://github.com/skwp/dotfiles` are great. The VIM portions are too heavyweight and most unforgivably YARD hard-codes the leader key to ',' explicitly in all its keybindings  which makes it a no-go for me. I use SPACE as the leader key. 
 Also contains settings for Intellij Idea for OSX and Windows.
 
+== Overview
+* Setups up ZSH using YADR but without YARD vim stuff
+* Instructions to setups VIM
+* Instructions to setups Spacemacs
+* Common shortcuts across editor/IDE software
+
 == Setup
 
 === ZSH Setup
@@ -31,10 +37,15 @@ TODO fill me up later
 
 === VIM Setup
 * Install vim-plug. See `https://github.com/junegunn/vim-plug`
-* Then link ~/.vimrc
+* Linux/Mac: Then link ~/.vimrc
 -----
 ln -s ~/dotfiles/vimrc ~/.vimrc
 -----
+* Then link ~/.gvimrc
+-----
+ln -s ~/dotfiles/gvimrc ~/.gvimrc
+-----
+
 * Start VIM and call :PlugInstall
 
 === Spacemacs Setup
@@ -49,19 +60,26 @@ ln -s ~/dotfiles/vimrc ~/.vimrc
 find ~/dotfiles/spacemacs-layers -depth 1 -type d -exec ln -s '{}' ~/.emacs.d/private \;
 ----
 
-== Common Editor Shortcuts Table
+== Common Editor Shortcuts 
 
 Please note that VIM has _hundreds_ of motion commands and in some cases shorter alternatives to the below. Also Emacs has more functionality than an entire operating system! Intellij has thousands of actions. So, comprehensive coverage would take a very long time. Only some useful shortcuts are covered.
 
-|=====================================================
-| Category   | ACTION IDEA     | ACTION VIM              | OSX GUI    | OSX Terminal | Windows  
-| Navigation | Navigate > File | `:Unite file_rec/async` | `Cmd-p`    | `<Leader>p`  | `Alt-p`  
-| Navigation | Navigate > Type | `:Unite tag`            | `Cmd-t`    | `<Leader>p`  | `Alt-t`  
-| Doc        | Show Param Info | `:Unite tag`            | `Cmd-i`    | `<Leader>i`  | `Alt-i`  
-| Motion     | Move EOL        | Move EOL in insert mode | `Ctrl-E`   | same         | same     
-| Transform  | Line Comment    | Shortcut for gc<Motion> | `Cmd-/`   | `<Leader>/`   | `Alt-/`  
+=== Window Movement
+
+I have heavy use of window splits using the VIM window management keybindings. Generally all the VIM window keybindings start with `<C-w>`. The window movement keybindings are basically the standard VIM movement kebindings such as `hkjl` prefixed with `<C-w>`. Example: `<C-w>h` to move the cursor to the left window. These keybidings are more then fine for infrequently used movement commands such as moving the current window to the left `<C-H>`, etc, but are not good for the very frequently used movement commands such as moving the cursor to the left, top, bottom or right windows. 
+Decision: The Spacemacs window movement commands will be used to move from one window to another. Ex: `<SPC>wh`, `<SPC>wl`, `<SPC>wj` and `<SPC>wk`. 
+
+
+| =====================================================
+| Category   | ACTION IDEA     | ACTION VIM              | OSX GUI    | OSX Terminal | Windows
+| Navigation | TODO            | asdfasdf                |         |             |
+| Navigation | Navigate > File | `:Unite file_rec/async` | `Cmd-p` | `<Leader>p` | `Alt-p`
+| Navigation | Navigate > Type | `:Unite tag`            | `Cmd-t` | `<Leader>p` | `Alt-t`
+| Doc        | Show Param Info | `:Unite tag`            | `Cmd-i`    | `<Leader>i`  | `Alt-i`
+| Motion     | Move EOL        | Move EOL in insert mode | `Ctrl-E`   | same         | same
+| Transform  | Line Comment    | Shortcut for gc<Motion> | `Cmd-/`   | `<Leader>/`   | `Alt-/`
 | Transform  | Block Comment   | Visual block gc operator| `Cmd-S-/` | `<Leader>-?`  | `Alt-S-/`
-|===
+| ===
 
 
 

@@ -10,7 +10,6 @@ set number                     " Line numbers are good
 set backspace=indent,eol,start " Allow backspace in insert mode
 set relativenumber             " Relative line numbers are better
 set history=5000               " Store lots of :cmdline history
-set showcmd                    " Show incomplete cmds down the bottom
 set gcr=a:blinkon0             " Disable cursor blink
 set autoread                   " Reload files changed outside vim
 set wmh=0                      " Set winminheight to 0 so that
@@ -19,32 +18,39 @@ set wmh=0                      " Set winminheight to 0 so that
 set visualbell noerrorbells t_vb= "
 
 
-" This makes vim act like all other editors, buffers can
-" exist in the background without being in a window.
-" http://items.sjbach.com/319/configuring-vim-right
-set hidden
-
-"turn on syntax highlighting
-syntax on
-
-
-
-" ================ Turn Off Swap Files ==============
-
-set noswapfile
-set nobackup
-set nowb
 
 " ================ Persistent Undo ==================
 " Keep undo history across sessions, by storing in file.
 " Only works all the time.
-if has('persistent_undo') && !isdirectory(expand('~').'/.vim/backups')
-  silent !mkdir ~/.vim/backups > /dev/null 2>&1
-  set undodir=~/.vim/backups
-  set undofile
-  set undolevels=2000         " How many undos
-  set undoreload=15000        " number of lines to save for undo
+
+if !isdirectory(expand('~').'/.vim/backups')
+	silent !mkdir ~/.vim/backups > /dev/null 2>&1
 endif
+
+if has('persistent_undo') 
+	set undodir=~/.vim/backups
+	set undofile
+	set undolevels=2000         " How many undos
+	set undoreload=15000        " number of lines to save for undo
+	set backupdir=~/.vim/backups "backup file directory"
+	set directory=~/.vim/backups "Swap file directory"
+else
+	set nobackup 
+	set nowritebackup
+	set noswapfile
+endif
+
+" Load matchit.vim
+if filereadable(expand("$VIMRUNTIME/macros/matchit.vim"))
+  source $VIMRUNTIME/macros/matchit.vim
+endif
+
+set matchtime=1 "time in tenths of a second to show the matching parenthesis
+set showmatch
+" When vimrc is edited, reload it
+autocmd! bufwritepost ~/.vimrc source %
+autocmd! bufwritepost ~/dotfiles/spacevim-extend.vim source %
+
 
 " ================ Indentation ======================
 
@@ -55,21 +61,22 @@ set shiftwidth=2
 set softtabstop=2
 set tabstop=2
 set expandtab
+set tw=90
 
+"filetype plugin on
+"filetype indent on
 
-filetype plugin on
-filetype indent on
-
+" only certain filetypes should have auto line break on.
 " Display tabs and trailing spaces visually
-set list listchars=tab:\ \ ,trail:·
-set nowrap       "Don't wrap lines
-set linebreak    "Wrap lines at convenient points
+"set list listchars=tab:\ \ ,trail:·
+"set nowrap       "Don't wrap lines
+"set linebreak    "Wrap lines at convenient points
 
 " ================ Folds ============================
 "
- set foldmethod=indent   "fold based on indent
- set foldnestmax=3       "deepest fold is 3 levels
- set foldlevel=2
+" set foldmethod=indent   "fold based on indent
+" set foldnestmax=3       "deepest fold is 3 levels
+" set foldlevel=2
  "set nofoldenable        "dont fold by default
 
 
@@ -94,43 +101,31 @@ set wildignore+=.idea/**
 "
 "" ================ Scrolling ========================
 
-set scrolloff=6         "Start scrolling when we're 8 lines away from margins
-set sidescrolloff=8
+"set scrolloff=6         "Start scrolling when we're 8 lines away from margins
+"set sidescrolloff=8
 set sidescroll=1
 
 
 " ================ Search ===========================
 "
- set incsearch       " Find the next match as we type the search
- set hlsearch        " Highlight searches by default
- set ignorecase      " Ignore case when searching...
- set smartcase       " ...unless we type a capital
-
-
-" =============== Plug Initialization ===============
-" This loads all the plugins specified in ~/dotfiles/plugins.vim
-" Use vim-plugin plugin to manage all other plugins
-if filereadable(expand("~/dotfiles/vimconfig/plugins.vim"))
-  source ~/dotfiles/vimconfig/plugins.vim
-endif
-
-" Load matchit.vim
-if filereadable(expand("$VIMRUNTIME/macros/matchit.vim"))
-  source $VIMRUNTIME/macros/matchit.vim
-endif
-
-set matchtime=1 "time in tenths of a second to show the matching parenthesis
-set showmatch
-" When vimrc is edited, reload it
-autocmd! bufwritepost vimrc source %
+set incsearch       " Find the next match as we type the search
+set hlsearch        " Highlight searches by default
+set ignorecase      " Ignore case when searching...
+set smartcase       " ...unless we type a capital
 
 
 source ~/dotfiles/vimconfig/basic-keymap.vim
-"source ~/dotfiles/vimconfig/unite-config.vim
-source ~/dotfiles/vimconfig/snippet-config.vim
-source ~/dotfiles/vimconfig/search-and-motion-config.vim
-source ~/dotfiles/vimconfig/align-config.vim
-source ~/dotfiles/vimconfig/auto-commands.vim
-colorscheme zenburn
+source ~/dotfiles/vimconfig/incsearch-keymap.vim
+source ~/dotfiles/vimconfig/commentary-keymap.vim
+source ~/dotfiles/vimconfig/sneak-keymap.vim
+"
+" =============== Plug Initialization ===============
+" This loads all the plugins specified in ~/dotfiles/plugins.vim
+" Use vim-plugin plugin to manage all other plugins
+"if filereadable(expand("~/dotfiles/plugins.vim"))
+ " source ~/dotfiles/plugins.vim
+"endif
+
+
 
 
