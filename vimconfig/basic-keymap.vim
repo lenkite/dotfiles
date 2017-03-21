@@ -1,6 +1,8 @@
 " vim: set foldmarker={,} foldlevel=0 f
 "
 
+noremap <Leader>s :update<CR>
+
 "Clear highlight on double escape
 nnoremap <esc><esc> :noh<return>
 
@@ -21,8 +23,18 @@ inoremap <C-e> <C-o>$
 
 "Let <C-H> open help, obviously not as convenient has spacemacs C-H, but
 "we will live with this for now.
-map <C-h> <Esc>:help 
+" NOTE: I decided to use window mappings
+"map <C-h> <Esc>:help 
 
+"Window management Commands
+"https://robots.thoughtbot.com/vim-splits-move-faster-and-more-naturally
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+" Got from some reddit post in the VIM forum  to map backspace to last used file.
+nnoremap  <BS> <C-^>
 
 "
 "nnoremap <Leader>w :w<CR>

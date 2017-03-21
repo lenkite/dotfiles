@@ -31,6 +31,7 @@ Plug 'SirVer/ultisnips'
 
 " Navigation: Fuzzy Find, Nerd Tree, Tag Bar, etc{
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
 "
 " "}
@@ -50,15 +51,13 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
+Plug 'rust-lang/rust.vim'
+Plug 'tpope/vim-fugitive'
 
 
+"Zoomwin
+Plug 'drn/zoomwin-vim'
 
-" UNITE Plugins {
-"Plug 'Shougo/unite.vim'
-"Plug 'Shougo/unite-outline'
-"Plug 'tsukkee/unite-tag'
-"Plug 'Shougo/vimfiler'
-"}
 
 
 "Search {

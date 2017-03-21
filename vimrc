@@ -126,8 +126,6 @@ autocmd! bufwritepost vimrc source %
 
 
 source ~/dotfiles/vimconfig/basic-keymap.vim
-"source ~/dotfiles/vimconfig/unite-config.vim
-source ~/dotfiles/vimconfig/snippet-config.vim
 source ~/dotfiles/vimconfig/search-and-motion-config.vim
 source ~/dotfiles/vimconfig/align-config.vim
 source ~/dotfiles/vimconfig/auto-commands.vim
