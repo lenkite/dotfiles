@@ -41,6 +41,7 @@ Plug 'scrooloose/syntastic'
 " Language Plugins {
 " Rust Lang plugin
 Plug 'rust-lang/rust.vim'
+Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 
 " D Lang plugins
 Plug 'idanarye/vim-dutyl'

@@ -2,6 +2,7 @@
 "
 
 noremap <Leader>s :update<CR>
+inoremap <Leader>s <Esc>:update<CR>
 
 "Clear highlight on double escape
 nnoremap <esc><esc> :noh<return>
@@ -85,3 +86,9 @@ nnoremap  <BS> <C-^>
 ""nnoremap <Leader>cc :"s/\<<C-r><C-w>\>/<C-r><C-w>
 ""vnoremap <Leader>cc y:"s/<C-r>"/<C-r>"
 ""
+
+" Next Previous Error
+nnoremap <C-,> :cnext
+nnoremap <C-S-,> :cprevious
+inoremap <C-,> <Esc>:cnext
+inoremap <C-S-,> <Esc>:cnext

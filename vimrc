@@ -13,6 +13,7 @@ set history=5000               " Store lots of :cmdline history
 set showcmd                    " Show incomplete cmds down the bottom
 set gcr=a:blinkon0             " Disable cursor blink
 set autoread                   " Reload files changed outside vim
+set autowrite                  " Writes contents of file on next rewind last first make etc
 set wmh=0                      " Set winminheight to 0 so that
                                " maximizing a window collapses all other windows
 
@@ -129,6 +130,7 @@ source ~/dotfiles/vimconfig/basic-keymap.vim
 source ~/dotfiles/vimconfig/search-and-motion-config.vim
 source ~/dotfiles/vimconfig/align-config.vim
 source ~/dotfiles/vimconfig/auto-commands.vim
+source ~/dotfiles/vimconfig/vim-go-settings.vim
 colorscheme zenburn
 
 
