@@ -8,7 +8,7 @@ My new dotfiles that leverages the prezto. Also contains vim setup.
 
 == Pre-requisites
 === Windows
-Ensure that you install either link:Cygwin[http://cygwin.com/] or you have the Windows 10 anniversary update and install the link:"Windows Subsystem for Linux"[https://msdn.microsoft.com/commandline/wsl]
+Ensure that you install either link:Cygwin[http://cygwin.com/] or you have the Windows 10 anniversary update and install the https://msdn.microsoft.com/commandline/wsl["Windows Subsystem for Linux"]
 
 == Setup
 
