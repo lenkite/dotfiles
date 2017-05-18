@@ -1,17 +1,19 @@
 = dotfiles
 
-My new dotfiles that leverages the non-VIM portions of YADR dotfiles. The ZSH and other configurations of YADR `https://github.com/skwp/dotfiles` are great. The VIM portions are too heavyweight and most unforgivably YARD hard-codes the leader key to ',' explicitly in all its keybindings  which makes it a no-go for me. I use SPACE as the leader key. 
-Also contains settings for Intellij Idea for OSX and Windows.
+My new dotfiles that leverages the prezto. Also contains vim setup.
 
 == Overview
-* Setups up ZSH using YADR but without YARD vim stuff
+* Setup ZSH configuration
 * Instructions to setups VIM
-* Instructions to setups Spacemacs
-* Common shortcuts across editor/IDE software
+
+== Pre-requisites
+=== Windows
+Ensure that you install either link:Cygwin[http://cygwin.com/] or you have the Windows 10 anniversary update and install the link:Windows Subsystem for Linux[https://msdn.microsoft.com/commandline/wsl]
 
 == Setup
 
 === ZSH Setup
+* Git clone 
 * Install YADR with the following command.
 ----
 sh -c "`curl -fsSL https://raw.githubusercontent.com/skwp/dotfiles/master/install.sh`" -s ask
