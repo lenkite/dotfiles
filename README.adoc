@@ -1,18 +1,26 @@
 = dotfiles
 
-My new dotfiles that leverages the non-VIM portions of YADR dotfiles. The ZSH and other configurations of YADR `https://github.com/skwp/dotfiles` are great. The VIM portions are too heavyweight and most unforgivably YARD hard-codes the leader key to ',' explicitly in all its keybindings  which makes it a no-go for me. I use SPACE as the leader key. 
-Also contains settings for Intellij Idea for OSX and Windows.
+:toc:
+:toclevels: 1
 
 == Overview
-* Setups up ZSH using YADR but without YARD vim stuff
-* Instructions to setups VIM
-* Instructions to setups Spacemacs
-* Common shortcuts across editor/IDE software
+
+My new cross-platform dotfiles (works on MacOS/Windows) that configures ZSH and VIM. It
+leverages prezto for ZSH configuration. I removed YADR since it was way too heavyweight and
+caused latency issues on Windows.
+ 
 
 == Setup
 
+=== Pre-Requisites
+
+If you are on Windows 10 with Anniversary Update please install the "Windows Subsystem for Linux" aka by the terrible name of "Bash on Ubuntu on Windows". Use the https://msdn.microsoft.com/en-us/commandline/wsl/install_guide[Installation Guide]. Please change your linux home directory to your windows home directory `$USERPROFILE`
+
+
+If you are on Windows 10 without the anniversary update, please install http://cygwin.com/[Cygwin]. Also install https://github.com/transcode-open/apt-cyg[apt-cyg]. Make sure that you install `zsh`, `zip`, `unzip`, `curl`, `git`, `wget` and other useful tools. 
+
 === ZSH Setup
-* Install YADR with the following command.
+* Install prezto with the following command. `git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"`
 ----
 sh -c "`curl -fsSL https://raw.githubusercontent.com/skwp/dotfiles/master/install.sh`" -s ask
 ----
