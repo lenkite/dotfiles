@@ -9,6 +9,16 @@ My new cross-platform dotfiles (works on MacOS/Windows) that configures ZSH and 
 leverages prezto for ZSH configuration. I removed YADR since it was way too heavyweight and
 caused latency issues on Windows.
  
+=======
+My new dotfiles that leverages the prezto. Also contains vim setup.
+
+== Overview
+* Setup ZSH configuration
+* Instructions to setups VIM
+
+== Pre-requisites
+=== Windows
+Ensure that you install either link:Cygwin[http://cygwin.com/] or you have the Windows 10 anniversary update and install the https://msdn.microsoft.com/commandline/wsl["Windows Subsystem for Linux"]
 
 == Setup
 
@@ -20,7 +30,12 @@ If you are on Windows 10 with Anniversary Update please install the "Windows Sub
 If you are on Windows 10 without the anniversary update, please install http://cygwin.com/[Cygwin]. Also install https://github.com/transcode-open/apt-cyg[apt-cyg]. Make sure that you install `zsh`, `zip`, `unzip`, `curl`, `git`, `wget` and other useful tools. 
 
 === ZSH Setup
+<<<<<<< HEAD
 * Install prezto with the following command. `git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"`
+=======
+* Git clone 
+* Install YADR with the following command.
+>>>>>>> 73c9b5ab5c62348279f966d20c917ee9e4d4a664
 ----
 sh -c "`curl -fsSL https://raw.githubusercontent.com/skwp/dotfiles/master/install.sh`" -s ask
 ----
