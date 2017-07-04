@@ -9,18 +9,20 @@ My new cross-platform dotfiles (works on MacOS/Windows) that configures ZSH and 
 leverages prezto for ZSH configuration. I removed YADR since it was way too heavyweight and
 caused latency issues on Windows.
  
-=======
-My new dotfiles that leverages the prezto. Also contains vim setup.
-
-== Overview
-* Setup ZSH configuration
-* Instructions to setups VIM
-
-== Pre-requisites
+== Manual Setup of Pre-requisites
 === Windows
-Ensure that you install either link:Cygwin[http://cygwin.com/] or you have the Windows 10 anniversary update and install the https://msdn.microsoft.com/commandline/wsl["Windows Subsystem for Linux"]
+- Install link:[Chocolatey:https://chocolatey.org/], the fantastic windows package manager for software.
+- 
+- Ensure that you install either link:Cygwin[http://cygwin.com/] or you have the Windows 10 anniversary update and install the https://msdn.microsoft.com/commandline/wsl["Windows Subsystem for Linux"]. Make sure you install the following cygwin components are selected for installation: `zsh`,`wget`,`curl`.
+- Cygwin: Change Home Directory to Windows Home Directory. See: https://stackoverflow.com/questions/1494658/how-can-i-change-my-cygwin-home-folder-after-installation. You need to basically add a line `db_home:  /%H` to `/etc/nsswitch.conf`.
+- Cygwin: Change Shell to ZSH. 
 
-== Setup
+=== MacOS 
+- Install link:Homebrew[https://brew.sh/]
+- Install ZSH `brew install zsh zsh-completions`
+
+== Run Setup Script
+Open S
 
 === Pre-Requisites
 
