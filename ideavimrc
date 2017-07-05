@@ -1,0 +1,7 @@
+" Mappings
+map <C-S-]> :action GotoImplementation<CR>
+map <leader>x :action Run<CR>
+map <leader>X :action ChooseRunConfiguration<CR>
+map <leader>b :action CompileDirty<CR>
+
+
