@@ -21,17 +21,31 @@ taskkill /f /FI "IMAGENAME eq bash*"
 taskkill /f /FI "IMAGENAME eq zsh*"
 taskkill /f /FI "IMAGENAME eq ConEmu*"
 taskkill /f /FI "IMAGENAME eq vim*"
+taskkill /f /FI "IMAGENAME eq mingw*"
+taskkill /f /FI "IMAGENAME eq Cygwin*"
+taskkill /f /FI "IMAGENAME eq MSYS2*"
+
+:download_wget
+REM mkdir c:\temp 2>nul
+echo Downloading wget...
+REM https://github.com/git-for-windows/git/releases/download/v2.13.2.windows.1/PortableGit-2.13.2-64-bit.7z.exe
+REM https://github.com/git-for-windows/git/releases/download/v2.13.2.windows.1/PortableGit-2.13.2-64-bit.7z.exe
+@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadFile('https://github.com/git-for-windows/git/releases/download/v2.13.2.windows.1/PortableGit-2.13.2-64-bit.7z.exe', 'c:\temp\git.exe'))" 
+set wget='c:\temp\wget.exe'
+set git='c:\temp\git.exe'
+goto :eof
 
 :install_choco_packages
 REM TODO support upgrade if package is alreadyinstalled.
-choco install -y wget vim SublimeText3 Cygwin cmdermini VisualStudioCode git autohotkey
+choco install -y SublimeText3 Cygwin cmdermini VisualStudioCode autohotkey 7zip
 REM any other packages
 
-:clone_dotfiles_repo
+:download_dotfiles_repo
 set git="c:\Program Files\Git\bin\git.exe"
 %git% clone https://github.com/lenkite/dotfiles.git %USERPROFILE%\dotfiles
 
-goto :eof REM Make hard links to various files SET vscode_userdir=%USERPROFILE%\AppData\Roaming\Code\User\ mkdir %vscode_userdir% 2>nul REM in case vscode hasn't created dir yet
+goto :eof 
+REM Make hard links to various files SET vscode_userdir=%USERPROFILE%\AppData\Roaming\Code\User\ mkdir %vscode_userdir% 2>nul REM in case vscode hasn't created dir yet
 DEL %vscode_userdir%\settings.json 2>nul
 DEL %vscode_userdir%\keybindings.json 2>nul
 

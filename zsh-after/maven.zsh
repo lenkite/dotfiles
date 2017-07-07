@@ -9,8 +9,8 @@ mvnsap() {
 		mv ~/.m2/settings.xml.bak ~/.m2/settings.xml
 	fi
 }
-alias mi='mvn install'
-alias mci='mvn clean install'
-alias msci='mvn -DskipTests clean install'
-alias msi='mvn -DskipTests install'
-alias mt='mvn test'
+alias mi='mvn -nsu install'
+alias mci='mvn -nsu clean install'
+alias msci='mvn -nsu -DskipTests clean install'
+alias msi='mvn -nsu -DskipTests install'
+alias mt='mvn -nsu test'
