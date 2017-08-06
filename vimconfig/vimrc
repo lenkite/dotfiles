@@ -109,11 +109,17 @@ set sidescroll=1
 
 
 " =============== Plug Initialization ===============
-" This loads all the plugins specified in ~/dotfiles/plugins.vim
+" This loads all the plugins specified in ./vimconfig/plugins.vim
 " Use vim-plugin plugin to manage all other plugins
-if filereadable(expand("~/dotfiles/vimconfig/plugins.vim"))
-  source ~/dotfiles/vimconfig/plugins.vim
-endif
+let s:dotfilesDirs=['~/dev/dotfiles', '~/dotfiles']
+for s:dir in s:dotfilesDirs
+	let s:vimPluginsCfg = expand(s:dir . "/vimconfig/plugins.vim")
+	if filereadable(s:vimPluginsCfg)
+ 	  let g:vimConfigDir=expand(s:dir . "/vimconfig/")
+		exec ":source" . s:vimPluginsCfg
+		break
+	endif
+endfor
 
 " Load matchit.vim
 if filereadable(expand("$VIMRUNTIME/macros/matchit.vim"))
@@ -126,11 +132,6 @@ set showmatch
 autocmd! bufwritepost vimrc source %
 
 
-source ~/dotfiles/vimconfig/basic-keymap.vim
-source ~/dotfiles/vimconfig/search-and-motion-config.vim
-source ~/dotfiles/vimconfig/align-config.vim
-source ~/dotfiles/vimconfig/auto-commands.vim
-source ~/dotfiles/vimconfig/vim-go-settings.vim
 colorscheme zenburn
 
 

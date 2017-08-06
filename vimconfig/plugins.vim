@@ -100,8 +100,11 @@ call plug#end()
 
 " }
 "
-
-
+let s:cfgs=['basic-keymap.vim', 'search-and-motion-config.vim', 'align-config.vim',
+ \ 'auto-commands.vim', 'vim-go-settings.vim']
+for s:cfg in s:cfgs
+	exec ":source " . g:vimConfigDir . '/' . s:cfg
+endfor
 
 
 
