@@ -1,6 +1,7 @@
 " vim: set foldmarker={,} foldlevel=0 f
 "
 
+"Save files since Cmd-S and Ctrl-S don't work well on Terminals (aaargh!)
 noremap <Leader>s :update<CR>
 inoremap <Leader>s <Esc>:update<CR>
 
@@ -34,15 +35,10 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
-" Got from some reddit post in the VIM forum  to map backspace to last used file.
+" Lovely! Got from some reddit post in the VIM forum to map backspace to last used file.
 nnoremap  <BS> <C-^>
 
-"
-"nnoremap <Leader>w :w<CR>
-"nnoremap <Leader>w :w<CR>
-"nnoremap <cr> :
-"snoremap <cr> :
-"vnoremap <cr> :
+
 "
 "
 "" Preview file in chrome, move me to os specific keymaps
@@ -86,9 +82,3 @@ nnoremap  <BS> <C-^>
 ""nnoremap <Leader>cc :"s/\<<C-r><C-w>\>/<C-r><C-w>
 ""vnoremap <Leader>cc y:"s/<C-r>"/<C-r>"
 ""
-
-" Next Previous Error
-nnoremap <C-,> :cnext
-nnoremap <C-S-,> :cprevious
-inoremap <C-,> <Esc>:cnext
-inoremap <C-S-,> <Esc>:cnext

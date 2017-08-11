@@ -22,8 +22,10 @@ rm ~/.zprofile 2> /dev/null
 rm ~/.zshrc 2> /dev/null
 rm ~/.zshenv 2> /dev/null
 rm ~/.vimrc 2> /dev/null
+rm ~/.ideavimrc 2> /dev/null
 ln $dotfilesDir/zshrc ~/.zshrc
 ln $vimconfigDir/vimrc ~/.vimrc
+ln $vimconfigDir/ideavimrc ~/.ideavimrc
 
 
 

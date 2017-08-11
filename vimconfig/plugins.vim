@@ -1,4 +1,4 @@
-" vim: set foldmarker={,} foldlevel=1 foldmethod=marker:
+"vim: set foldmarker={,} foldlevel=1 foldmethod=marker:
 
 " NOTE {
 " THE BELOW ASSUMES THAT YOU HAVE INSTALLED " vim-plug https://github.com/junegunn/vim-plug
@@ -29,10 +29,11 @@ Plug 'Shougo/neocomplete.vim'
 Plug 'SirVer/ultisnips'
 " }
 
-" Navigation: Fuzzy Find, Nerd Tree, Tag Bar, etc{
+" Navigation: Fuzzy Find, Nerd Tree, Tag Bar, etc {
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
+Plug 'majutsushi/tagbar'
 "
 " "}
 " Syntax Checking
