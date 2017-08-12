@@ -64,6 +64,7 @@ Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 
 " D Lang plugins
 Plug 'idanarye/vim-dutyl'
+Plug 'gabrielelana/vim-markdown'
 " "}
 
 
