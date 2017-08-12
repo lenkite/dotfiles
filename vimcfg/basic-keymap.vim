@@ -1,5 +1,8 @@
 " vim: set foldmarker={,} foldlevel=0 f
 "
+"
+" Allow quit via single keypress (Q)
+nmap Q :qa<CR>
 
 "Save files since Cmd-S and Ctrl-S don't work well on Terminals (aaargh!)
 noremap <Leader>s :update<CR>
@@ -39,6 +42,15 @@ nnoremap <C-H> <C-W><C-H>
 nnoremap  <BS> <C-^>
 
 
+" From reddit
+" https://www.reddit.com/r/vim/comments/6pw5ui/what_is_the_most_diffucult_vim_command_to_enter/
+" Just do a visual selection and K J will move it up & down and it'll also
+" reindent the code correctly.
+" Move visual block. [Tarun: This is amazing and I can't understand it, Freaky]
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+
+
 "
 "
 "" Preview file in chrome, move me to os specific keymaps
@@ -62,8 +74,6 @@ nnoremap  <BS> <C-^>
 "noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
 "noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 "
-"" allow quit via single keypress (Q)
-"map <Leader>Q :qa!<CR>
 "
 "
 ""Location List next an previous for Syntastic

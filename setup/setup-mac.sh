@@ -8,12 +8,12 @@ fi
 # it is really crappy that we don't have a better way to get full path to a script
 export dotfilesSetupDir=$(cd "$(dirname "$0")"; pwd)
 export dotfilesDir="$(dirname $dotfilesSetupDir)"
-export vimconfigDir=$dotfilesDir/vimconfig
+export vimConfigDir=$dotfilesDir/vimcfg
 export SDKHOME=~/sdk
 export sdkhome=$SDKHOME
 
 echo "Dotfiles Dir: $dotfilesDir"
-echo "VimConfig Dir: $vimconfigDir"
+echo "VimConfig Dir: $vimConfigDir"
 
 
 # Re-Create Links to zsh startup scripts
@@ -24,8 +24,8 @@ rm ~/.zshenv 2> /dev/null
 rm ~/.vimrc 2> /dev/null
 rm ~/.ideavimrc 2> /dev/null
 ln $dotfilesDir/zshrc ~/.zshrc
-ln $vimconfigDir/vimrc ~/.vimrc
-ln $vimconfigDir/ideavimrc ~/.ideavimrc
+ln $vimConfigDir/vimrc ~/.vimrc
+ln $vimConfigDir/ideavimrc ~/.ideavimrc
 
 
 
