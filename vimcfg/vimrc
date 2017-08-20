@@ -25,7 +25,7 @@ set hidden
 
 "turn on syntax highlighting
 syntax on
-
+set synmaxcol=2048        "long lines are slow
 
 "================ Check the first line for a modeline if present ============
 set modelines=1
@@ -91,6 +91,10 @@ set wildignore+=*.png,*.jpg,*.gif
 set wildignore+=.idea/**
  
 
+
+"https://stackoverflow.com/questions/30691466/what-is-difference-between-vims-clipboard-unnamed-and-unnamedplus-settings
+set clipboard^=unnamed,unnamedplus
+
 "
 "" ================ Scrolling ========================
 
@@ -125,7 +129,10 @@ if filereadable(expand("$VIMRUNTIME/macros/matchit.vim"))
 endif
 
 set matchtime=1 "time in tenths of a second to show the matching parenthesis
-set showmatch
+set showmatch "The vim implementation of matching parenthesis sucks
+set cursorcolumn
+set cursorline
+let loaded_matchparen = 1 "Parenthesis highlight is distracting like hell!
 " When vimrc is edited, reload it
 autocmd! bufwritepost vimrc source %
 

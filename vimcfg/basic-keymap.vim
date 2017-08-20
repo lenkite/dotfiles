@@ -51,6 +51,14 @@ vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
 
+"Cycle through buffers
+"From http://vim.wikia.com/wiki/Cycle_through_buffers_including_hidden_buffers
+"Umm finaly a shift key that works!! I shoudl use this for next/previous error
+"instead!!
+:nnoremap <Tab> :bnext<CR>
+:nnoremap <S-Tab> :bprevious<CR>
+
+
 "
 "
 "" Preview file in chrome, move me to os specific keymaps
