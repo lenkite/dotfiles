@@ -1,5 +1,6 @@
+" vim: set foldmarker={,} foldlevel=0 foldmethod=marker
+
 " Modeline and Notes {
-" vim: set foldmarker={,} foldlevel=0 foldmethod=marker:
 "   Tarun Ramakrishna Elankath's vimrc file. Been using VIM for 8 years now. 
 "   Re-created from scratch on Aug 20, 2011
 "   Re-created from scratch again on Aug 6, 2016, taking the best parts from YADR
@@ -7,16 +8,13 @@
 " }
 "TODO: Only keep stuff here that is not covered by defaults of tpope/vim-sensible
 set number                     " Line numbers are good
-set backspace=indent,eol,start " Allow backspace in insert mode
 set relativenumber             " Relative line numbers are better
 set history=5000               " Store lots of :cmdline history
 set showcmd                    " Show incomplete cmds down the bottom
 set gcr=a:blinkon0             " Disable cursor blink
-set autoread                   " Reload files changed outside vim
 set autowrite                  " Writes contents of file on next rewind last first make etc
 set wmh=0                      " Set winminheight to 0 so that
                                " maximizing a window collapses all other windows
-
 set visualbell noerrorbells t_vb= "
 
 
@@ -27,9 +25,10 @@ set hidden
 
 "turn on syntax highlighting
 syntax on
+set synmaxcol=2048        "long lines are slow
 
-
-
+"================ Check the first line for a modeline if present ============
+set modelines=1
 " ================ Turn Off Swap Files ==============
 
 set noswapfile
@@ -92,6 +91,10 @@ set wildignore+=*.png,*.jpg,*.gif
 set wildignore+=.idea/**
  
 
+
+"https://stackoverflow.com/questions/30691466/what-is-difference-between-vims-clipboard-unnamed-and-unnamedplus-settings
+set clipboard^=unnamed,unnamedplus
+
 "
 "" ================ Scrolling ========================
 
@@ -102,20 +105,19 @@ set sidescroll=1
 
 " ================ Search ===========================
 "
- set incsearch       " Find the next match as we type the search
  set hlsearch        " Highlight searches by default
  set ignorecase      " Ignore case when searching...
  set smartcase       " ...unless we type a capital
 
 
 " =============== Plug Initialization ===============
-" This loads all the plugins specified in ./vimconfig/plugins.vim
+" This loads all the plugins specified in ./vimcfg/plugins.vim
 " Use vim-plugin plugin to manage all other plugins
 let s:dotfilesDirs=['~/src/dotfiles', '~/dotfiles']
 for s:dir in s:dotfilesDirs
-	let s:vimPluginsCfg = expand(s:dir . "/vimconfig/plugins.vim")
+	let s:vimPluginsCfg = expand(s:dir . "/vimcfg/plugins.vim")
 	if filereadable(s:vimPluginsCfg)
- 	  let g:vimConfigDir=expand(s:dir . "/vimconfig/")
+ 	  let g:vimCfgDir=expand(s:dir . "/vimcfg/")
 		exec ":source" . s:vimPluginsCfg
 		break
 	endif
@@ -127,7 +129,10 @@ if filereadable(expand("$VIMRUNTIME/macros/matchit.vim"))
 endif
 
 set matchtime=1 "time in tenths of a second to show the matching parenthesis
-set showmatch
+set showmatch "The vim implementation of matching parenthesis sucks
+set cursorcolumn
+set cursorline
+let loaded_matchparen = 1 "Parenthesis highlight is distracting like hell!
 " When vimrc is edited, reload it
 autocmd! bufwritepost vimrc source %
 

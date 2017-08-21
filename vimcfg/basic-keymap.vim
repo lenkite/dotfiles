@@ -1,6 +1,10 @@
 " vim: set foldmarker={,} foldlevel=0 f
 "
+"
+" Allow quit via single keypress (Q)
+nmap Q :qa<CR>
 
+"Save files since Cmd-S and Ctrl-S don't work well on Terminals (aaargh!)
 noremap <Leader>s :update<CR>
 inoremap <Leader>s <Esc>:update<CR>
 
@@ -34,15 +38,27 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
-" Got from some reddit post in the VIM forum  to map backspace to last used file.
+" Lovely! Got from some reddit post in the VIM forum to map backspace to last used file.
 nnoremap  <BS> <C-^>
 
-"
-"nnoremap <Leader>w :w<CR>
-"nnoremap <Leader>w :w<CR>
-"nnoremap <cr> :
-"snoremap <cr> :
-"vnoremap <cr> :
+
+" From reddit
+" https://www.reddit.com/r/vim/comments/6pw5ui/what_is_the_most_diffucult_vim_command_to_enter/
+" Just do a visual selection and K J will move it up & down and it'll also
+" reindent the code correctly.
+" Move visual block. [Tarun: This is amazing and I can't understand it, Freaky]
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+
+
+"Cycle through buffers
+"From http://vim.wikia.com/wiki/Cycle_through_buffers_including_hidden_buffers
+"Umm finaly a shift key that works!! I shoudl use this for next/previous error
+"instead!!
+:nnoremap <Tab> :bnext<CR>
+:nnoremap <S-Tab> :bprevious<CR>
+
+
 "
 "
 "" Preview file in chrome, move me to os specific keymaps
@@ -66,8 +82,6 @@ nnoremap  <BS> <C-^>
 "noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
 "noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 "
-"" allow quit via single keypress (Q)
-"map <Leader>Q :qa!<CR>
 "
 "
 ""Location List next an previous for Syntastic
@@ -86,9 +100,3 @@ nnoremap  <BS> <C-^>
 ""nnoremap <Leader>cc :"s/\<<C-r><C-w>\>/<C-r><C-w>
 ""vnoremap <Leader>cc y:"s/<C-r>"/<C-r>"
 ""
-
-" Next Previous Error
-nnoremap <C-,> :cnext
-nnoremap <C-S-,> :cprevious
-inoremap <C-,> <Esc>:cnext
-inoremap <C-S-,> <Esc>:cnext
