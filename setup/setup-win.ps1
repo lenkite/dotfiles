@@ -1,4 +1,42 @@
-#Requires -RunAsAdministrator
+# From https://blogs.msdn.microsoft.com/virtual_pc_guy/2010/09/23/a-self-elevating-powershell-script/
+# Get the ID and security principal of the current user account
+$myWindowsID=[System.Security.Principal.WindowsIdentity]::GetCurrent()
+$myWindowsPrincipal=new-object System.Security.Principal.WindowsPrincipal($myWindowsID)
+
+# Get the security principal for the Administrator role
+$adminRole=[System.Security.Principal.WindowsBuiltInRole]::Administrator
+
+# Check to see if we are currently running "as Administrator"
+if ($myWindowsPrincipal.IsInRole($adminRole))
+   {
+    # We are running "as Administrator" - so change the title and background color to indicate this
+    $Host.UI.RawUI.WindowTitle = $myInvocation.MyCommand.Definition + "(Elevated)"
+    $Host.UI.RawUI.BackgroundColor = "DarkBlue"
+    clear-host
+   }
+else
+   {
+   # We are not running "as Administrator" - so relaunch as administrator
+   
+   # Create a new process object that starts PowerShell
+   $newProcess = new-object System.Diagnostics.ProcessStartInfo "PowerShell";
+   
+   # Specify the current script path and name as a parameter
+   $newProcess.Arguments = $myInvocation.MyCommand.Definition;
+   
+   # Indicate that the process should be elevated
+   $newProcess.Verb = "runas";
+   
+   # Start the new process
+   [System.Diagnostics.Process]::Start($newProcess);
+   
+   # Exit from the current, unelevated, process
+   exit
+   }
+ 
+# Run your code that needs to be elevated here
+Write-Host -NoNewLine "Press any key to continue..."
+$null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
 
 Write-Output "Running Windows Setup for dotfiles"
 Write-Output "Script root is $PSScriptRoot"
@@ -16,7 +54,29 @@ function Stop-CygProcesses {
 
 function Install-MyPackages {
 	echo "Installing packages. Ensure that chocolatey (https://chocolatey.org/) is installed!"
-	choco install -y vim SublimeText3 Cygwin cmdermini VisualStudioCode autohotkey 7zip
+	choco install -y vim golang SublimeText3 cyg-get Cygwin cmdermini VisualStudioCode autohotkey 7zip fzf
+	cyg-get install lynx wget curl
+}
+
+function Set-MyEnvVars {
+	Write-Output "Setting environment variables..."
+	$goroot='C:\tools\go'
+	if ((Test-Path $goroot)) {
+		Write-Output "Setting GOROOT to $goroot"
+		[Environment]::SetEnvironmentVariable("GOROOT", $goroot, "Machine")
+		Write-Output "Setting GOPATH to $HOME"
+		[Environment]::SetEnvironmentVariable("GOPATH", "$HOME", "User")
+		$gopath = [Environment]::GetEnvironmentVariable("GOPATH")
+		Write-Output "Checking GOPATH = $gopath"
+	}
+}
+function Add-Path([string] $path) {
+	# from: https://codingbee.net/tutorials/powershell/powershell-make-a-permanent-change-to-the-path-environment-variable
+	# there might be a better way of doing  this
+	$oldpath = (Get-ItemProperty -Path ‘Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment’ -Name PATH).path
+	Write-Output "Adding $path to PATH"
+	$newpath = “$oldpath;c:\path\to\folder”
+	Set-ItemProperty -Path ‘Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment’ -Name PATH -Value $newPath
 }
 
 function Initialize-MyHardLinks {
@@ -72,10 +132,24 @@ function Initialize-MyHardLinks {
 	New-Item -ItemType HardLink -Path ~\.gvimrc -Value $gvimrcTarget
 }
 
+function Install-VimPlug {
+  if (!(test-path ~/.vim/autoload)) {
+    Write-Output "Creating ~/.vim/autoload"
+		New-Item -ItemType Directory -Force -Path ~/.vim/autoload
+  }
+  $plugVimUri="https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+  Invoke-WebRequest -Uri $plugVimUri -OutFile ~/.vim/autoload/plug.vim
+}
+
 
 # TODO: read C:\tools\cmdermini\config\user-conEmu.xml and remove the -NoProfile 
 # Modify Cygwin so that home directory is correct.
 $nsswitch_config="C:\tools\cygwin\etc\nsswitch.conf"
+
+#Install-MyPackages
+Set-MyEnvVars
+Write-Host -NoNewLine "Press any key to continue..."
+$null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
 
 
 

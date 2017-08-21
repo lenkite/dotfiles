@@ -111,7 +111,7 @@ set sidescroll=1
 " =============== Plug Initialization ===============
 " This loads all the plugins specified in ./vimconfig/plugins.vim
 " Use vim-plugin plugin to manage all other plugins
-let s:dotfilesDirs=['~/dev/dotfiles', '~/dotfiles']
+let s:dotfilesDirs=['~/src/dotfiles', '~/dotfiles']
 for s:dir in s:dotfilesDirs
 	let s:vimPluginsCfg = expand(s:dir . "/vimconfig/plugins.vim")
 	if filereadable(s:vimPluginsCfg)
