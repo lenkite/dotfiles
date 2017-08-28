@@ -22,7 +22,10 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
 Plug 'rust-lang/rust.vim'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-eunuch'
 " }
+
+
 
 " Windows {
 Plug 'drn/zoomwin-vim'
@@ -33,21 +36,21 @@ Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 
 " COMPLETION and SNIPPETS {
 "Plug 'SirVer/ultisnips'
-Plug 'Shougo/neocomplete.vim'
+"Plug 'Shougo/neocomplete.vim'
 "Plug 'Shougo/neosnippet.vim'
 "Plug 'Shougo/neosnippet-snippets'
-"Plug 'ervandew/supertab'
+Plug 'ervandew/supertab'
 "Plug 'honza/vim-snippets'
 Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
 Plug 'SirVer/ultisnips'
 " }
 
 
-" Navigation: Fuzzy Find, Nerd Tree, Tags , etc {
+" Navigation: Fuzzy Find, Vimfiler, Tags , etc {
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'scrooloose/nerdtree'
 Plug 'majutsushi/tagbar'
+Plug 'justinmk/vim-dirvish'
 Plug 'ludovicchabant/vim-gutentags'
 "
 " "}
@@ -58,29 +61,33 @@ Plug 'scrooloose/syntastic'
 " }
 
 " Language Plugins {
-" Rust Lang plugin
-Plug 'rust-lang/rust.vim'
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
-
-" D Lang plugins
-Plug 'idanarye/vim-dutyl'
-Plug 'gabrielelana/vim-markdown'
-" "}
+Plug 'idanarye/vim-dutyl' "Dlang
+Plug 'sheerun/vim-polyglot'
+let g:polyglot_disabled = ['go'] "since I choose to use vim-go directly
+"}
 
 
 "SEARCH {
 Plug 'mhinz/vim-grepper'
+Plug 'nelstrom/vim-visual-star-search'
 "}
 
 " Motion and Text Objects {
 Plug 'easymotion/vim-easymotion'
 Plug 'justinmk/vim-sneak'
+Plug 'wellle/targets.vim'
 "}
 
 Plug 'haya14busa/incsearch.vim'
 
 Plug 'tmhedberg/matchit'
+
+" Color Schemes {
 Plug 'flazz/vim-colorschemes'
+"https://bluz71.github.io/2017/05/21/vim-plugins-i-like.html
+Plug 'rakr/vim-one'
+"}
 
 " Table Alignment and Editing Plugins {
 Plug 'junegunn/vim-easy-align'
@@ -97,6 +104,8 @@ Plug 'terryma/vim-expand-region'
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+
+Plug 'Houl/conomode-vim'
 
 
 Plug 'airblade/vim-rooter'
