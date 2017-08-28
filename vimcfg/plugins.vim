@@ -1,4 +1,5 @@
 " vim: set sw=2 ts=2 sts=2 et tw=80 foldmarker={,} foldlevel=0 foldmethod=marker spell:
+set cursorcolumn
 
 " NOTE {
 " THE BELOW ASSUMES THAT YOU HAVE INSTALLED " vim-plug https://github.com/junegunn/vim-plug
@@ -62,9 +63,6 @@ Plug 'scrooloose/syntastic'
 
 " Language Plugins {
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
-Plug 'idanarye/vim-dutyl' "Dlang
-Plug 'sheerun/vim-polyglot'
-let g:polyglot_disabled = ['go'] "since I choose to use vim-go directly
 "}
 
 
@@ -93,19 +91,10 @@ Plug 'rakr/vim-one'
 Plug 'junegunn/vim-easy-align'
 " }
 
-" Ascii Doc Plugin and Deps {
-Plug 'dahu/vimple'
-Plug 'dahu/Asif'
-Plug 'Raimondi/VimRegStyle' "library plugin
-Plug 'vim-scripts/SyntaxRange'
-Plug 'dahu/vim-asciidoc'
-Plug 'terryma/vim-expand-region'
-"}
 
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-
-Plug 'Houl/conomode-vim'
+" Light weight status line. airline/powerline suck
+" From https://bluz71.github.io/2017/05/21/vim-plugins-i-like.html
+Plug 'bluz71/vim-moonfly-statusline'
 
 
 Plug 'airblade/vim-rooter'
