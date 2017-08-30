@@ -1,2 +1,2 @@
-" d for directory/dirvish
-nnoremap <Leader>dd :Dirvish<Enter>
+autocmd VimEnter * if exists(":Dirvish") | exe "nnoremap <Leader>fd :Dirvish\<CR>" | endif
+

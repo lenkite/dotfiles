@@ -1,5 +1,4 @@
 " vim: set sw=2 ts=2 sts=2 et tw=80 foldmarker={,} foldlevel=0 foldmethod=marker spell:
-set cursorcolumn
 
 " NOTE {
 " THE BELOW ASSUMES THAT YOU HAVE INSTALLED " vim-plug https://github.com/junegunn/vim-plug
@@ -23,9 +22,6 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
 Plug 'rust-lang/rust.vim'
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-eunuch'
-" }
-
 
 
 " Windows {
@@ -46,12 +42,12 @@ Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' 
 Plug 'SirVer/ultisnips'
 " }
 
-
 " Navigation: Fuzzy Find, Vimfiler, Tags , etc {
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'majutsushi/tagbar'
 Plug 'justinmk/vim-dirvish'
+Plug 'scrooloose/nerdtree'
 Plug 'ludovicchabant/vim-gutentags'
 "
 " "}
@@ -69,6 +65,8 @@ Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 "SEARCH {
 Plug 'mhinz/vim-grepper'
 Plug 'nelstrom/vim-visual-star-search'
+Plug 'haya14busa/incsearch.vim'
+Plug 'tmhedberg/matchit'
 "}
 
 " Motion and Text Objects {
@@ -77,9 +75,6 @@ Plug 'justinmk/vim-sneak'
 Plug 'wellle/targets.vim'
 "}
 
-Plug 'haya14busa/incsearch.vim'
-
-Plug 'tmhedberg/matchit'
 
 " Color Schemes {
 Plug 'flazz/vim-colorschemes'
@@ -95,8 +90,6 @@ Plug 'junegunn/vim-easy-align'
 " Light weight status line. airline/powerline suck
 " From https://bluz71.github.io/2017/05/21/vim-plugins-i-like.html
 Plug 'bluz71/vim-moonfly-statusline'
-
-
 Plug 'airblade/vim-rooter'
 
 

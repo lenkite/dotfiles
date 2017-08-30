@@ -110,11 +110,11 @@ set sidescroll=1
  set ignorecase      " Ignore case when searching...
  set smartcase       " ...unless we type a capital
 
-
 " =============== Plug Initialization ===============
 " This loads all the plugins specified in ./vimcfg/plugins.vim
 " Use vim-plugin plugin to manage all other plugins
 let s:dotfilesDirs=['~/src/dotfiles', '~/dotfiles']
+
 for s:dir in s:dotfilesDirs
 	let s:vimPluginsCfg = expand(s:dir . "/vimcfg/plugins.vim")
 	if filereadable(s:vimPluginsCfg)
@@ -124,6 +124,7 @@ for s:dir in s:dotfilesDirs
 	endif
 endfor
 
+"
 " Load matchit.vim
 if filereadable(expand("$VIMRUNTIME/macros/matchit.vim"))
   source $VIMRUNTIME/macros/matchit.vim
@@ -135,7 +136,14 @@ let loaded_matchparen = 1 "Parenthesis highlight is distracting like hell!
 " When vimrc is edited, reload it
 autocmd! bufwritepost vimrc source %
 
+function! HasColorscheme(name)
+    let pat = 'colors/'.a:name.'.vim'
+    return !empty(globpath(&rtp, l:pat))
+endfunction
 
-colorscheme zenburn
+
+if HasColorscheme('zenburn')
+ colorscheme zenburn
+endif
 
 
