@@ -16,6 +16,7 @@ set autowrite                  " Writes contents of file on next rewind last fir
 set wmh=0                      " Set winminheight to 0 so that
                                " maximizing a window collapses all other windows
 set visualbell noerrorbells t_vb= "
+set lazyredraw " redraw only when we need to
 
 
 " This makes vim act like all other editors, buffers can

@@ -1,7 +1,12 @@
-" Mappings
+" Intellij IDEA OSX Mappings
 map <C-S-]> :action GotoImplementation<CR>
 map <leader>x :action Run<CR>
 map <leader>X :action ChooseRunConfiguration<CR>
 map <leader>b :action CompileDirty<CR>
-
-
+nmap <C-P> :action GotoFile<CR>
+nmap ]q :action  GotoNextError<CR>
+nmap [q :action  GotoPreviousError<CR>
+nmap <C-;> :action GotoNextError<CR>
+nmap <C-S-;> :action GotoPreviousError<CR>
+nmap <C-I> :action Forward<CR>
+nmap <C-O> :action Back<CR>
