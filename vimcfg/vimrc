@@ -131,8 +131,6 @@ endif
 
 set matchtime=1 "time in tenths of a second to show the matching parenthesis
 set showmatch "The vim implementation of matching parenthesis sucks
-set cursorcolumn
-set cursorline
 let loaded_matchparen = 1 "Parenthesis highlight is distracting like hell!
 " When vimrc is edited, reload it
 autocmd! bufwritepost vimrc source %

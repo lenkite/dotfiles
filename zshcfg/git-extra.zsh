@@ -23,3 +23,6 @@ for d in */ ; do
   echo "$d"
 done
 }
+export VISUAL=vim
+export EDITOR=$VISUAL
+export GIT_EDITOR=$VISUAL
