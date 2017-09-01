@@ -20,7 +20,6 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
-Plug 'rust-lang/rust.vim'
 Plug 'tpope/vim-fugitive'
 
 
@@ -59,6 +58,8 @@ Plug 'scrooloose/syntastic'
 
 " Language Plugins {
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+Plug 'rust-lang/rust.vim'
+Plug 'udalov/kotlin-vim'
 "}
 
 

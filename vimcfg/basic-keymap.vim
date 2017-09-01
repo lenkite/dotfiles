@@ -58,6 +58,11 @@ vnoremap K :m '<-2<CR>gv=gv
 :nnoremap <Tab> :bnext<CR>
 :nnoremap <S-Tab> :bprevious<CR>
 
+"Space and S-Space should go page down and page up!
+nnoremap <Space> <C-D>
+"Shift-space Doesn't work in terminal. You need to remap key in terminal
+"preferences
+nnoremap <S-Space> <C-U> 
 
 "
 "

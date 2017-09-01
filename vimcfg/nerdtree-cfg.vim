@@ -1,4 +1,10 @@
-if exists(":NERDTree")
+function! ConfigureNerdTree()
+  " f for filess
+  nnoremap <Leader>ff :NERDTreeToggle<CR>
+  nnoremap <Leader>fF :NERDTreeFind<CR>
+  nnoremap <Leader>fb :NERDTreeFromBookmark<CR>
+  nnoremap <Leader>fc :NERDTreeCWD<CR>
+
   " From FAQ: How can I open NERDTree automatically when vim starts up on
   " opening a directory? (How can I open NERDTree automatically when vim starts
   " up on opening a directory?)
@@ -21,11 +27,5 @@ if exists(":NERDTree")
   let NERDTreeDirArrows = 1
   let NERDTreeShowBookmarks = 1
 
-
-  " E for explorer
-  nnoremap <Leader>ft :NERDTreeToggle<Enter>
-  nnoremap <Leader>ff :NERDTreeFind<CR>
-  nnoremap <Leader>fb :NERDTreeFromBookmark 
-  nnoremap <Leader>fc :NERDTreeCWD<CR>
-
-endif
+endfunction
+autocmd VimEnter * if exists(":NERDTree") | call ConfigureNerdTree() | endif
