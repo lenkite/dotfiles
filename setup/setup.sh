@@ -26,10 +26,10 @@ if [[ -f  $osreleaseFile ]]; then
   fi
 fi
 
+user=`whoami`
 echo "Hello $user!"
 exit -1
 
-user=`whoami`
 if [[ "$wsl" == true ]]; then
   echo "Linux user is $user. Windows User is TODO"
   echo "Replacing /home/$user /etc/passwd"
