@@ -15,31 +15,29 @@ let g:cargo_makeprg_params='build'
 call plug#begin('~/.vim/plugged')
 
 " TPope plugins: Bracket mappings, surround, comment, repeat {  
-Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-fugitive'
+"}
 
 
 " Windows {
 Plug 'drn/zoomwin-vim'
 " }
 
-" async library for vim plugins such as unite
-Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 
 " COMPLETION and SNIPPETS {
-"Plug 'SirVer/ultisnips'
-"Plug 'Shougo/neocomplete.vim'
-"Plug 'Shougo/neosnippet.vim'
-"Plug 'Shougo/neosnippet-snippets'
+Plug 'SirVer/ultisnips'
+Plug 'Shougo/neocomplete.vim'
+Plug 'Shougo/neosnippet.vim'
+Plug 'Shougo/neosnippet-snippets'
 Plug 'ervandew/supertab'
-"Plug 'honza/vim-snippets'
+Plug 'honza/vim-snippets'
 Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
 Plug 'SirVer/ultisnips'
-" }
+"}
 
 " Navigation: Fuzzy Find, Vimfiler, Tags , etc {
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -48,6 +46,7 @@ Plug 'majutsushi/tagbar'
 Plug 'justinmk/vim-dirvish'
 Plug 'scrooloose/nerdtree'
 Plug 'ludovicchabant/vim-gutentags'
+Plug 'travisjeffery/vim-gotosymbol'
 "
 " "}
 
@@ -59,7 +58,6 @@ Plug 'scrooloose/syntastic'
 " Language Plugins {
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 Plug 'rust-lang/rust.vim'
-Plug 'udalov/kotlin-vim'
 "}
 
 
@@ -70,10 +68,11 @@ Plug 'haya14busa/incsearch.vim'
 Plug 'tmhedberg/matchit'
 "}
 
-" Motion and Text Objects {
+" Motion, Text Objects, Regions {
 Plug 'easymotion/vim-easymotion'
 Plug 'justinmk/vim-sneak'
 Plug 'wellle/targets.vim'
+Plug 'terryma/vim-expand-region'
 "}
 
 

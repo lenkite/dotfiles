@@ -8,7 +8,8 @@
 " }
 "TODO: Only keep stuff here that is not covered by defaults of tpope/vim-sensible
 set number                     " Line numbers are good
-set relativenumber             " Relative line numbers are better
+"set relativenumber             " Relative line numbers are better but cause
+"SLOW SCROLLING :(
 set history=10000               " Store lots of :cmdline history
 set showcmd                    " Show incomplete cmds down the bottom
 set gcr=a:blinkon0             " Disable cursor blink
@@ -17,6 +18,9 @@ set wmh=0                      " Set winminheight to 0 so that
                                " maximizing a window collapses all other windows
 set visualbell noerrorbells t_vb= "
 set lazyredraw " redraw only when we need to
+set smarttab
+let g:skip_loading_mswin="true"
+autocmd FileType make set noexpandtab shiftwidth=8 softtabstop=0
 
 
 " This makes vim act like all other editors, buffers can
@@ -76,6 +80,7 @@ set linebreak    "Wrap lines at convenient points
 
  " ================ Completion =======================
  " "http://vim.wikia.com/wiki/Great_wildmode/wildmenu_and_console_mouse
+let g:skip_loading_mswin=1
  
 set wildmode=list:longest,full
 set wildmenu "enable ctrl-n and ctrl-p to scroll thru matches
@@ -146,4 +151,12 @@ if HasColorscheme('zenburn')
  colorscheme zenburn
 endif
 
+if $Oj == "Windows_NT"
+  let &t_ti.="\e[1 q"
+  let &t_SI.="\e[5 q"
+  let &t_EI.="\e[1 q"
+  let &t_te.="\e[0 q"
+  " Avoid mswin.vim making Ctrl-v act as paste
+  behave xterm
+endif
 
