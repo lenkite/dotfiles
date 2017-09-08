@@ -10,13 +10,13 @@ leverages prezto for ZSH configuration.
  
 == Pre-Requisites: Needs Manual Setup 
 === Windows
-- Install link:[Chocolatey:https://chocolatey.org/], the fantastic windows package manager for software.
-- If you are on Windows 10 with Anniversary Update please install the "Windows Subsystem for Linux" aka by the terrible name of "Bash on Ubuntu on Windows". Use the https://msdn.microsoft.com/en-us/commandline/wsl/install_guide[Installation Guide]. Please change your linux home directory to your windows home directory `$USERPROFILE`
-- Ensure that you install either link:Cygwin[http://cygwin.com/] or you have the Windows 10 anniversary update and install the https://msdn.microsoft.com/commandline/wsl["Windows Subsystem for Linux"]. 
- -- Cyugwin: Make sure you install the following cygwin components are selected for installation: `zsh`,`wget`,`curl`.
- -- Cygwin: Change Home Directory to Windows Home Directory. See: https://stackoverflow.com/questions/1494658/how-can-i-change-my-cygwin-home-folder-after-installation. You need to basically add a line `db_home:  /%H` to `/etc/nsswitch.conf`.
- -- Cygwin: Change Shell to ZSH. See https://stackoverflow.com/questions/22363210/set-default-shell-in-cygwin/37815158#37815158. You need to add/edit the line containing `db_shell`.
- -- Cygwin: Install apt-cyg. See https://github.com/transcode-open/apt-cyg
+- Install link:https://chocolatey.org/[Chocolatey], the fantastic windows package manager for software.
+- If you are on Windows 10 with at-least the Creators Update please install the https://msdn.microsoft.com/commandline/wsl["Windows Subsystem for Linux"] which is also called by the terrible name of "Bash on Ubuntu on Windows". Refer to the https://msdn.microsoft.com/en-us/commandline/wsl/install_guide[Installation Guide]. 
+- IF you are on an older build of Windows,  install link:Cygwin[http://cygwin.com/]. Cygwin Support will be dropped in the future as Cygwin is slow as hell.
+ ** Cygwin: Make sure you install the following cygwin components are selected for installation: `zsh`,`wget`,`curl`.
+ ** Cygwin: Change Home Directory to Windows Home Directory. See: https://stackoverflow.com/questions/1494658/how-can-i-change-my-cygwin-home-folder-after-installation. You need to basically add a line `db_home:  /%H` to `/etc/nsswitch.conf`.
+ ** Cygwin: Change Shell to ZSH. See https://stackoverflow.com/questions/22363210/set-default-shell-in-cygwin/37815158#37815158. You need to add/edit the line containing `db_shell`.
+ ** Cygwin: Install apt-cyg. See https://github.com/transcode-open/apt-cyg
 
 === MacOS 
 - Install link:Homebrew[https://brew.sh/]
@@ -24,7 +24,8 @@ leverages prezto for ZSH configuration.
 
 == Run Setup Script
 Open a shell and execute the following command:
+.Execute this
 [source,shell]
----
-curl https://github.com/lenkite/dotfiles/blob/master/setup/setup.sh | sudo bash
----
+----
+curl -sfL  https://raw.github.com/lenkite/dotfiles/master/setup/setup.sh | sudo bash
+----

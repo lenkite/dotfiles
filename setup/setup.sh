@@ -11,7 +11,7 @@ elif [[ $uname == CYGWIN* ]]; then
   cygwin=true
   echo "Running in Cygwin"
 else
-  echo "This Setup Script only works for Linux and MacOS"
+  echo "This Setup Script only works for Windows Cygwin, Windows Subsystem for Linux and MacOS"
   exit -1
 fi
 
@@ -25,6 +25,9 @@ if [[ -f  $osreleaseFile ]]; then
     wsl=true
   fi
 fi
+
+echo "Hello $user!"
+exit -1
 
 user=`whoami`
 if [[ "$wsl" == true ]]; then
