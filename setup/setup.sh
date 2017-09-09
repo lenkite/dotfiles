@@ -11,7 +11,7 @@ elif [[ $uname == CYGWIN* ]]; then
   cygwin=true
   echo "Running in Cygwin"
 else
-  echo "This Setup Script only works for Linux and MacOS"
+  echo "This Setup Script only works for Windows Cygwin, Windows Subsystem for Linux and MacOS"
   exit -1
 fi
 
@@ -27,6 +27,9 @@ if [[ -f  $osreleaseFile ]]; then
 fi
 
 user=`whoami`
+echo "Hello $user!"
+exit -1
+
 if [[ "$wsl" == true ]]; then
   echo "Linux user is $user. Windows User is TODO"
   echo "Replacing /home/$user /etc/passwd"

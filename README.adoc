@@ -6,113 +6,26 @@
 == Overview
 
 My new cross-platform dotfiles (works on MacOS/Windows) that configures ZSH and VIM. It
-leverages prezto for ZSH configuration. I removed YADR since it was way too heavyweight and
-caused latency issues on Windows.
+leverages prezto for ZSH configuration. 
  
-== Manual Setup of Pre-requisites
+== Pre-Requisites: Needs Manual Setup 
 === Windows
-- Install link:[Chocolatey:https://chocolatey.org/], the fantastic windows package manager for software.
-- 
-- Ensure that you install either link:Cygwin[http://cygwin.com/] or you have the Windows 10 anniversary update and install the https://msdn.microsoft.com/commandline/wsl["Windows Subsystem for Linux"]. Make sure you install the following cygwin components are selected for installation: `zsh`,`wget`,`curl`.
-- Cygwin: Change Home Directory to Windows Home Directory. See: https://stackoverflow.com/questions/1494658/how-can-i-change-my-cygwin-home-folder-after-installation. You need to basically add a line `db_home:  /%H` to `/etc/nsswitch.conf`.
-- Cygwin: Change Shell to ZSH. 
+- Install link:https://chocolatey.org/[Chocolatey], the fantastic windows package manager for software.
+- If you are on Windows 10 with at-least the Creators Update please install the https://msdn.microsoft.com/commandline/wsl["Windows Subsystem for Linux"] which is also called by the terrible name of "Bash on Ubuntu on Windows". Refer to the https://msdn.microsoft.com/en-us/commandline/wsl/install_guide[Installation Guide]. 
+- IF you are on an older build of Windows,  install link:Cygwin[http://cygwin.com/]. Cygwin Support will be dropped in the future as Cygwin is slow as hell.
+ ** Cygwin: Make sure you install the following cygwin components are selected for installation: `zsh`,`wget`,`curl`.
+ ** Cygwin: Change Home Directory to Windows Home Directory. See: https://stackoverflow.com/questions/1494658/how-can-i-change-my-cygwin-home-folder-after-installation. You need to basically add a line `db_home:  /%H` to `/etc/nsswitch.conf`.
+ ** Cygwin: Change Shell to ZSH. See https://stackoverflow.com/questions/22363210/set-default-shell-in-cygwin/37815158#37815158. You need to add/edit the line containing `db_shell`.
+ ** Cygwin: Install apt-cyg. See https://github.com/transcode-open/apt-cyg
 
 === MacOS 
 - Install link:Homebrew[https://brew.sh/]
 - Install ZSH `brew install zsh zsh-completions`
 
 == Run Setup Script
-Open S
-
-=== Pre-Requisites
-
-If you are on Windows 10 with Anniversary Update please install the "Windows Subsystem for Linux" aka by the terrible name of "Bash on Ubuntu on Windows". Use the https://msdn.microsoft.com/en-us/commandline/wsl/install_guide[Installation Guide]. Please change your linux home directory to your windows home directory `$USERPROFILE`
-
-
-If you are on Windows 10 without the anniversary update, please install http://cygwin.com/[Cygwin]. Also install https://github.com/transcode-open/apt-cyg[apt-cyg]. Make sure that you install `zsh`, `zip`, `unzip`, `curl`, `git`, `wget` and other useful tools. 
-
-=== ZSH Setup
-<<<<<<< HEAD
-* Install prezto with the following command. `git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"`
-=======
-* Git clone 
-* Install YADR with the following command.
->>>>>>> 73c9b5ab5c62348279f966d20c917ee9e4d4a664
+Open a shell and execute the following command:
+.Execute this
+[source,shell]
 ----
-sh -c "`curl -fsSL https://raw.githubusercontent.com/skwp/dotfiles/master/install.sh`" -s ask
+curl -sfL  https://raw.github.com/lenkite/dotfiles/master/setup/setup.sh | sudo bash
 ----
-* Check out dotfiles to your home directory
-----
-cd ~
-git clone https://github.com/lenkite/dotfiles.git
-----
-* Then link `~/.zsh.after` to `dotfiles/zsh-after`, so we can override and fix YADR zsh.
-----
-rm -rf ~/.zsh.after
-ln -s ~/dotfiles/zsh-after ~/.zsh.after
-----
-
-=== Notes
-* Note that after doing the above you can put your custom zsh files in `~/.zsh.after` and they will be run automatically at shell startup. 
-
-=== YADR ZSH  customizations
-
-TODO fill me up later
-
-
-=== VIM Setup
-
-* Install vim-plug. See `https://github.com/junegunn/vim-plug`
-* Linux/Mac: Then link ~/.vimrc
------
-ln -s ~/dotfiles/vimrc ~/.vimrc
------
-* Then link ~/.gvimrc
------
-ln -s ~/dotfiles/gvimrc ~/.gvimrc
------
-
-* Start VIM and call :PlugInstall
-=======
-
-=== Spacemacs Setup
-* Spacemacs is emacs with VIM wizardry and the space leader key
-* See  http://spacemacs.org/
-* `brew cask install emacs`
-* Install Spacemacs:
- ** `git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d`
- ** Launch emacs (Make sure your internet connection is working)
-* Link all my private layers
-----
-find ~/dotfiles/spacemacs-layers -depth 1 -type d -exec ln -s '{}' ~/.emacs.d/private \;
-----
-
-== Common Editor Shortcuts 
-
-<<<<<<< HEAD
-Please note that VIM has _hundreds_ of motion commands and in some cases shorter alternatives to the below. Also Emacs has more functionality than an entire operating system! Intellij has thousands of actions. So, comprehensive coverage would take a very long time. Only some useful shortcuts are covered.
-
-=== Window Movement
-
-I have heavy use of window splits using the VIM window management keybindings. Generally all the VIM window keybindings start with `<C-w>`. The window movement keybindings are basically the standard VIM movement kebindings such as `hkjl` prefixed with `<C-w>`. Example: `<C-w>h` to move the cursor to the left window. These keybidings are more then fine for infrequently used movement commands such as moving the current window to the left `<C-H>`, etc, but are not good for the very frequently used movement commands such as moving the cursor to the left, top, bottom or right windows. 
-Decision: The Spacemacs window movement commands will be used to move from one window to another. Ex: `<SPC>wh`, `<SPC>wl`, `<SPC>wj` and `<SPC>wk`. 
-
-
-| =====================================================
-| Category   | ACTION IDEA     | ACTION VIM              | OSX GUI    | OSX Terminal | Windows
-| Navigation | TODO            | asdfasdf                |         |             |
-| Navigation | Navigate > File | `:Unite file_rec/async` | `Cmd-p` | `<Leader>p` | `Alt-p`
-| Navigation | Navigate > Type | `:Unite tag`            | `Cmd-t` | `<Leader>p` | `Alt-t`
-| Doc        | Show Param Info | `:Unite tag`            | `Cmd-i`    | `<Leader>i`  | `Alt-i`
-| Motion     | Move EOL        | Move EOL in insert mode | `Ctrl-E`   | same         | same
-| Transform  | Line Comment    | Shortcut for gc<Motion> | `Cmd-/`   | `<Leader>/`   | `Alt-/`
-| Transform  | Block Comment   | Visual block gc operator| `Cmd-S-/` | `<Leader>-?`  | `Alt-S-/`
-| ===
-
-
-
-=== Vim specific shortcuts added by plugins
-
-=======
->>>>>>> 7ae46cd4a90c91c98d0699285617127b91370cf5
-
