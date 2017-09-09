@@ -28,7 +28,6 @@ fi
 
 user=`whoami`
 echo "Hello $user!"
-exit -1
 
 if [[ "$wsl" == true ]]; then
   echo "Linux user is $user. Windows User is TODO"

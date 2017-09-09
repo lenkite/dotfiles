@@ -27,5 +27,5 @@ Open a shell and execute the following command:
 .Execute this
 [source,shell]
 ----
-curl -sfL  https://raw.github.com/lenkite/dotfiles/master/setup/setup.sh | sudo bash
+curl -sfL  https://raw.github.com/lenkite/dotfiles/master/setup/setup.sh | bash
 ----
