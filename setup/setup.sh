@@ -90,6 +90,7 @@ function setup-zsh {
 }
 
 function setup-vim {
+  echo "Setting up vim.."
   rm ~/.vimrc 2> /dev/null
   rm ~/.ideavimrc 2> /dev/null
   ln $vimConfigDir/vimrc ~/.vimrc

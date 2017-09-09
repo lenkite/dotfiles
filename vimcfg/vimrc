@@ -1,46 +1,23 @@
-" vim: set foldmarker={,} foldlevel=0 foldmethod=marker
+" vim: set sw=2 ts=2 sts=2 et tw=80 foldmarker={,} foldlevel=0 foldmethod=marker spell:
 
-" Modeline and Notes {
-"   Tarun Ramakrishna Elankath's vimrc file. Been using VIM for 8 years now. 
+" NOTE {
+"   Tarun Ramakrishna Elankath's vimrc file. Been using VIM for 12 years now. 
 "   Re-created from scratch on Aug 20, 2011
 "   Re-created from scratch again on Aug 6, 2016, taking the best parts from YADR
+"   Extensively modified in period Aug, 2017
 "   https://github.com/lenkite/dotfiles
 " }
-"TODO: Only keep stuff here that is not covered by defaults of tpope/vim-sensible
-set number                     " Line numbers are good
-"set relativenumber             " Relative line numbers are better but cause
-"SLOW SCROLLING :(
-set history=10000               " Store lots of :cmdline history
-set showcmd                    " Show incomplete cmds down the bottom
-set gcr=a:blinkon0             " Disable cursor blink
-set autowrite                  " Writes contents of file on next rewind last first make etc
-set wmh=0                      " Set winminheight to 0 so that
-                               " maximizing a window collapses all other windows
-set visualbell noerrorbells t_vb= "
-set lazyredraw " redraw only when we need to
-set smarttab
-let g:skip_loading_mswin="true"
-autocmd FileType make set noexpandtab shiftwidth=8 softtabstop=0
+"
 
-
-" This makes vim act like all other editors, buffers can
-" exist in the background without being in a window.
-" http://items.sjbach.com/319/configuring-vim-right
-set hidden
-
-"turn on syntax highlighting
-syntax on
-set synmaxcol=2048        "long lines are slow
-
-"================ Check the first line for a modeline if present ============
+" { * Modeline Settings
 set modelines=1
-" ================ Turn Off Swap Files ==============
+" }
 
-set noswapfile
-set nobackup
-set nowb
 
-" ================ Persistent Undo ==================
+"{ * History, Buffers, Undo
+set history=10000               " Store lots of :cmdline history
+set autowrite                  " Writes contents of file on next rewind last first make etc
+" { ** Persistent Undo 
 " Keep undo history across sessions, by storing in file.
 " Only works all the time.
 if has('persistent_undo') && !isdirectory(expand('~').'/.vim/backups')
@@ -50,35 +27,63 @@ if has('persistent_undo') && !isdirectory(expand('~').'/.vim/backups')
   set undolevels=2000         " How many undos
   set undoreload=15000        " number of lines to save for undo
 endif
+"  }
+"}
 
-" ================ Indentation ======================
 
+"{ * Turn Off Swap Files And Backups 
+set noswapfile
+set nobackup
+set nowb
+"}
+
+
+" { * Indentation 
 set autoindent
 set smartindent
 set smarttab
+autocmd FileType make set noexpandtab shiftwidth=8 softtabstop=0 "Make files need a Tab!
 set shiftwidth=2
 set softtabstop=2
 set tabstop=2
 set expandtab
+"}
 
 
-filetype plugin on
-filetype indent on
-
+" { * Screen Related
+"
 " Display tabs and trailing spaces visually
 set list listchars=tab:\ \ ,trail:·
 set nowrap       "Don't wrap lines
 set linebreak    "Wrap lines at convenient points
+set visualbell noerrorbells t_vb= "
+set lazyredraw " redraw only when we need to
+" This makes vim act like all other editors, buffers can
+" exist in the background without being in a window.
+" http://items.sjbach.com/319/configuring-vim-right
+set number                     " Line numbers are good
+"set relativenumber             " Relative line numbers are better but cause SLOW SCROLLING :(
+set hidden
+set wmh=0                      " Set winminheight to 0 so that
+                               " maximizing a window collapses all other windows
+set gcr=a:blinkon0             " Disable cursor blink
+set showcmd                    " Show incomplete cmds down the bottom
 
-" ================ Folds ============================
-"
- set foldmethod=indent   "fold based on indent
- set foldnestmax=3       "deepest fold is 3 levels
- set foldlevel=2
- "set nofoldenable        "dont fold by default
+"}
 
 
- " ================ Completion =======================
+"{ * Folds 
+""
+set foldnestmax=3       "deepest fold is 3 levels
+set foldlevel=0
+" }
+
+
+ " * { Syntax and Completion 
+syntax on
+set synmaxcol=2048        "long lines are slow
+filetype plugin on
+filetype indent on
  " "http://vim.wikia.com/wiki/Great_wildmode/wildmenu_and_console_mouse
 let g:skip_loading_mswin=1
  
@@ -95,42 +100,34 @@ set wildignore+=log/**
 set wildignore+=tmp/**
 set wildignore+=*.png,*.jpg,*.gif
 set wildignore+=.idea/**
- 
+"} 
 
 
+
+" { * Clipboard
 "https://stackoverflow.com/questions/30691466/what-is-difference-between-vims-clipboard-unnamed-and-unnamedplus-settings
 set clipboard^=unnamed,unnamedplus
+" }
 
-"
-"" ================ Scrolling ========================
+
+" { * Scrolling 
 
 set scrolloff=6         "Start scrolling when we're 8 lines away from margins
 set sidescrolloff=8
 set sidescroll=1
 
+" }
 
-" ================ Search ===========================
+
+" { * Search 
 "
  set hlsearch        " Highlight searches by default
  set ignorecase      " Ignore case when searching...
  set smartcase       " ...unless we type a capital
+" }
 
-" =============== Plug Initialization ===============
-" This loads all the plugins specified in ./vimcfg/plugins.vim
-" Use vim-plugin plugin to manage all other plugins
-let s:dotfilesDirs=['~/src/dotfiles', '~/dotfiles']
 
-for s:dir in s:dotfilesDirs
-	let s:vimPluginsCfg = expand(s:dir . "/vimcfg/plugins.vim")
-	if filereadable(s:vimPluginsCfg)
- 	  let g:vimCfgDir=expand(s:dir . "/vimcfg/")
-		exec ":source" . s:vimPluginsCfg
-		break
-	endif
-endfor
-
-"
-" Load matchit.vim
+" { * Matchit and Parenthesis
 if filereadable(expand("$VIMRUNTIME/macros/matchit.vim"))
   source $VIMRUNTIME/macros/matchit.vim
 endif
@@ -138,19 +135,19 @@ endif
 set matchtime=1 "time in tenths of a second to show the matching parenthesis
 set showmatch "The vim implementation of matching parenthesis sucks
 let loaded_matchparen = 1 "Parenthesis highlight is distracting like hell!
-" When vimrc is edited, reload it
-autocmd! bufwritepost vimrc source %
+"}
 
+
+" { * Autoreload vimrc
+autocmd! bufwritepost vimrc source %
 function! HasColorscheme(name)
     let pat = 'colors/'.a:name.'.vim'
     return !empty(globpath(&rtp, l:pat))
 endfunction
+autocmd VimEnter * if HasColorscheme("zenburn") | colorscheme zenburn | endif
 
 
-if HasColorscheme('zenburn')
- colorscheme zenburn
-endif
-
+" { * Cygwin specific stuff
 if $Oj == "Windows_NT"
   let &t_ti.="\e[1 q"
   let &t_SI.="\e[5 q"
@@ -159,4 +156,277 @@ if $Oj == "Windows_NT"
   " Avoid mswin.vim making Ctrl-v act as paste
   behave xterm
 endif
+" }
 
+
+"{ * Plugin List (Assumes you have vim-plug installed!
+"
+call plug#begin('~/.vim/plugged')
+
+" ** Plugins: Tpope: Bracket mappings, surround, commentary, repeat {  
+Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-fugitive'
+"}
+
+" ** Plugins: Window {
+Plug 'drn/zoomwin-vim'
+" }
+
+" ** Plugins: Completion And Snippets {
+Plug 'SirVer/ultisnips'
+Plug 'Shougo/neocomplete.vim'
+Plug 'Shougo/neosnippet.vim'
+Plug 'Shougo/neosnippet-snippets'
+Plug 'ervandew/supertab'
+Plug 'honza/vim-snippets'
+Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
+Plug 'SirVer/ultisnips'
+"}
+
+" ** Plugins: Navigation: Fuzzy Find, Vimfiler, Tags , etc {
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'majutsushi/tagbar'
+Plug 'justinmk/vim-dirvish'
+Plug 'scrooloose/nerdtree'
+Plug 'ludovicchabant/vim-gutentags'
+Plug 'travisjeffery/vim-gotosymbol'
+"
+" "}
+
+" ** Plugins: Motion, Text Objects, Regions {
+Plug 'easymotion/vim-easymotion'
+Plug 'justinmk/vim-sneak'
+Plug 'wellle/targets.vim'
+Plug 'terryma/vim-expand-region'
+"}
+
+" ** Plugins: Syntax/Linting  {
+Plug 'scrooloose/syntastic'
+" }
+
+" ** Plugins: Language {
+Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+Plug 'rust-lang/rust.vim'
+"}
+
+" ** Plugins: Search {
+Plug 'mhinz/vim-grepper'
+Plug 'nelstrom/vim-visual-star-search'
+Plug 'haya14busa/incsearch.vim'
+Plug 'tmhedberg/matchit'
+"}
+
+" ** Plugins: Color Schemes {
+Plug 'flazz/vim-colorschemes'
+"https://bluz71.github.io/2017/05/21/vim-plugins-i-like.html
+Plug 'rakr/vim-one'
+"}
+
+" ** Table Alignment and Editing Plugins {
+Plug 'junegunn/vim-easy-align'
+" }
+
+" { ** Misc Light weight status line. airline/powerline suck
+" From https://bluz71.github.io/2017/05/21/vim-plugins-i-like.html
+Plug 'bluz71/vim-moonfly-statusline'
+Plug 'airblade/vim-rooter'
+"}
+
+" Add plugins to &runtimepath
+call plug#end()
+"}
+
+
+"{ * Basic Key Mappings
+" Allow quit via single keypress (Q)
+nmap Q :qa<CR>
+
+"Save files since Cmd-S and Ctrl-S don't work well on Terminals (aaargh!)
+noremap <Leader>s :update<CR>
+inoremap <Leader>s <Esc>:update<CR>
+
+"Clear highlight on double escape
+nnoremap <esc><esc> :noh<return>
+
+" From https://blog.petrzemek.net/2016/04/06/things-about-vim-i-wish-i-knew-earlier/
+" Quickly select the text that was just pasted. This allows you to, e.g.,
+" indent it after pasting.
+noremap gV `[v`]
+
+" Make Y yank everything from the cursor to the end of the line. This makes Y
+" act more like C or D because by default, Y yanks the current line (i.e. the
+" same as yyj).
+noremap Y y$
+
+" Make Ctrl-e jump to the end of the current line in the insert mode. This is
+" handy when you are in the middle of a line and would like to go to its end
+" without switching to the normal mode.
+inoremap <C-e> <C-o>$
+
+"Let <C-H> open help, obviously not as convenient has spacemacs C-H, but
+"we will live with this for now.
+" NOTE: I decided to use window mappings
+"map <C-h> <Esc>:help 
+
+"Window management Commands
+"https://robots.thoughtbot.com/vim-splits-move-faster-and-more-naturally
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+" Lovely! Got from some reddit post in the VIM forum to map backspace to last used file.
+nnoremap  <BS> <C-^>
+
+
+" From reddit
+" https://www.reddit.com/r/vim/comments/6pw5ui/what_is_the_most_diffucult_vim_command_to_enter/
+" Just do a visual selection and K J will move it up & down and it'll also
+" reindent the code correctly.
+" Move visual block. [Tarun: This is amazing and I can't understand it, Freaky]
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+
+
+"Cycle through buffers
+"From http://vim.wikia.com/wiki/Cycle_through_buffers_including_hidden_buffers
+"Umm finaly a shift key that works!! I shoudl use this for next/previous error
+"instead!!
+:nnoremap <Tab> :bnext<CR>
+:nnoremap <S-Tab> :bprevious<CR>
+
+"Space and S-Space should go page down and page up!
+nnoremap <Space> <C-D>
+"Shift-space Doesn't work in terminal. You need to remap key in terminal
+"preferences
+nnoremap <S-Space> <C-U> 
+"}
+
+" { * NERDTree and Dirvish Config
+autocmd VimEnter * if exists(":FZF") | exe "map <C-p> :FZF\<CR>" | endif
+autocmd VimEnter * if exists(":Dirvish") | exe "nnoremap <Leader>fd :Dirvish\<CR>" | endif
+function! ConfigureNerdTree()
+  " f for filess
+  nnoremap <Leader>ff :NERDTreeToggle<CR>
+  nnoremap <Leader>fF :NERDTreeFind<CR>
+  nnoremap <Leader>fb :NERDTreeFromBookmark<CR>
+  nnoremap <Leader>fc :NERDTreeCWD<CR>
+
+  " From FAQ: How can I open NERDTree automatically when vim starts up on
+  " opening a directory? (How can I open NERDTree automatically when vim starts
+  " up on opening a directory?)
+  autocmd StdinReadPre * let s:std_in=1
+  autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
+
+  " From FAQ: Close vim if only window left open is NERDTree
+  autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+  " From https://medium.com/@victormours/a-better-nerdtree-setup-3d3921abc0b9
+  " Though I have made my own keybindings
+  let NERDTreeQuitOnOpen = 1
+
+  " Automatically delete the buffer of the file you just deleted with NerdTree:
+  let NERDTreeAutoDeleteBuffer = 1
+
+  "You’re going to be looking at your NerdTree a lot. You might as well make
+  "sure it looks nice and disable that old “Press ? for help”.
+  let NERDTreeMinimalUI = 1
+  let NERDTreeDirArrows = 1
+  let NERDTreeShowBookmarks = 1
+
+endfunction
+autocmd VimEnter * if exists(":NERDTree") | call ConfigureNerdTree() | endif
+" }
+
+
+" { * Search Plugin Config
+"From https://github.com/haya14busa/incsearch.vim
+if exists("g:incsearch#auto_nohlsearch")
+  map /  <Plug>(incsearch-forward)
+  map ?  <Plug>(incsearch-backward)
+  map g/ <Plug>(incsearch-stay)
+  map n  <Plug>(incsearch-nohl-n)
+  map N  <Plug>(incsearch-nohl-N)
+  map *  <Plug>(incsearch-nohl-*)
+  map #  <Plug>(incsearch-nohl-#)
+  map g* <Plug>(incsearch-nohl-g*)
+  map g# <Plug>(incsearch-nohl-g#)
+endif
+" }
+
+
+" { * Rust Lang Config
+"Set the compiler as cargo for rust files
+autocmd BufRead,BufNewFile Cargo.toml,Cargo.lock,*.rs compiler cargo
+"}
+
+
+" { * Go Lang Config
+"Taken from example mappings in https://github.com/fatih/vim-go
+"
+function! ConfigureVimGo()
+  au FileType go nmap <Leader>x <Plug>(go-run)
+  au FileType go nmap <leader>b <Plug>(go-build)
+  au FileType go nmap <leader>t <Plug>(go-test)
+  au FileType go nmap <leader>c <Plug>(go-coverage)
+
+  au FileType go nmap <leader>ds <Plug>(go-def-split)
+  au FileType go nmap <leader>dv <Plug>(go-def-vertical)
+  au FileType go nmap <leader>dt <Plug>(go-def-tab)
+
+  au FileType go nmap <leader>gd <Plug>(go-doc)
+  au FileType go nmap <leader>gv <Plug>(go-doc-vertical)
+  au FileType go nmap <leader>gb <Plug>(go-doc-browser)
+
+  au FileType go nmap <leader>i <Plug>(go-info)
+  au FileType go nmap <leader>r <Plug>(go-rename)
+
+
+  let g:go_highlight_functions = 1
+  let g:go_highlight_methods = 1
+  let g:go_highlight_fields = 1
+  let g:go_highlight_types = 1
+  let g:go_highlight_operators = 1
+  let g:go_highlight_build_constraints = 1
+
+endfunction
+autocmd FileType go if exists(":GoBuild") | call ConfigureVimGo() | endif
+
+
+
+" }
+
+
+" { Sneak Config
+"replace 'f' with 1-char Sneak
+nmap f <Plug>Sneak_f
+nmap F <Plug>Sneak_F
+xmap f <Plug>Sneak_f
+xmap F <Plug>Sneak_F
+omap f <Plug>Sneak_f
+omap F <Plug>Sneak_F
+"replace 't' with 1-char Sneak
+nmap t <Plug>Sneak_t
+nmap T <Plug>Sneak_T
+xmap t <Plug>Sneak_t
+xmap T <Plug>Sneak_T
+omap t <Plug>Sneak_t
+omap T <Plug>Sneak_T
+" }
+
+" EasyAlign Config {
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+"}
+
+"{ * GLOBAL Variables 
+let g:skip_loading_mswin="true"  "Do not like mswin settings. Want consistent behaviour across platforms
+let g:cargo_makeprg_params='build'
+"}
+"
