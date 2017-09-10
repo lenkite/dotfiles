@@ -20,6 +20,7 @@ setup_main() {
 
   if [[ -d $dotfilesDir ]]; then
     echo "Dotfiles dir already exists. Moving to /tmp"
+    rm /tmp/dotfiles 2> /dev/null
     mv $dotfilesDir /tmp
   fi
   echo "Cloning dotfiles into $dotfilesDir"
@@ -88,6 +89,8 @@ set_homevars() {
     winHome=${wh/\"}
     echo "Windows home is >>>$winHome<<<"
     export winHome=$(convert_wpath $winHome)
+  elif [[ $isCygwin == true ]]; then
+    winHome=$HOME
   fi
   export linHome=$HOME
   echo "Linux home: $linHome"
@@ -198,16 +201,25 @@ setup_zsh() {
   fi
 
   install_rupa_z
+  echo "Changing shell to /bin/zsh.."
+  sudo chsh -s /bin/zsh
 }
 
 setup_vscode() {
   echo "Setting up vscode"
   sourceDir=$dotfilesDir/vscode
   if [[ $isMacos == true ]]; then
-      targetDir="$HOME/Library/Application Support/Code/User"
+    targetDir="$HOME/Library/Application Support/Code/User"
   elif [[ $isCygwin == true ]]; then
-    targetDir="$HOME/AppData/Roaming/Code/User/"
+    targetDir="$winHome/AppData/Roaming/Code/User"
+  elif [[ $isWsl == true ]]; then
+    targetDir="$winHome/AppData/Roaming/Code/User"
+  elif [[ $isLinux == true ]]; then
+    echo "TODO: Not sure what is VSC's target dir in real linux..check it out!"
+    exit -1
+    targetDir="$winHome/AppData/Roaming/Code/User"
   fi
+
   if [[ -e $targetDir/keybindings.json ]]; then
     echo "Deleting existing vscode keybindings.json"
     rm $targetDir/keybindings.json 2> /dev/null
