@@ -6,6 +6,16 @@ cdir=$(cd "$(dirname "$0")"; pwd)
 main() {
   detect_running_os
   set_uservars
+  if [[ "$isWsl" == true ]]; then
+    start() {
+      local target_path=$(wslpath -r -s -w $1)
+      (cd /mnt/c && /mnt/c/Windows/explorer.exe $target_path)
+    }
+  elif [[ "$isMacos" == true ]]; then
+    alias start=open
+  else
+    #TODO: how to handle this for pure linux
+  fi
 }
 
 
@@ -48,5 +58,6 @@ set_uservars() {
   linUser=`whoami`
 	winUser=$(get_windows_user)
 }
+
 
 main
