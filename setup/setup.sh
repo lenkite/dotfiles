@@ -149,12 +149,12 @@ install_pkgs() {
 
 setup_vim() {
   echo "Setting up vim.."
-  rm ~/.vimrc 2> /dev/null
-  rm ~/.ideavimrc 2> /dev/null
-  ln $vimConfigDir/vimrc ~/.vimrc
-  ln $vimConfigDir/ideavimrc ~/.ideavimrc
+  rm $trueHome/.vimrc 2> /dev/null
+  rm $trueHome/.ideavimrc 2> /dev/null
+  ln $vimConfigDir/vimrc $trueHome/.vimrc
+  ln $vimConfigDir/ideavimrc $trueHome/.ideavimrc
   echo "Setup Dir $dotfilesSetupDir"
-  curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+  curl -fLo $trueHome/.vim/autoload/plug.vim --create-dirs \
       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 }
 
@@ -170,12 +170,12 @@ install_rupa_z() {
 setup_zsh() {
   echo "Setting up ZSH"
   echo "Deleting all existing .z* files from home directory.."
-  rm ~/.zshrc 2> /dev/null
-  rm ~/.zprofile 2> /dev/null
-  rm ~/.zshenv 2> /dev/null
-  rm ~/.zlogin 2> /dev/null
-  rm ~/.zlogout 2> /dev/null
-  rm ~/.zpreztorc 2> /dev/null
+  rm $trueHome/.zshrc 2> /dev/null
+  rm $trueHome/.zprofile 2> /dev/null
+  rm $trueHome/.zshenv 2> /dev/null
+  rm $trueHome/.zlogin 2> /dev/null
+  rm $trueHome/.zlogout 2> /dev/null
+  rm $trueHome/.zpreztorc 2> /dev/null
   echo "Deleted all existing .z* files from home directory.."
 
   if [[ -e $preztoDir ]]; then
@@ -187,7 +187,7 @@ setup_zsh() {
     git clone --recursive https://github.com/lenkite/prezto.git $preztoDir
   fi
 
-  wget https://raw.githubusercontent.com/rupa/z/master/z.sh -O ~/z.sh
+  wget https://raw.githubusercontent.com/rupa/z/master/z.sh -O $trueHome/z.sh
 
   echo "PreztoDir is $preztoDir. Making ZSH softlinks to $preztoDir./runcoms"
   for rcfile in $preztoDir/runcoms/*; do
