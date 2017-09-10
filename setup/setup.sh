@@ -1,8 +1,9 @@
 #!/bin/bash
+
 # Setups up dotfiles for use on various OS'es. 
 # Supported OS'es are Windows/Cygwin, Windows/WSL, MacOS and Linux
-
 # Dev Note: Some funcs here are duplicated in zshcfg/0.zsh. This is by design
+
 setup_main() {
   detect_running_os
   set_uservars
@@ -10,6 +11,7 @@ setup_main() {
 
 	if [[ $isWsl == true ]]; then
 		replace_linux_home_shell
+    exit -1
 	fi
 
   if [[ $isWsl == true ]]; then
@@ -83,6 +85,11 @@ set_uservars() {
 }
 
 set_homevars() {
+  if [[ $isLinux == true ]]; then
+    export linHome=$HOME
+    export trueHome=$linHome
+    echo "Linux home: $linHome"
+  fi
   if [[ $isWsl == true ]]; then
     local wh=$(/mnt/c/Windows/System32/cmd.exe '/c echo %USERPROFILE%')
     wh=${wh/$'\r'} # https://stackoverflow.com/questions/7800482/in-bash-how-do-i-replace-r-from-a-variable-that-exist-in-a-file-written-using
@@ -93,10 +100,6 @@ set_homevars() {
   elif [[ $isCygwin == true ]]; then
     winHome=$HOME
     export trueHome=$winHome
-  elif [[ $isLinux == true ]]; then
-    export linHome=$HOME
-    export trueHome=$linHome
-    echo "Linux home: $linHome"
   fi
   echo "True home: $trueHome"
 }
