@@ -6,7 +6,7 @@ setup_main() {
   set_homevars
 
 	if [[ $isWsl == true ]]; then
-		replace_linux_home
+		replace_linux_home_shell
 	fi
 
   if [[ $isWsl == true ]]; then
@@ -20,8 +20,7 @@ setup_main() {
 
   if [[ -d $dotfilesDir ]]; then
     echo "Dotfiles dir already exists. Moving to /tmp"
-    rm /tmp/dotfiles 2> /dev/null
-    mv $dotfilesDir /tmp
+    rm -rf $dotfilesDir
   fi
   echo "Cloning dotfiles into $dotfilesDir"
   git clone https://github.com/lenkite/dotfiles $dotfilesDir
@@ -30,9 +29,7 @@ setup_main() {
   # it is really crappy that we don't have a better way to get full path to a script
 
   export vimConfigDir=$dotfilesDir/vimcfg
-  export SDKHOME=~/sdk
-  export sdkhome=$SDKHOME
-  export preztoDir=$HOME/.zprezto
+  export preztoDir=$trueHome/.zprezto
 
   if [[ ! -d $dotfilesSetupDir ]]; then
     echo "Error: $dotfilesSetupDir does not exist! Have you checked out dotfiles correctly?"
@@ -89,11 +86,16 @@ set_homevars() {
     winHome=${wh/\"}
     echo "Windows home is >>>$winHome<<<"
     export winHome=$(convert_wpath $winHome)
+    export trueHome=$winHome
   elif [[ $isCygwin == true ]]; then
     winHome=$HOME
+    export trueHome=$winHome
+  elif [[ $isLinux == true ]]; then
+    export linHome=$HOME
+    export trueHome=$linHome
+    echo "Linux home: $linHome"
   fi
-  export linHome=$HOME
-  echo "Linux home: $linHome"
+  echo "True home: $trueHome"
 }
 
 get_windows_user() {
@@ -108,13 +110,13 @@ convert_wpath() {
   echo "$@" | sed -e 's|\\|/|g' -e 's|^\([A-Za-z]\)\:/\(.*\)|/mnt/\L\1\E/\2|'
 }
 
-replace_linux_home() {
+replace_linux_home_shell() {
 	if [[ $isWsl == true ]]; then
     cat $vimscript > /tmp/changehome.vim
 		echo "Linux user is $user. Windows User is $winUser"
 		echo "Replacing linux home directory: '$linHome' with windows home dir: '$winHome'"
-    echo "Need priv to execute: sudo sed -i.bak s_${linHome}_${winHome}_ /etc/passwd"
-    sudo sed -i.bak s_${linHome}_${winHome}_ /etc/passwd
+    echo "Need priv to execute: sed -i.bak -e s_${linHome}_${winHome}_ -e s_/bin/bash_/bin/zsh_ /etc/passwd"
+    sudo sed -i.bak -e "s_${linHome}_${winHome}_" -e s_/bin/bash_/bin/zsh_ /etc/passwd
 		echo "Kindly check /etc/passwd to see if its ok"
 	fi
 }
@@ -161,7 +163,7 @@ install_rupa_z() {
  if [[ "$isMacos" == true ]]; then
   brew install z
  elif [[ "$isLinux" == true ]]; then
-  wget https://raw.githubusercontent.com/rupa/z/master/z.sh -O ~/.z.sh
+  wget https://raw.githubusercontent.com/rupa/z/master/z.sh -O $trueHome/.z.sh
  fi
 }
 
@@ -190,8 +192,8 @@ setup_zsh() {
   echo "PreztoDir is $preztoDir. Making ZSH softlinks to $preztoDir./runcoms"
   for rcfile in $preztoDir/runcoms/*; do
     if [[ $rcfile != *README* ]]; then
-      echo "Executing: ln -s $rcfile $HOME/.${rcfile##*/}"
-      ln -s "$rcfile" "$HOME/.${rcfile##*/}"
+      echo "Executing: ln -s $rcfile $trueHome/.${rcfile##*/}"
+      ln -s "$rcfile" "$trueHome/.${rcfile##*/}"
     fi
   done
 
