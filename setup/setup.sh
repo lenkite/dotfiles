@@ -1,115 +1,129 @@
 #!/bin/bash
 
-uname=`uname`
-if [[ $uname == 'Darwin' ]]; then
-  macos=true
-  echo "Running MacOS"
-elif [[ $uname == 'Linux' ]]; then
-	linux=true
-	echo "Running Linux"
-elif [[ $uname == CYGWIN* ]]; then
-  cygwin=true
-  echo "Running in Cygwin"
-else
-  echo "This Setup Script only works for Windows Cygwin, Windows Subsystem for Linux and MacOS"
-  exit -1
-fi
+setup_main() {
+  detect_running_os
+  set_uservars
+  set_homevars
 
-osreleaseFile=/proc/sys/kernel/osrelease
-echo "Checking $osreleaseFile (if present)"
-if [[ -f  $osreleaseFile ]]; then
-  osrelease=`cat $osreleaseFile`
-  echo "Linux OS release is $osrelease"
-  if [[ $osrelease == *Microsoft* ]]; then
-    echo "Running in Windows Subystem for Linux"
-    wsl=true
-  fi
-fi
+	if [[ $isWsl == true ]]; then
+		replace_linux_home
+	fi
 
-user=`whoami`
-echo "Hello $user!"
-
-if [[ "$wsl" == true ]]; then
-  echo "Linux user is $user. Windows User is TODO"
-  echo "Replacing /home/$user /etc/passwd"
-  echo "TODO"
-  exit -1
-fi
-
-
-#http://stackoverflow.com/questions/5756524/how-to-get-absolute-path-name-of-shell-script-on-macos
-# it is really crappy that we don't have a better way to get full path to a script
-export dotfilesSetupDir=$(cd "$(dirname "$0")"; pwd)
-export dotfilesDir="$(dirname $dotfilesSetupDir)"
-export vimConfigDir=$dotfilesDir/vimcfg
-export SDKHOME=~/sdk
-export sdkhome=$SDKHOME
-export preztoDir=$HOME/.zprezto
-
-if [[ ! -d $dotfilesSetupDir ]]; then
-  echo "Error: $dotfilesSetupDir does not exist! Have you checked out dotfiles correctly?"
-  exit -1
-fi
-
-echo "Dotfiles Dir: $dotfilesDir"
-echo "VimConfig Dir: $vimConfigDir"
-
-
-function setup-zsh {
-  echo "Deleting all existing .z* files from home directory.."
-  rm ~/.zshrc 2> /dev/null
-  rm ~/.zprofile 2> /dev/null
-  rm ~/.zshenv 2> /dev/null
-  rm ~/.zlogin 2> /dev/null
-  rm ~/.zlogout 2> /dev/null
-  rm ~/.zpreztorc 2> /dev/null
-  echo "Deleted all existing .z* files from home directory.."
-
-  if [[ -e $preztoDir ]]; then
-    echo "$preztoDir exists. Updating the same"
-    #git -C $preztoDir submodule update --init --recursive
-    #git -C $preztoDir pull
+  if [[ $isWsl == true ]]; then
+    export dotfilesDir=$winHome/dotfiles
   else
-    echo "$preztoDir does not exist. Cloning freshly"
-    git clone --recursive https://github.com/lenkite/prezto.git $preztoDir
+    export dotfilesDir=$HOME/dotfiles
   fi
 
-  echo "PreztoDir is $preztoDir. Making ZSH softlinks to $preztoDir./runcoms"
-  for rcfile in $preztoDir/runcoms/*; do
-    if [[ $rcfile != *README* ]]; then
-      echo "Executing: ln -s $rcfile $HOME/.${rcfile##*/}"
-      ln -s "$rcfile" "$HOME/.${rcfile##*/}"
-    fi
-  done
+  #export dotfilesSetupDir=$(cd "$(dirname "$0")"; pwd)
+  export dotfilesSetupDir="$dotfilesDir/setup"
 
-  if [[ $SHELL != "/bin/zsh" ]]; then
-    echo "Current shell is $SHELL. Changing to /bin/zsh"
-    chsh -s /bin/zsh
+  if [[ -d $dotfilesDir ]]; then
+    echo "Dotfiles dir already exists. Moving to /tmp"
+    mv $dotfilesDir /tmp
   fi
+  echo "Cloning dotfiles into $dotfilesDir"
+  git clone https://github.com/lenkite/dotfiles $dotfilesDir
 
+  #http://stackoverflow.com/questions/5756524/how-to-get-absolute-path-name-of-shell-script-on-macos
+  # it is really crappy that we don't have a better way to get full path to a script
+
+  export vimConfigDir=$dotfilesDir/vimcfg
+  export SDKHOME=~/sdk
+  export sdkhome=$SDKHOME
+  export preztoDir=$HOME/.zprezto
+
+  if [[ ! -d $dotfilesSetupDir ]]; then
+    echo "Error: $dotfilesSetupDir does not exist! Have you checked out dotfiles correctly?"
+    exit -1
+  fi
+  echo "Dotfiles Dir: $dotfilesDir"
+  echo "VimConfig Dir: $vimConfigDir"
+
+  install_pkgs
+  setup_zsh
+  setup_vim
+  setup_vscode
+  
 }
 
-function setup-vim {
-  echo "Setting up vim.."
-  rm ~/.vimrc 2> /dev/null
-  rm ~/.ideavimrc 2> /dev/null
-  ln $vimConfigDir/vimrc ~/.vimrc
-  ln $vimConfigDir/ideavimrc ~/.ideavimrc
-  echo "Setup Dir $dotfilesSetupDir"
-  curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+detect_running_os() {
+	uname=`uname`
+	if [[ $uname == 'Darwin' ]]; then
+		export isMacos=true
+		echo "Running in MacOS"
+	elif [[ $uname == 'Linux' ]]; then
+		export isLinux=true
+		echo "Running in Linux"
+	elif [[ $uname == CYGWIN* ]]; then
+		export isCygwin=true
+		echo "Running in Cygwin"
+	else
+		echo "This Setup Script only works for Windows Cygwin, Windows Subsystem for Linux and MacOS"
+		exit -1
+	fi
+	export osreleaseFile=/proc/sys/kernel/osrelease
+	echo "Checking $osreleaseFile (if present)"
+	if [[ -f  $osreleaseFile ]]; then
+		osrelease=`cat $osreleaseFile`
+		echo "Linux OS release is $osrelease"
+		if [[ $osrelease == *Microsoft* ]]; then
+			echo "Running in WSL: Windows Subystem for Linux"
+			export isWsl=true
+		fi
+	fi
 }
 
 
 
-function install-pkgs {
-  echo " Installing packages"
- if [[ "$macos" == true ]]; then
-  brew install zsh z git the_silver_searcher
- elif [[ "$linux" == true ]]; then
-  sudo apt-get install git zsh silversearcher-ag
-  wget https://raw.githubusercontent.com/rupa/z/master/z.sh -O ~/z.sh
- elif [[ "$cygwin" == true ]]; then
+set_uservars() {
+  user=`whoami`
+	winUser=$(get_windows_user)
+}
+
+set_homevars() {
+  if [[ $isWsl == true ]]; then
+    local wh=$(/mnt/c/Windows/System32/cmd.exe '/c echo %USERPROFILE%')
+    wh=${wh/$'\r'} # https://stackoverflow.com/questions/7800482/in-bash-how-do-i-replace-r-from-a-variable-that-exist-in-a-file-written-using
+    winHome=${wh/\"}
+    echo "Windows home is >>>$winHome<<<"
+    export winHome=$(convert_wpath $winHome)
+  fi
+  export linHome=$HOME
+  echo "Linux home: $linHome"
+}
+
+get_windows_user() {
+	local sys32dir="/mnt/c/Windows/System32"
+	local winWho=$(cd $sys32dir; whoami.exe)
+	local winUser=${winWho##*\\}
+	cd $cdir
+	echo $winUser 
+}
+
+convert_wpath() {
+  echo "$@" | sed -e 's|\\|/|g' -e 's|^\([A-Za-z]\)\:/\(.*\)|/mnt/\L\1\E/\2|'
+}
+
+replace_linux_home() {
+	if [[ $isWsl == true ]]; then
+    cat $vimscript > /tmp/changehome.vim
+		echo "Linux user is $user. Windows User is $winUser"
+		echo "Replacing linux home directory: '$linHome' with windows home dir: '$winHome'"
+    echo "Need priv to execute: sudo sed -i.bak s_${linHome}_${winHome}_ /etc/passwd"
+    sudo sed -i.bak s_${linHome}_${winHome}_ /etc/passwd
+		echo "Kindly check /etc/passwd to see if its ok"
+	fi
+}
+
+
+install_pkgs() {
+ echo " Installing packages"
+ if [[ $isMacos == true ]]; then
+  brew install zsh git the_silver_searcher
+ elif [[ $isLinux == true ]]; then
+  sudo apt-get install git zsh silversearcher-ag netcat-openbsd
+ elif [[ $isCygwin == true ]]; then
    if [[ -f /tmp/apt-cyg ]]; then
      rm /tmp/apt-cyg
    fi
@@ -128,11 +142,70 @@ function install-pkgs {
  fi
 }
 
-function setup-vscode {
+setup_vim() {
+  echo "Setting up vim.."
+  rm ~/.vimrc 2> /dev/null
+  rm ~/.ideavimrc 2> /dev/null
+  ln $vimConfigDir/vimrc ~/.vimrc
+  ln $vimConfigDir/ideavimrc ~/.ideavimrc
+  echo "Setup Dir $dotfilesSetupDir"
+  curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+}
+
+install_rupa_z() {
+  echo "Setting up rupa z"
+ if [[ "$isMacos" == true ]]; then
+  brew install z
+ elif [[ "$isLinux" == true ]]; then
+  wget https://raw.githubusercontent.com/rupa/z/master/z.sh -O ~/.z.sh
+ fi
+}
+
+setup_zsh() {
+  echo "Setting up ZSH"
+  echo "Deleting all existing .z* files from home directory.."
+  rm ~/.zshrc 2> /dev/null
+  rm ~/.zprofile 2> /dev/null
+  rm ~/.zshenv 2> /dev/null
+  rm ~/.zlogin 2> /dev/null
+  rm ~/.zlogout 2> /dev/null
+  rm ~/.zpreztorc 2> /dev/null
+  echo "Deleted all existing .z* files from home directory.."
+
+  if [[ -e $preztoDir ]]; then
+    echo "$preztoDir exists. Updating the same"
+    git -C $preztoDir submodule update --init --recursive
+    git -C $preztoDir pull
+  else
+    echo "$preztoDir does not exist. Cloning freshly"
+    git clone --recursive https://github.com/lenkite/prezto.git $preztoDir
+  fi
+
+  wget https://raw.githubusercontent.com/rupa/z/master/z.sh -O ~/z.sh
+
+  echo "PreztoDir is $preztoDir. Making ZSH softlinks to $preztoDir./runcoms"
+  for rcfile in $preztoDir/runcoms/*; do
+    if [[ $rcfile != *README* ]]; then
+      echo "Executing: ln -s $rcfile $HOME/.${rcfile##*/}"
+      ln -s "$rcfile" "$HOME/.${rcfile##*/}"
+    fi
+  done
+
+  if [[ $SHELL != "/bin/zsh" ]]; then
+    echo "Current shell is $SHELL. Changing to /bin/zsh"
+    chsh -s /bin/zsh
+  fi
+
+  install_rupa_z
+}
+
+setup_vscode() {
+  echo "Setting up vscode"
   sourceDir=$dotfilesDir/vscode
-  if [[ $macos == true ]]; then
-    targetDir="$HOME/Library/Application Support/Code/User"
-  elif [[ $cygwin == true ]]; then
+  if [[ $isMacos == true ]]; then
+      targetDir="$HOME/Library/Application Support/Code/User"
+  elif [[ $isCygwin == true ]]; then
     targetDir="$HOME/AppData/Roaming/Code/User/"
   fi
   if [[ -e $targetDir/keybindings.json ]]; then
@@ -142,7 +215,6 @@ function setup-vscode {
   echo "Executing ln -s $sourceDir/keybindings.json $targetDir"
   ln -s "$sourceDir/keybindings.json" "$targetDir"
 
-
   if [[ -e $targetDir/settings.json ]]; then
     echo "Deleting existing vscode settings.json"
     rm $targetDir/settings.json 2> /dev/null
@@ -150,7 +222,7 @@ function setup-vscode {
   echo "Executing ln -s $sourceDir/settings.json $targetDir"
   ln -s "$sourceDir/settings.json" "$targetDir"
 }
-install-pkgs
-setup-zsh
-setup-vim
-setup-vscode
+
+if [[ "$1" != "skipExec" ]]; then
+  setup_main"$@"
+fi
