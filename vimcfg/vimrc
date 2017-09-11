@@ -188,6 +188,8 @@ Plug 'SirVer/ultisnips'
 
 " ** Plugins: Navigation: Fuzzy Find, Vimfiler, Tags , etc {
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+"Because vim-go uses this for GoDecls
+Plug 'ctrlpvim/ctrlp.vim' 
 Plug 'junegunn/fzf.vim'
 Plug 'majutsushi/tagbar'
 Plug 'justinmk/vim-dirvish'

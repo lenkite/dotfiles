@@ -90,6 +90,11 @@ set_homevars() {
     export trueHome=$linHome
     echo "Linux home: $linHome"
   fi
+  if [[ $isMacos == true ]]; then
+    export macHome=$HOME
+    export trueHome=$macHome
+    echo "Mac home: $macHome"
+  fi
   if [[ $isWsl == true ]]; then
     local wh=$(/mnt/c/Windows/System32/cmd.exe '/c echo %USERPROFILE%')
     wh=${wh/$'\r'} # https://stackoverflow.com/questions/7800482/in-bash-how-do-i-replace-r-from-a-variable-that-exist-in-a-file-written-using
