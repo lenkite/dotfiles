@@ -171,11 +171,11 @@ setup_vim() {
 
 install_rupa_z() {
   echo "Setting up rupa z"
- if [[ "$isMacos" == true ]]; then
-  brew install z
- elif [[ "$isLinux" == true ]]; then
-  wget https://raw.githubusercontent.com/rupa/z/master/z.sh -O $trueHome/.z.sh
- fi
+  if [[ "$isMacos" == true ]]; then
+    brew install z
+  else
+    wget https://raw.githubusercontent.com/rupa/z/master/z.sh -O $trueHome/.z.sh
+  fi
 }
 
 setup_zsh() {

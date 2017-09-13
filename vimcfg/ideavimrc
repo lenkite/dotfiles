@@ -37,7 +37,6 @@ vnoremap <leader>u :<bs><bs><bs><bs><bs>action VimVisualSwapSelections<cr>:actio
 "set clipboard+=unnamed
 "set clipboard+=unnamedplus
 
-
 " Parameter hInts.
 imap <Leader>i <C-O>:action ParameterInfo<CR>
 nmap <Leader>i :action ParameterInfo<CR>
@@ -51,6 +50,15 @@ vnoremap <Leader>R :<bs><bs><bs><bs><bs>action VimVisualSwapSelections<cr>:actio
 "IDE Settings
 nmap <A-,> :action ShowSettings<CR>
 
+"Breakpoints. you can use Alt shortcuts here as we don't have VIM ones yet.
+"FIXME: this is not working. figure out why.
+nmap <A-B> :action ToggleBreakpointAction<CR>
+
+"Definition list (aka outline view in eclipse, file strucuture in intellij ide)
+nmap <Leader>d  :action FileStructurePopup<CR>
+
+"Find usages, also called find references
+nmap <Leader>g :action FindUsages<CR>
 
 "surround
 set surround
