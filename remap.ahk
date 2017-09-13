@@ -1,0 +1,2 @@
+Capslock::Escape
+Escape::Capslock

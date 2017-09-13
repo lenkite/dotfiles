@@ -1,6 +1,5 @@
 #!/bin/zsh
 
-echo "Inside zero"
 cdir=$(cd "$(dirname "$0")"; pwd)
 
 main() {
@@ -56,7 +55,13 @@ get_windows_user() {
 
 set_uservars() {
   linUser=`whoami`
-	winUser=$(get_windows_user)
+  if [[ $isCygwin == true ]]; then
+    winUser=$linUser
+  fi
+
+  if [[ $isWsl == true ]]; then
+	  winUser=$(get_windows_user)
+  fi
 }
 
 
