@@ -77,12 +77,17 @@ detect_running_os() {
 	fi
 }
 
-
-
 set_uservars() {
   linUser=`whoami`
-	winUser=$(get_windows_user)
+  if [[ $isCygwin == true ]]; then
+    winUser=$linUser
+  fi
+
+  if [[ $isWsl == true ]]; then
+	  winUser=$(get_windows_user)
+  fi
 }
+
 
 set_homevars() {
   if [[ $isLinux == true ]]; then
