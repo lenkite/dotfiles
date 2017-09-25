@@ -184,6 +184,7 @@ Plug 'ervandew/supertab'
 Plug 'honza/vim-snippets'
 Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
 Plug 'SirVer/ultisnips'
+Plug 'mattn/emmet-vim'
 "}
 
 " ** Plugins: Navigation: Fuzzy Find, Vimfiler, Tags , etc {
@@ -426,6 +427,14 @@ xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 "}
+
+
+" Emmet Config {
+autocmd FileType html imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
+autocmd FileType css imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
+
+" }
+
 
 "{ * GLOBAL Variables 
 let g:skip_loading_mswin="true"  "Do not like mswin settings. Want consistent behaviour across platforms
