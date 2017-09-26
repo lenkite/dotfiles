@@ -11,7 +11,6 @@ setup_main() {
 
 	if [[ $isWsl == true ]]; then
 		replace_linux_home_shell
-    exit -1
 	fi
 
   if [[ $isWsl == true ]]; then
@@ -128,7 +127,6 @@ convert_wpath() {
 
 replace_linux_home_shell() {
 	if [[ $isWsl == true ]]; then
-    cat $vimscript > /tmp/changehome.vim
 		echo "Linux user is $linUser. Windows User is $winUser"
 		echo "Replacing linux home directory: '$linHome' with windows home dir: '$winHome'"
     echo "Need priv to execute: sed -i.bak -e s_${linHome}_${winHome}_ -e s_/bin/bash_/bin/zsh_ /etc/passwd"
