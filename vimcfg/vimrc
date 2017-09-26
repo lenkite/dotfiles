@@ -1,5 +1,8 @@
 " vim: set sw=2 ts=2 sts=2 et tw=80 foldmarker={,} foldlevel=0 foldmethod=marker spell:
 
+" The below is needed so that gvim will work
+set encoding=utf-8
+scriptencoding utf-8
 " NOTE {
 "   Tarun Ramakrishna Elankath's vimrc file. Been using VIM for 12 years now. 
 "   Re-created from scratch on Aug 20, 2011
