@@ -48,12 +48,13 @@ setopt HASH_ALL
 
 # Autoloads 
 # See https://unix.stackexchange.com/questions/33255/how-to-define-and-load-your-own-shell-function-in-zsh
-autoload -U compinit #Used for compdef function. 
+autoload -Uz compinit #Used for compdef function. 
 autoload -U promptinit && promptinit
 autoload -U colors && colors
 # See http://www.refining-linux.org/archives/36/ZSH-Gem-1-Programmable-file-renaming/
 autoload -U zmv
-compinit
+# See http://zsh.sourceforge.net/Doc/Release/Completion-System.html#Initialization
+compinit -u
 
 # Prompt Configuration, Note: now I use 'pure' prompt
 # Use 'pure' prompt at https://github.com/sindresorhus/pure
