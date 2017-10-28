@@ -146,7 +146,7 @@ replace_linux_home_shell() {
 install_pkgs() {
  echo " Installing packages"
  if [[ $isMacos == true ]]; then
-  brew install zsh git the_silver_searcher
+  brew install zsh git the_silver_searcher zplug
  elif [[ $isLinux == true ]]; then
   sudo apt-get install git zsh silversearcher-ag netcat-openbsd
  elif [[ $isCygwin == true ]]; then

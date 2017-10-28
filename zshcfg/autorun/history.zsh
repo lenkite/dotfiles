@@ -1,9 +1,15 @@
 #Increase history size
 ## See http://zsh.sourceforge.net/Guide/zshguide02.html#l16
-export HISTFILESIZE=100000
-export SAVEHIST=100000
-export HISTSIZE=100000
-setopt HIST_ALLOW_CLOBBER HIST_REDUCE_BLANKS
+
+if [ -z "$HISTFILE" ]; then
+    HISTFILE=$HOME/.zhistory
+fi
+export HISTFILESIZE=10000000
+export SAVEHIST=1000000
+export HISTSIZE=1000000
+setopt APPEND_HISTORY HIST_ALLOW_CLOBBER SHARE_HISTORY
+setopt HIST_IGNORE_DUPS HIST_REDUCE_BLANKS HIST_IGNORE_SPACE HIST_VERIFY 
+
 
 # The behaviour of / and ? in command line is screwed up by prezto. I want to
 # remove the incremental search keybindings 

@@ -4,8 +4,10 @@
 # All env variables including path should be set here.
 # Should not produce output or aassume that shell is attached to tty.
 
-cdir=$(cd "$(dirname "$0")"; pwd)
-[ -d ~/dotfiles ] && export dotfiles=~/dotfiles || echo "Could not locate dotfiles at ~/dotfiles"
+[ -d ~/dotfiles ] && export dotfiles=~/dotfiles
+[ -d ~/src/dotfiles ] && export dotfiles=~/src/dotfiles
+
+[  -d $dotfiles ] || echo "Could not locate dotfiles at ~/dotfiles or ~/src/dotfiles"
 
 main() {
   detect_running_os
