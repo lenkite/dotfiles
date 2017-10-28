@@ -1,0 +1,94 @@
+# See ZSH startup files: http://zsh.sourceforge.net/Intro/intro_3.html
+# Link this to ~/.zshenv
+# .zshenv is sourced on all invocations.
+# All env variables including path should be set here.
+# Should not produce output or aassume that shell is attached to tty.
+
+cdir=$(cd "$(dirname "$0")"; pwd)
+[ -d ~/dotfiles ] && export dotfiles=~/dotfiles || echo "Could not locate dotfiles at ~/dotfiles"
+
+main() {
+  detect_running_os
+  set_uservars
+  if [[ "$isWsl" == true ]]; then
+    start() {
+      local target_path=$(wslpath -r -s -w $1)
+      (cd /mnt/c && /mnt/c/Windows/explorer.exe $target_path)
+    }
+  elif [[ "$isMacos" == true ]]; then
+    alias start=open
+  else
+    #TODO: how to handle this for pure linux
+  fi
+  load_dotenv
+  load_dotpaths
+}
+
+
+detect_running_os() {
+	uname=`uname`
+	if [[ $uname == 'Darwin' ]]; then
+		export isMacos=true
+	elif [[ $uname == 'Linux' ]]; then
+		export isLinux=true
+	elif [[ $uname == CYGWIN* ]]; then
+		export isCygwin=true
+	else
+		echo "This Setup Script only works for Windows Cygwin, Windows Subsystem for Linux and MacOS"
+		exit -1
+	fi
+	export osreleaseFile=/proc/sys/kernel/osrelease
+	if [[ -f  $osreleaseFile ]]; then
+		osrelease=`cat $osreleaseFile`
+		if [[ $osrelease == *Microsoft* ]]; then
+			export isWsl=true
+		fi
+	fi
+}
+
+get_windows_user() {
+	local sys32dir="/mnt/c/Windows/System32"
+	local winWho=$(cd $sys32dir; whoami.exe)
+	local winUser=${winWho##*\\}
+	cd $cdir
+}
+
+set_uservars() {
+  linUser=`whoami`
+  if [[ $isCygwin == true ]]; then
+    winUser=$linUser
+  fi
+
+  if [[ $isWsl == true ]]; then
+	  winUser=$(get_windows_user)
+  fi
+}
+
+# Source ~/.env. ~/.env should export user/system
+# specific environment variables
+load_dotenv() {
+  envfile=~/.env
+  [[ -f $envfile ]] && source $envfile
+}
+
+# Loads lines from ~/.paths and adds each line as 
+# path component to env PATH 
+load_dotpaths() {
+  # http://zsh.sourceforge.net/Guide/zshguide02.html#l24
+  typeset -U path
+  path+=( $dotfiles/scripts ~/bin )
+  pathsf=~/.paths
+  if [[ -f $pathsf ]]; then
+    #http://stackoverflow.com/questions/12651355/zsh-read-lines-from-file-into-array
+    zmodload zsh/mapfile
+    FLINES=( "${(f)mapfile[$pathsf]}" )
+    LIST="${mapfile[$pathsf]}" # Not required unless stuff uses it
+    integer POS=1             # Not required unless stuff uses it
+    integer SIZE=$#FLINES     # Number of lines, not required unless stuff uses it
+    # setting path list sets PATH in zsh
+    path+=( $FLINES )
+  fi
+}
+
+main
+

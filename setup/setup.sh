@@ -5,42 +5,30 @@
 # Dev Note: Some funcs here are duplicated in zshcfg/0.zsh. This is by design
 
 setup_main() {
-  detect_running_os
-  set_uservars
-  set_homevars
+  initialize_vars
 
 	if [[ $isWsl == true ]]; then
 		replace_linux_home_shell
 	fi
 
-  if [[ $isWsl == true ]]; then
-    export dotfilesDir=$winHome/dotfiles
-  else
-    export dotfilesDir=$HOME/dotfiles
-  fi
 
   #export dotfilesSetupDir=$(cd "$(dirname "$0")"; pwd)
   export dotfilesSetupDir="$dotfilesDir/setup"
 
   if [[ -d $dotfilesDir ]]; then
-    echo "Dotfiles dir already exists. Moving to /tmp"
-    rm -rf $dotfilesDir
+    echo "Dotfiles dir already exists. Updating..."
+    git -C $dotfilesDir pull
+  else
+    echo "Cloning dotfiles into $dotfilesDir"
+    git clone https://github.com/lenkite/dotfiles $dotfilesDir
   fi
-  echo "Cloning dotfiles into $dotfilesDir"
-  git clone https://github.com/lenkite/dotfiles $dotfilesDir
 
-  #http://stackoverflow.com/questions/5756524/how-to-get-absolute-path-name-of-shell-script-on-macos
-  # it is really crappy that we don't have a better way to get full path to a script
-
-  export vimConfigDir=$dotfilesDir/vimcfg
-  export preztoDir=$trueHome/.zprezto
 
   if [[ ! -d $dotfilesSetupDir ]]; then
     echo "Error: $dotfilesSetupDir does not exist! Have you checked out dotfiles correctly?"
     exit -1
   fi
   echo "Dotfiles Dir: $dotfilesDir"
-  echo "VimConfig Dir: $vimConfigDir"
 
   install_pkgs
   setup_zsh
@@ -49,7 +37,14 @@ setup_main() {
   
 }
 
-detect_running_os() {
+initialize_vars() {
+  [ $done_detect_os] || detect_os
+  [ $dotfilesDir ] || detect_dotfilesdir
+  [ $done_set_uservars ] || set_uservars
+  [ $done_set_homevars ] || set_homevars
+}
+
+detect_os() {
 	uname=`uname`
 	if [[ $uname == 'Darwin' ]]; then
 		export isMacos=true
@@ -74,6 +69,15 @@ detect_running_os() {
 			export isWsl=true
 		fi
 	fi
+  export done_detect_os=true
+}
+
+detect_dotfilesdir() {
+  if [[ $isWsl == true ]]; then
+    export dotfilesDir=$winHome/dotfiles
+  else
+    export dotfilesDir=$HOME/dotfiles
+  fi
 }
 
 set_uservars() {
@@ -85,6 +89,7 @@ set_uservars() {
   if [[ $isWsl == true ]]; then
 	  winUser=$(get_windows_user)
   fi
+  export done_set_uservars=true
 }
 
 
@@ -111,6 +116,7 @@ set_homevars() {
     export trueHome=$winHome
   fi
   echo "True home: $trueHome"
+  export done_set_homevars=true
 }
 
 get_windows_user() {
@@ -127,6 +133,7 @@ convert_wpath() {
 
 replace_linux_home_shell() {
 	if [[ $isWsl == true ]]; then
+    cat $vimscript > /tmp/changehome.vim
 		echo "Linux user is $linUser. Windows User is $winUser"
 		echo "Replacing linux home directory: '$linHome' with windows home dir: '$winHome'"
     echo "Need priv to execute: sed -i.bak -e s_${linHome}_${winHome}_ -e s_/bin/bash_/bin/zsh_ /etc/passwd"
@@ -162,7 +169,10 @@ install_pkgs() {
 }
 
 setup_vim() {
+  initialize_vars
   echo "Setting up vim.."
+  export vimConfigDir=$dotfilesDir/vimcfg
+  echo "VimConfig Dir: $vimConfigDir"
   rm $trueHome/.vimrc 2> /dev/null
   rm $trueHome/.ideavimrc 2> /dev/null
   ln $vimConfigDir/vimrc $trueHome/.vimrc
@@ -172,16 +182,9 @@ setup_vim() {
       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 }
 
-install_rupa_z() {
-  echo "Setting up rupa z"
-  if [[ "$isMacos" == true ]]; then
-    brew install z
-  else
-    wget https://raw.githubusercontent.com/rupa/z/master/z.sh -O $trueHome/.z.sh
-  fi
-}
 
 setup_zsh() {
+  initialize_vars
   echo "Setting up ZSH"
   echo "Deleting all existing .z* files from home directory.."
   rm $trueHome/.zshrc 2> /dev/null
@@ -192,22 +195,14 @@ setup_zsh() {
   rm $trueHome/.zpreztorc 2> /dev/null
   echo "Deleted all existing .z* files from home directory.."
 
-  if [[ -e $preztoDir ]]; then
-    echo "$preztoDir exists. Updating the same"
-    git -C $preztoDir submodule update --init --recursive
-    git -C $preztoDir pull
-  else
-    echo "$preztoDir does not exist. Cloning freshly"
-    git clone --recursive https://github.com/lenkite/prezto.git $preztoDir
-  fi
-
-  wget https://raw.githubusercontent.com/rupa/z/master/z.sh -O $trueHome/z.sh
-
-  echo "PreztoDir is $preztoDir. Making ZSH softlinks to $preztoDir./runcoms"
-  for rcfile in $preztoDir/runcoms/*; do
+  zshCfgDir=$dotfilesDir/zshcfg
+  echo "Making ZSH softlinks to files in $zshCfgDir.."
+  for rcfile in $zshCfgDir/*; do
     if [[ $rcfile != *README* ]]; then
+      if [[ -f $rcfile ]]; then
       echo "Executing: ln -s $rcfile $trueHome/.${rcfile##*/}"
       ln -s "$rcfile" "$trueHome/.${rcfile##*/}"
+      fi
     fi
   done
 
@@ -216,9 +211,12 @@ setup_zsh() {
     chsh -s /bin/zsh
   fi
 
-  install_rupa_z
   echo "Changing shell to /bin/zsh.."
-  sudo chsh -s /bin/zsh
+  if [[ -z $isCygwin ]]; then
+   sudo chsh -s /bin/zsh
+  else
+    echo "Shell Switch for cygwin not implemented yet. Please add line 'db_shell: /bin/zsh' in /etc/nsswitch.conf"
+  fi
 }
 
 setup_vscode() {
@@ -251,6 +249,8 @@ setup_vscode() {
   ln -s "$sourceDir/settings.json" "$targetDir"
 }
 
-if [[ "$1" != "skipExec" ]]; then
-  setup_main"$@"
-fi
+[[ "${BASH_SOURCE[0]}" != "${0}" ]] && isSetupSourced=true
+
+[ $isSetupSourced ] && echo "script ${BASH_SOURCE[0]} is being sourced. Execute full setup by calling\
+ setup_main or individual setup_xxx functions" || setup_main
+

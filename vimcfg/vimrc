@@ -1,8 +1,5 @@
 " vim: set sw=2 ts=2 sts=2 et tw=80 foldmarker={,} foldlevel=0 foldmethod=marker spell:
 
-" The below is needed so that gvim will work
-set encoding=utf-8
-scriptencoding utf-8
 " NOTE {
 "   Tarun Ramakrishna Elankath's vimrc file. Been using VIM for 12 years now. 
 "   Re-created from scratch on Aug 20, 2011
@@ -12,10 +9,26 @@ scriptencoding utf-8
 " }
 "
 
+"https://stackoverflow.com/questions/18321538/vim-error-e474-invalid-argument-listchars-tab-trail
+scriptencoding utf-8
+set encoding=utf-8
+
+
 " { * Modeline Settings
 set modelines=1
 " }
 
+" { * Cygwin specific stuff
+if $OS == "Windows_NT"
+  set rtp+=~/.vim
+  let &t_ti.="\e[1 q"
+  let &t_SI.="\e[5 q"
+  let &t_EI.="\e[1 q"
+  let &t_te.="\e[0 q"
+  " Avoid mswin.vim making Ctrl-v act as paste
+  behave xterm
+endif
+" }
 
 "{ * History, Buffers, Undo
 set history=10000               " Store lots of :cmdline history
@@ -65,7 +78,7 @@ set lazyredraw " redraw only when we need to
 " exist in the background without being in a window.
 " http://items.sjbach.com/319/configuring-vim-right
 set number                     " Line numbers are good
-"set relativenumber             " Relative line numbers are better but cause SLOW SCROLLING :(
+set relativenumber             " Relative line numbers are better but cause SLOW SCROLLING :(
 set hidden
 set wmh=0                      " Set winminheight to 0 so that
                                " maximizing a window collapses all other windows
@@ -150,16 +163,6 @@ endfunction
 autocmd VimEnter * if HasColorscheme("zenburn") | colorscheme zenburn | endif
 
 
-" { * Cygwin specific stuff
-if $Oj == "Windows_NT"
-  let &t_ti.="\e[1 q"
-  let &t_SI.="\e[5 q"
-  let &t_EI.="\e[1 q"
-  let &t_te.="\e[0 q"
-  " Avoid mswin.vim making Ctrl-v act as paste
-  behave xterm
-endif
-" }
 
 
 "{ * Plugin List (Assumes you have vim-plug installed!
@@ -174,8 +177,9 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-fugitive'
 "}
 
-" ** Plugins: Window {
+" ** Plugins: Buffer and Window {
 Plug 'drn/zoomwin-vim'
+Plug 'ap/vim-buftabline'
 " }
 
 " ** Plugins: Completion And Snippets {
@@ -297,13 +301,6 @@ nnoremap  <BS> <C-^>
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
-
-"Cycle through buffers
-"From http://vim.wikia.com/wiki/Cycle_through_buffers_including_hidden_buffers
-"Umm finaly a shift key that works!! I shoudl use this for next/previous error
-"instead!!
-:nnoremap <Tab> :bnext<CR>
-:nnoremap <S-Tab> :bprevious<CR>
 
 "Space and S-Space should go page down and page up!
 nnoremap <Space> <C-D>
@@ -433,8 +430,11 @@ nmap ga <Plug>(EasyAlign)
 
 
 " Emmet Config {
-autocmd FileType html imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
-autocmd FileType css imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
+"autocmd FileType html imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
+"autocmd FileType html imap  <tab> emmet#expandAbbrIntelligent("\<tab>")
+"autocmd FileType css imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
+let g:user_emmet_leader_key = '<C-y>'
+
 
 " }
 

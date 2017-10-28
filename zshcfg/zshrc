@@ -1,0 +1,43 @@
+# See ZSH startup files at http://zsh.sourceforge.net/Intro/intro_3.html
+# zshrc is sourced in interactive shells
+# It should be used to setup aliases, functions, options
+# key-bindings, etc
+#
+
+[[ -z $dotfiles ]] && echo "ERROR: dotfiles variable not set! Check zshenv"
+
+# Prompt Configuration
+# See http://zshwiki.org/home/config/prompt
+# See http://www.csse.uwa.edu.au/programming/linux/zsh-doc/zsh_13.html
+# See https://gabri.me/blog/custom-colors-in-your-zsh-prompt/
+setopt PROMPT_SUBST 
+autoload -U promptinit && promptinit
+autoload -U colors && colors
+export PROMPT='%m%#% ~> '
+
+setopt AUTOCD
+setopt CD_ABLE_VARS
+setopt PUSHD_IGNORE_DUPS AUTOPUSHD
+setopt CORRECT
+setopt EXTENDED_GLOB
+setopt HASH_ALL
+# http://dougblack.io/words/zsh-vi-mode.html
+set -o vi
+bindkey -v
+export KEYTIMEOUT=1 # very important for lag killing.
+
+#Completions
+autoload -U compinit #Used for compdef function. 
+compinit
+
+# http://www.refining-linux.org/archives/36/ZSH-Gem-1-Programmable-file-renaming/
+autoload -U zmv
+
+# https://stackoverflow.com/questions/14677936/source-multiple-files-in-zshrc-with-wildcard
+if [[ -d $dotfiles ]] ; then
+  for file in $dotfiles/zshcfg/autorun/*.{sh,zsh}; do
+    if [[ -f $file ]] ; then
+      source "$file"
+    fi
+  done
+fi

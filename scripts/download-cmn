@@ -1,0 +1,41 @@
+#!/bin/bash
+
+usage() { echo "Usage: $0 [-v <version>] [-p]" 1>&2; exit 1; }
+
+
+# Use getopt for simple option parsing
+# See https://stackoverflow.com/questions/16483119/example-of-how-to-use-getopts-in-bash
+# See http://wiki.bash-hackers.org/howto/getopts_tutorial
+while getopts ":v:p:" o; do
+  case "${o}" in
+    v)
+      version=${OPTARG}
+      ((s == 45 || s == 90)) || usage
+      ;;
+    p)
+      profile=true
+      ;;
+    *)
+      echo "Invalid option: -$OPTARG" >&2
+      usage
+      ;;
+  esac
+done
+shift $((OPTIND-1))
+
+[ $version ] || version="LATEST"
+[ $profile ] && classifier="stackprofile" || classifier="assembly"
+repo="deploy.milestones"
+gid="com.sap.it.node"
+aid="stack.cmn"
+
+
+
+echo "Version is $version profile is $profile"
+
+nexus='http://nexussnap.wdf.sap.corp:8081'
+path="/nexus/service/local/artifact/maven/redirect?r=$repo&g=$gid&a=$aid&v=$version&e=zip&c=$classifier"
+url=$nexus$path
+
+curl -sI $url | grep -o -E 'Location:[[:blank:]]*(.*)'
+
