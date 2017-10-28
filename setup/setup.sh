@@ -38,7 +38,7 @@ setup_main() {
 }
 
 initialize_vars() {
-  [ $done_detect_os] || detect_os
+  [ $done_detect_os ] || detect_os
   [ $dotfilesDir ] || detect_dotfilesdir
   [ $done_set_uservars ] || set_uservars
   [ $done_set_homevars ] || set_homevars
@@ -146,7 +146,7 @@ replace_linux_home_shell() {
 install_pkgs() {
  echo " Installing packages"
  if [[ $isMacos == true ]]; then
-  brew install zsh git the_silver_searcher zplug
+  brew install zsh git the_silver_searcher
  elif [[ $isLinux == true ]]; then
   sudo apt-get install git zsh silversearcher-ag netcat-openbsd
  elif [[ $isCygwin == true ]]; then
@@ -165,6 +165,13 @@ install_pkgs() {
    else 
      echo "Could not download apt-cyg. Please download and install manually"
    fi 
+ fi
+
+ #https://stackoverflow.com/questions/592620/check-if-a-program-exists-from-a-bash-script
+ #zplug install https://github.com/zplug/zplug
+ if [ command -v zsh >/dev/null 2>&1 ]; then
+  echo "Installing zplug..."
+  curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh 
  fi
 }
 
