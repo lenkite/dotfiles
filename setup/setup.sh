@@ -38,10 +38,11 @@ setup_main() {
 }
 
 initialize_vars() {
+  echo "Detect host enrivornment and initializ variables.."
   [ $done_detect_os ] || detect_os
-  [ $dotfilesDir ] || detect_dotfilesdir
   [ $done_set_uservars ] || set_uservars
   [ $done_set_homevars ] || set_homevars
+  [ $dotfilesDir ] || detect_dotfilesdir
 }
 
 detect_os() {
@@ -73,11 +74,7 @@ detect_os() {
 }
 
 detect_dotfilesdir() {
-  if [[ $isWsl == true ]]; then
-    export dotfilesDir=$winHome/dotfiles
-  else
-    export dotfilesDir=$HOME/dotfiles
-  fi
+  export dotfilesDir=$trueHome/dotfiles
 }
 
 set_uservars() {
@@ -133,7 +130,7 @@ convert_wpath() {
 
 replace_linux_home_shell() {
 	if [[ $isWsl == true ]]; then
-    cat $vimscript > /tmp/changehome.vim
+    echo "Replacing WSL home shell to ZSH.."
 		echo "Linux user is $linUser. Windows User is $winUser"
 		echo "Replacing linux home directory: '$linHome' with windows home dir: '$winHome'"
     echo "Need priv to execute: sed -i.bak -e s_${linHome}_${winHome}_ -e s_/bin/bash_/bin/zsh_ /etc/passwd"
@@ -148,7 +145,8 @@ install_pkgs() {
  if [[ $isMacos == true ]]; then
   brew install zsh git the_silver_searcher
  elif [[ $isLinux == true ]]; then
-  sudo apt-get install git zsh silversearcher-ag netcat-openbsd
+  sudo apt-get update
+  sudo apt-get install git zsh silversearcher-ag netcat-openbsd dh-autoreconf autoconf pkg-config
  elif [[ $isCygwin == true ]]; then
    if [[ -f /tmp/apt-cyg ]]; then
      rm /tmp/apt-cyg
@@ -169,7 +167,7 @@ install_pkgs() {
 
  #https://stackoverflow.com/questions/592620/check-if-a-program-exists-from-a-bash-script
  #zplug install https://github.com/zplug/zplug
- if [ command -v zsh >/dev/null 2>&1 ]; then
+ if command -v zsh >/dev/null 2>&1 ; then
   echo "Installing zplug..."
   curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh 
  fi

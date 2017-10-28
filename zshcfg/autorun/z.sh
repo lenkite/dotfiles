@@ -34,8 +34,11 @@ _z() {
     # if symlink, dereference
     [ -h "$datafile" ] && datafile=$(readlink "$datafile")
 
-    # bail if we don't own ~/.z and $_Z_OWNER not set
-    [ -z "$_Z_OWNER" -a -f "$datafile" -a ! -O "$datafile" ] && return
+    if [[ -z $isWsl ]]; then
+      #Skip this check for WSL cos owner is always root if you change to win home dir
+      # bail if we don't own ~/.z and $_Z_OWNER not set
+      [ -z "$_Z_OWNER" -a -f "$datafile" -a ! -O "$datafile" ] && return
+    fi
 
     _z_dirs () {
         while read line; do

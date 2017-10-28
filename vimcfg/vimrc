@@ -1,5 +1,6 @@
 " vim: set sw=2 ts=2 sts=2 et tw=80 foldmarker={,} foldlevel=0 foldmethod=marker spell:
 
+
 " NOTE {
 "   Tarun Ramakrishna Elankath's vimrc file. Been using VIM for 12 years now. 
 "   Re-created from scratch on Aug 20, 2011
@@ -13,6 +14,7 @@
 "https://stackoverflow.com/questions/18321538/vim-error-e474-invalid-argument-listchars-tab-trail
 scriptencoding utf-8
 set encoding=utf-8
+set modeline
 set modelines=1
 " }
 
