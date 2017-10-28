@@ -1,5 +1,8 @@
 " vim: set sw=2 ts=2 sts=2 et tw=80 foldmarker={,} foldlevel=0 foldmethod=marker spell:
 
+" The below is needed so that gvim will work
+set encoding=utf-8
+scriptencoding utf-8
 " NOTE {
 "   Tarun Ramakrishna Elankath's vimrc file. Been using VIM for 12 years now. 
 "   Re-created from scratch on Aug 20, 2011
@@ -177,6 +180,7 @@ Plug 'honza/vim-snippets'
 Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
 Plug 'SirVer/ultisnips'
 Plug 'maralla/completor.vim'
+Plug 'mattn/emmet-vim'
 "}
 
 " ** Plugins: Navigation: Fuzzy Find, Vimfiler, Tags , etc {
@@ -465,6 +469,12 @@ xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 "}
 
+
+" Emmet Config {
+autocmd FileType html imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
+autocmd FileType css imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
+
+" }
 
 "{ * GLOBAL Variables 
 let g:skip_loading_mswin="true"  "Do not like mswin settings. Want consistent behaviour across platforms

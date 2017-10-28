@@ -11,7 +11,6 @@ setup_main() {
 
 	if [[ $isWsl == true ]]; then
 		replace_linux_home_shell
-    exit -1
 	fi
 
   if [[ $isWsl == true ]]; then
@@ -77,12 +76,17 @@ detect_running_os() {
 	fi
 }
 
-
-
 set_uservars() {
   linUser=`whoami`
-	winUser=$(get_windows_user)
+  if [[ $isCygwin == true ]]; then
+    winUser=$linUser
+  fi
+
+  if [[ $isWsl == true ]]; then
+	  winUser=$(get_windows_user)
+  fi
 }
+
 
 set_homevars() {
   if [[ $isLinux == true ]]; then
@@ -123,7 +127,6 @@ convert_wpath() {
 
 replace_linux_home_shell() {
 	if [[ $isWsl == true ]]; then
-    cat $vimscript > /tmp/changehome.vim
 		echo "Linux user is $linUser. Windows User is $winUser"
 		echo "Replacing linux home directory: '$linHome' with windows home dir: '$winHome'"
     echo "Need priv to execute: sed -i.bak -e s_${linHome}_${winHome}_ -e s_/bin/bash_/bin/zsh_ /etc/passwd"
@@ -171,11 +174,11 @@ setup_vim() {
 
 install_rupa_z() {
   echo "Setting up rupa z"
- if [[ "$isMacos" == true ]]; then
-  brew install z
- elif [[ "$isLinux" == true ]]; then
-  wget https://raw.githubusercontent.com/rupa/z/master/z.sh -O $trueHome/.z.sh
- fi
+  if [[ "$isMacos" == true ]]; then
+    brew install z
+  else
+    wget https://raw.githubusercontent.com/rupa/z/master/z.sh -O $trueHome/.z.sh
+  fi
 }
 
 setup_zsh() {
