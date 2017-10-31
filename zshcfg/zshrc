@@ -62,6 +62,7 @@ autoload -Uz _curl
 zstyle ':completion:*' list-prompt '%S%M matches%s' #from prezto
 zstyle ':completion:*' menu select
 
+[ $isCygwin ] && echo "Loading autoruns/completions. This can take time on Cygwin..."
 # https://stackoverflow.com/questions/14677936/source-multiple-files-in-zshrc-with-wildcard
 if [[ -d $dotfiles ]] ; then
   for file in $dotfiles/zshcfg/autorun/*.{sh,zsh}; do
@@ -75,5 +76,7 @@ fi
 compinit -u
 
 command -v fortune 2>&1 >/dev/null && command -v cowsay 2>&1 >/dev/null && fortune | cowsay
+
+[ $isCygwin ] && prompt suse
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

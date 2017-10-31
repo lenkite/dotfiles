@@ -32,6 +32,7 @@ setup_main() {
 
   install_pkgs
   setup_zsh
+  setup_tmux
   setup_vim
   setup_vscode
   
@@ -146,20 +147,19 @@ install_pkgs() {
   brew install zsh git the_silver_searcher fortune cowsay
  elif [[ $isLinux == true ]]; then
   sudo apt-get update
-  sudo apt-get install git zsh silversearcher-ag netcat-openbsd dh-autoreconf autoconf pkg-config
+  sudo apt-get install git zsh silversearcher-ag netcat-openbsd dh-autoreconf autoconf pkg-config tmux
  elif [[ $isCygwin == true ]]; then
    if [[ -f /tmp/apt-cyg ]]; then
      rm /tmp/apt-cyg
    fi
-   echo "Attempting download of apt-cyg via lynx.."
-   lynx -source rawgit.com/transcode-open/apt-cyg/master/apt-cyg > /tmp/apt-cyg
-   if [[ "$?" == 127 ]]; then
-     echo "Attempting download of apt-cyg via wget.."
-     wget  https://rawgit.com/transcode-open/apt-cyg/master/apt-cyg  -O /tmp/apt-cyg 
-   fi
+   echo "Attempting download of apt-cyg via wget.."
+   $(cd /tmp && curl https://rawgit.com/transcode-open/apt-cyg/master/apt-cyg  -O )
    if [[ -f /tmp/apt-cyg ]]; then
      install /tmp/apt-cyg /bin
      echo "installed apt-cyg"
+     apt-cyg install tmux
+     apt-cyg install fortune
+     apt-cyg install cowsay
    else 
      echo "Could not download apt-cyg. Please download and install manually"
    fi 
@@ -187,6 +187,10 @@ setup_vim() {
       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 }
 
+setup_tmux() {
+  echo "Setting up Tmux.."
+  ln $dotfilesDir/tmux.conf $trueHome/.tmux.conf
+}
 
 setup_zsh() {
   initialize_vars
