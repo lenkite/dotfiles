@@ -153,7 +153,7 @@ install_pkgs() {
      rm /tmp/apt-cyg
    fi
    echo "Attempting download of apt-cyg via wget.."
-   $(cd /tmp && curl https://rawgit.com/transcode-open/apt-cyg/master/apt-cyg  -O )
+   $(cd /tmp && curl -L https://rawgit.com/transcode-open/apt-cyg/master/apt-cyg  -O )
    if [[ -f /tmp/apt-cyg ]]; then
      install /tmp/apt-cyg /bin
      echo "installed apt-cyg"
