@@ -179,10 +179,9 @@ Plug 'ap/vim-buftabline'
 
 " ** Plugins: Completion And Snippets {
 Plug 'SirVer/ultisnips'
-Plug 'ervandew/supertab'
+"Plug 'ervandew/supertab'
 Plug 'honza/vim-snippets'
 Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
-Plug 'SirVer/ultisnips'
 Plug 'maralla/completor.vim'
 Plug 'mattn/emmet-vim'
 "}
@@ -219,6 +218,7 @@ Plug 'dahu/vimple' "Dep of vim-asciidoc
 Plug 'dahu/Asif' "Dep of vim-asciidoc
 Plug 'Raimondi/VimRegStyle' "Dep of vim-asciidoc
 Plug 'vim-scripts/SyntaxRange' "dep of vim-asciidoc
+Plug 'udalov/kotlin-vim'
 "}
 
 " ** Plugins: Search {
@@ -254,7 +254,7 @@ call plug#end()
 
 "{ * Basic Key Mappings
 " Allow quit via single keypress (Q)
-nmap Q :qa<CR>
+nmap ZQ :qa!<CR>
 
 "Save files since Cmd-S and Ctrl-S don't work well on Terminals (aaargh!)
 noremap <Leader>s :update<CR>
@@ -303,15 +303,7 @@ vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
 
-"Space and S-Space should go page down and page up!
-nnoremap <Space> <C-D>
-"Shift-space Doesn't work in terminal. You need to remap key in terminal
-"preferences
-nnoremap <S-Space> <C-U> 
-"}
-
-
-" { * FZF NERDTree and Dirvish Config
+" { * FZF NERDTree,  Dirvish, Tagbar Config
 
 function! ConfigureFzf()
   nmap <Leader>e :Buffers<CR>
@@ -350,6 +342,11 @@ function! ConfigureNerdTree()
 
 endfunction
 autocmd VimEnter * if exists(":NERDTree") | call ConfigureNerdTree() | endif
+function! ConfigureTagbar()
+  nmap <Leader>o :Tagbar<CR>
+endfunction
+autocmd VimEnter * if exists(":Tagbar") | call ConfigureTagbar() | endif
+
 " }
 
 
@@ -442,7 +439,7 @@ autocmd FileType go if exists(":GoBuild") | call ConfigureVimGo() | endif
 " }
 
 
-" { Sneak Config
+" { Sneak Configuration
 "replace 'f' with 1-char Sneak
 nmap f <Plug>Sneak_f
 nmap F <Plug>Sneak_F
@@ -480,6 +477,12 @@ let g:user_emmet_leader_key = '<C-y>'
 
 "{ * GLOBAL Variables 
 let g:skip_loading_mswin="true"  "Do not like mswin settings. Want consistent behaviour across platforms
+" Use deoplete.
 let g:cargo_makeprg_params='build'
 "}
+
+
+" UltiSnips config
 "
+set background=dark
+
