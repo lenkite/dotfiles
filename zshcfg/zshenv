@@ -4,17 +4,14 @@
 # All env variables including path should be set here.
 # Should not produce output or aassume that shell is attached to tty.
 
-[ -d ~/dotfiles ] && export dotfiles=~/dotfiles
-[ -d ~/src/dotfiles ] && export dotfiles=~/src/dotfiles
-
-[  -d $dotfiles ] || echo "Could not locate dotfiles at ~/dotfiles or ~/src/dotfiles"
+[ -d ~/dotfiles ] && export dotfiles=~/dotfiles || echo "Could not locate dotfiles at ~/dotfiles"
 
 # Autoloads 
 # See https://unix.stackexchange.com/questions/33255/how-to-define-and-load-your-own-shell-function-in-zsh
 #fpath=($dotfiles/zshcfg/zfuncs $fpath)
 #autoload -Uz detect_os determine_user
 
-source $dotfiles/zshcfg/os-user-detect.zsh
+source $dotfiles/zshcfg/zfuncs/os-user-detect.zsh
 
 
 main() {

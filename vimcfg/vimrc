@@ -475,6 +475,14 @@ let g:user_emmet_leader_key = '<C-y>'
 " }
 
 
+" GUI VIM Config {
+
+if has('gui') && has('win32')
+ set guifont=Consolas:h11:cANSI:qDRAFT
+endif
+
+" }
+
 "{ * GLOBAL Variables 
 let g:skip_loading_mswin="true"  "Do not like mswin settings. Want consistent behaviour across platforms
 " Use deoplete.
