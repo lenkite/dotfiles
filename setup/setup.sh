@@ -1,5 +1,4 @@
-#!/bin/bash
-
+#!/bin/bash 
 # Setups up dotfiles for use on various OS'es. 
 # Supported OS'es are Windows/Cygwin, Windows/WSL, MacOS and Linux
 # Dev Note: Some funcs here are duplicated in zshcfg/0.zsh. This is by design

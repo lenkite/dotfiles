@@ -187,6 +187,7 @@ Plug 'mattn/emmet-vim'
 "}
 
 " ** Plugins: Navigation: Fuzzy Find, Vimfiler, Tags , etc {
+if 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 "Because vim-go uses this for GoDecls
 Plug 'ctrlpvim/ctrlp.vim' 

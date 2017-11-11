@@ -1,6 +1,8 @@
+typeset -gxU path PATH
 if [[ -d $HOME/src/flutter/bin ]]; then
-  export PATH=$HOME/src/flutter/bin:$PATH
+  path += $HOME/src/flutter/bin
 fi
 if [[ -d $HOME/src/flutter/flutter/bin ]]; then
-  export PATH=$HOME/src/flutter/flutter/bin:$PATH
+  path += $HOME/src/flutter/flutter/bin
 fi
+export PATH

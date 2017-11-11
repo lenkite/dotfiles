@@ -29,13 +29,15 @@ repo="deploy.milestones"
 gid="com.sap.it.node"
 aid="stack.cmn"
 
-
-
-echo "Version is $version profile is $profile"
+#echo "Version is $version profile is $profile"
 
 nexus='http://nexussnap.wdf.sap.corp:8081'
 path="/nexus/service/local/artifact/maven/redirect?r=$repo&g=$gid&a=$aid&v=$version&e=zip&c=$classifier"
 url=$nexus$path
 
-curl -sI $url | grep -o -E 'Location:[[:blank:]]*(.*)'
+stackUrl=$(curl -sI $url | grep -o -E 'Location:[[:blank:]]*(.*)' | awk '{print $2}')
+echo "Downloading $stackUrl"
+pushd /tmp
+curl -O $stackUrl
+popd
 
