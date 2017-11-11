@@ -2,6 +2,8 @@
 function settitle() {
     [ $isCygwin ] && echo -ne "\033]2;"$1"\007"
 }
-function chpwd() {
+if [[ $isCygwin ]]; then
+  function chpwd() {
     settitle $(cygpath -m `pwd`)
-}
+  }
+fi

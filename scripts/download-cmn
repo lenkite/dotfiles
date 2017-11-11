@@ -10,7 +10,6 @@ while getopts ":v:p:" o; do
   case "${o}" in
     v)
       version=${OPTARG}
-      ((s == 45 || s == 90)) || usage
       ;;
     p)
       profile=true

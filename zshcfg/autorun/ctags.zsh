@@ -8,8 +8,5 @@
 if [[ $isWsl == true || $isCygwin == true ]]; then
   ctags=~/src/ctags/ctags.exe
   [[ -f $ctags ]] && cp $ctags ~/bin
-
-  fzf=~/.fzf/bin/fzf.exe
-  [[ -f $fzf ]] || curl
 fi
 

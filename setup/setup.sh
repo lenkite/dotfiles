@@ -3,10 +3,44 @@
 # Supported OS'es are Windows/Cygwin, Windows/WSL, MacOS and Linux
 # Dev Note: Some funcs here are duplicated in zshcfg/0.zsh. This is by design
 
+usage() { echo "Usage: $0 [-c] [-v] [-t] [-z]" 1>&2; exit 1; }
+
+# Use getopt for simple option parsing
+# See https://stackoverflow.com/questions/16483119/example-of-how-to-use-getopts-in-bash
+# See http://wiki.bash-hackers.org/howto/getopts_tutorial
+while getopts "cvtz" opt; do
+  case "${opt}" in
+    c)
+      codeSetup=true
+      ;;
+    v)
+      viSetup=true
+      ;;
+    t)
+      tmuxSetup=true
+      ;;
+    z)
+      zshSetup=true
+      ;;
+    \?)  
+      usage
+      ;;
+    *)
+      echo "Invalid option: -$OPTARG" >&2
+      usage
+      ;;
+  esac
+done
+shift $((OPTIND-1))
+
+[ $codeSetup] || [ $viSetup ] || [ $tmuxSetup ] || [ $zshSetup ] || allSetup=true
+
+#echo "codeSetup = $codeSetup, viSetup = $viSetup, tmuxSetup = $tmuxSetup, zshSetup = $zshSetup, allSetup=$allSetup"
+
 setup_main() {
   initialize_vars
 
-	if [[ $isWsl == true ]]; then
+	if [[ $allSetup && $isWsl == true ]]; then
 		replace_linux_home_shell
 	fi
 
@@ -29,11 +63,11 @@ setup_main() {
   fi
   echo "Dotfiles Dir: $dotfilesDir"
 
-  install_pkgs
-  setup_zsh
-  setup_tmux
-  setup_vim
-  setup_vscode
+  [ $allSetup ] && install_pkgs
+  [[ $allSetup || $zshSetup ]] && setup_zsh
+  [[ $allSetup || $tmuxSetup ]] && setup_tmux
+  [[ $viSetup || $allSetup ]] && setup_vim
+  [[ $codeSetup || $allSetup ]] && setup_vscode
   
 }
 
