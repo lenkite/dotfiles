@@ -179,10 +179,10 @@ Plug 'ap/vim-buftabline'
 
 " ** Plugins: Completion And Snippets {
 Plug 'SirVer/ultisnips'
-"Plug 'ervandew/supertab'
+Plug 'ervandew/supertab'
 Plug 'honza/vim-snippets'
 Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
-Plug 'maralla/completor.vim'
+"Plug 'maralla/completor.vim'
 Plug 'mattn/emmet-vim'
 "}
 
@@ -232,7 +232,8 @@ Plug 'yssl/QFEnter'
 "}
 
 " ** Plugins: Color Schemes {
-Plug 'flazz/vim-colorschemes'
+"Plug 'flazz/vim-colorschemes'
+Plug 'rafi/awesome-vim-colorschemes'
 "https://bluz71.github.io/2017/05/21/vim-plugins-i-like.html
 Plug 'rakr/vim-one'
 "}
