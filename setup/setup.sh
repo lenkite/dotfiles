@@ -180,7 +180,7 @@ install_pkgs() {
   brew install zsh git the_silver_searcher fortune cowsay
  elif [[ $isLinux == true ]]; then
   sudo apt-get update
-  sudo apt-get install git zsh silversearcher-ag netcat-openbsd dh-autoreconf autoconf pkg-config tmux
+  sudo apt-get install git zsh silversearcher-ag netcat-openbsd dh-autoreconf autoconf pkg-config tmux 7zip
  elif [[ $isCygwin == true ]]; then
    if [[ -f /tmp/apt-cyg ]]; then
      rm /tmp/apt-cyg

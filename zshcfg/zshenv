@@ -20,13 +20,13 @@ main() {
   load_dotenv
   load_dotpaths
 
-  manpath=`manpath`
-  manpath=(
-    "$dotfiles/man"
-    "$manpath[@]"
-  )
-  typeset -U manpath
-  export MANPATH
+  # manpath=`manpath`
+  # manpath=(
+  #   "$dotfiles/man"
+  #   "$manpath[@]"
+  # )
+  #typeset -U manpath
+  export MANPATH=":$dotfiles/man"
 }
 
 
