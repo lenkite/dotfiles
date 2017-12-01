@@ -190,9 +190,11 @@ install_pkgs() {
    if [[ -f /tmp/apt-cyg ]]; then
      install /tmp/apt-cyg /bin
      echo "installed apt-cyg"
+     apt-cyg install zsh
      apt-cyg install tmux
      apt-cyg install fortune
      apt-cyg install cowsay
+     apt-cyg install the_silver_searcher
    else 
      echo "Could not download apt-cyg. Please download and install manually"
    fi 
@@ -212,6 +214,7 @@ setup_vim() {
   export vimConfigDir=$dotfilesDir/vimcfg
   echo "VimConfig Dir: $vimConfigDir"
   rm $trueHome/.vimrc 2> /dev/null
+  rm $trueHome/_vimrc 2> /dev/null
   rm $trueHome/.ideavimrc 2> /dev/null
   ln $vimConfigDir/vimrc $trueHome/.vimrc
   ln $vimConfigDir/ideavimrc $trueHome/.ideavimrc

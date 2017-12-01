@@ -20,6 +20,7 @@ main() {
   load_dotenv
   load_dotpaths
 
+
   manpath=`manpath`
   manpath=(
     "$dotfiles/man"
@@ -41,6 +42,8 @@ load_dotenv() {
 # Loads lines from ~/.paths and adds each line as 
 # path component to env PATH 
 load_dotpaths() {
+  #ensure that cygwin stuff is first in path, so that windows path doesn't take priority
+  export PATH="/bin:/usr/bin:~/.fzf/bin:$PATH"
   # http://zsh.sourceforge.net/Guide/zshguide02.html#l24
   typeset -gxU path PATH
   path+=( $dotfiles/scripts ~/bin )
