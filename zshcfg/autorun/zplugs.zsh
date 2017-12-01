@@ -1,12 +1,12 @@
 [ -f ~/.zplug/init.zsh ] && source ~/.zplug/init.zsh || return
 
 # Fancy stuff don't work in Cygwin
-if [[ -z $isCygwin ]]; then
+if [[ $isCygwin ]]; then
+  zplug "ericdwang/zsh-lightrise"
+else 
   zplug mafredri/zsh-async, from:github
   zplug sindresorhus/pure, use:pure.zsh, from:github, as:theme
   zplug supercrabtree/k
-  zplug changyuheng/zsh-interactive-cd
-  zplug RobSis/zsh-completion-generator
 fi
 zplug modules/utility, from:prezto
 zplug zsh-users/zsh-syntax-highlighting, defer:2
