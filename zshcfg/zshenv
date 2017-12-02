@@ -20,12 +20,6 @@ main() {
   load_dotenv
   load_dotpaths
 
-  # manpath=`manpath`
-  # manpath=(
-  #   "$dotfiles/man"
-  #   "$manpath[@]"
-  # )
-  #typeset -U manpath
   export MANPATH=":$dotfiles/man"
 }
 
@@ -60,5 +54,9 @@ load_dotpaths() {
   export PATH
 }
 
+# Not sure if this is the right place
+if [[ $GOROOT ]]; then
+  export GOROOT=`cygpath -am $GOROOT`
+fi
 main
 

@@ -1,7 +1,7 @@
 #!/bin/zsh
 
-if [[ -z "$GOPATH" ]]; then
+if [[ $isCygwin ]]; then
+  export GOPATH=`cygpath -am ~`
+else
   export GOPATH="$HOME"
-else 
-  export GOPATH="$HOME:$GOPATH"
 fi

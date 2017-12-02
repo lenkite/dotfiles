@@ -95,9 +95,9 @@ else
 	compinit -C;
 fi;
 
+echo "Bingo"
+echo "Tringo"
 command -v fortune 2>&1 >/dev/null && command -v cowsay 2>&1 >/dev/null && fortune | cowsay
 
-if [[ $isCygwin && -d ~/.zplug/repos/ericdwang/zsh-lightrise ]]; then
-  source ~/.zplug/repos/ericdwang/zsh-lightrise/zsh-lightrise.zsh 
-  cd ~
-fi
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
