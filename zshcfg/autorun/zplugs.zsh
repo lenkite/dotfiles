@@ -2,7 +2,7 @@
 
 # Fancy stuff don't work in Cygwin
 if [[ $isCygwin ]]; then
-  zplug "ericdwang/zsh-lightrise"
+#  zplug "ericdwang/zsh-lightrise"
 else 
   zplug mafredri/zsh-async, from:github
   zplug sindresorhus/pure, use:pure.zsh, from:github, as:theme
