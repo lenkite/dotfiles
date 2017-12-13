@@ -2,7 +2,7 @@
 
 # Fancy stuff don't work in Cygwin
 if [[ $isCygwin ]]; then
-#  zplug "ericdwang/zsh-lightrise"
+  zplug miekg/lean, use:prompt_lean_setup, from:github
 else 
   zplug mafredri/zsh-async, from:github
   zplug sindresorhus/pure, use:pure.zsh, from:github, as:theme
