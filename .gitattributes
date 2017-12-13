@@ -1,0 +1,7 @@
+# Declare that all java files will always have LF line endings on checkout.
+*.java text eol=lf
+
+# Declare binary files
+*.jar	binary
+*.class binary
+
