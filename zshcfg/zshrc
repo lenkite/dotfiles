@@ -17,8 +17,8 @@ export KEYTIMEOUT=1 # very important for lag killing.
 # See
 # http://unix.stackexchange.com/questions/285208/how-to-remove-a-zsh-keybinding-if-i-dont-know-what-it-does
 # See man zshzle for these functions
-#bindkey -M vicmd "?" vi-history-search-forward
-#bindkey -M vicmd "/" vi-history-search-backward
+bindkey -M vicmd "?" vi-history-search-forward
+bindkey -M vicmd "/" vi-history-search-backward
 
 #  Increase history size
 ## See http://zsh.sourceforge.net/Guide/zshguide02.html#l16
