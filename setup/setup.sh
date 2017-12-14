@@ -3,12 +3,12 @@
 # Supported OS'es are Windows/Cygwin, Windows/WSL, MacOS and Linux
 # Dev Note: Some funcs here are duplicated in zshcfg/0.zsh. This is by design
 
-usage() { echo "Usage: $0 [-c] [-v] [-t] [-z]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-c] [-v] [-t] [-u] [-z]" 1>&2; exit 1; }
 
 # Use getopt for simple option parsing
 # See https://stackoverflow.com/questions/16483119/example-of-how-to-use-getopts-in-bash
 # See http://wiki.bash-hackers.org/howto/getopts_tutorial
-while getopts "cvtz" opt; do
+while getopts "cvtuz" opt; do
   case "${opt}" in
     c)
       codeSetup=true
@@ -18,6 +18,9 @@ while getopts "cvtz" opt; do
       ;;
     t)
       tmuxSetup=true
+      ;;
+    u)
+      utilSetup=true
       ;;
     z)
       zshSetup=true
@@ -33,19 +36,18 @@ while getopts "cvtz" opt; do
 done
 shift $((OPTIND-1))
 
-[ $codeSetup] || [ $viSetup ] || [ $tmuxSetup ] || [ $zshSetup ] || allSetup=true
+[ $codeSetup ] || [ $viSetup ] || [ $tmuxSetup ] || [ $utilSetup ] || [ $zshSetup ] || allSetup=true
 
-#echo "codeSetup = $codeSetup, viSetup = $viSetup, tmuxSetup = $tmuxSetup, zshSetup = $zshSetup, allSetup=$allSetup"
+echo "codeSetup = $codeSetup, viSetup = $viSetup, tmuxSetup = $tmuxSetup, zshSetup = $zshSetup, utilSetup = $utilSetup, allSetup=$allSetup"
 
 setup_main() {
   initialize_vars
 
-	if [[ $allSetup && $isWsl == true ]]; then
+	if [[ $allSetup == true && $isWsl == true ]]; then
 		replace_linux_home_shell
 	fi
 
 
-  #export dotfilesSetupDir=$(cd "$(dirname "$0")"; pwd)
   export dotfilesSetupDir="$dotfilesDir/setup"
 
   if [[ -d $dotfilesDir ]]; then
@@ -68,6 +70,7 @@ setup_main() {
   [[ $allSetup || $tmuxSetup ]] && setup_tmux
   [[ $viSetup || $allSetup ]] && setup_vim
   [[ $codeSetup || $allSetup ]] && setup_vscode
+  [[ $utilSetup || $allSetup ]] && setup_util
   
 }
 
@@ -202,10 +205,12 @@ install_pkgs() {
 
  #https://stackoverflow.com/questions/592620/check-if-a-program-exists-from-a-bash-script
  #zplug install https://github.com/zplug/zplug
- if command -v zsh >/dev/null 2>&1 ; then
-  echo "Installing zplug..."
-  curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh 
- fi
+ # if command -v zsh >/dev/null 2>&1 ; then
+ #  echo "Installing zplug..."
+ #  curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh 
+ # fi
+
+
 }
 
 setup_vim() {
@@ -226,6 +231,16 @@ setup_vim() {
 setup_tmux() {
   echo "Setting up Tmux.."
   ln $dotfilesDir/tmux.conf $trueHome/.tmux.conf
+}
+
+setup_util() {
+  echo "Setting up utilities.."
+  if command -v go >/dev/null 2>&1 ; then
+    echo "Installing mycliutil..."
+    go get -v github.com/lenkite/mycliutil/neosdkurls
+  else
+    echo "ERR: Go not found or not in PATH. Kindly install the same!"
+  fi
 }
 
 setup_zsh() {
@@ -251,16 +266,22 @@ setup_zsh() {
     fi
   done
 
-  if [[ $SHELL != "/bin/zsh" ]]; then
-    echo "Current shell is $SHELL. Changing to /bin/zsh"
-    chsh -s /bin/zsh
-  fi
 
   echo "Changing shell to /bin/zsh.."
-  if [[ -z $isCygwin ]]; then
-   sudo chsh -s /bin/zsh
+  if [[ $SHELL != "/bin/zsh" ]]; then
+    if [[ -z $isCygwin ]]; then
+      echo "Current shell is $SHELL. Changing to /bin/zsh"
+      sudo chsh -s /bin/zsh
+    else
+      echo "Shell SWITCH for cygwin not implemented yet. Please add line 'db_shell: /bin/zsh' in /etc/nsswitch.conf"
+    fi
+  fi
+
+  if command -v git >/dev/null 2>&1 ; then
+    echo "Installing zgen"
+    git clone https://github.com/tarjoilija/zgen.git "${HOME}/.zgen"
   else
-    echo "Shell Switch for cygwin not implemented yet. Please add line 'db_shell: /bin/zsh' in /etc/nsswitch.conf"
+    echo "ERROR: Could not find git and hence couldn't clone zgen :("
   fi
 }
 
