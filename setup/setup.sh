@@ -279,7 +279,12 @@ setup_zsh() {
 
   if command -v git >/dev/null 2>&1 ; then
     echo "Installing zgen"
-    git clone https://github.com/tarjoilija/zgen.git "${HOME}/.zgen"
+    if [ -d ~/.zgen -a -d ~/.zgen/.git ]; then
+      git -C ~/.zgen reset --hard
+      git -C ~/.zgen pull
+    else
+      git clone https://github.com/tarjoilija/zgen.git "${HOME}/.zgen"
+    fi
   else
     echo "ERROR: Could not find git and hence couldn't clone zgen :("
   fi

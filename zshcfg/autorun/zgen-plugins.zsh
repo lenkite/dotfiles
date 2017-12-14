@@ -6,15 +6,16 @@ if [[ -f ~/.zgen/zgen.zsh ]]; then
     # zplug sindresorhus/pure, use:pure.zsh, from:github, as:theme
     zgen load supercrabtree/k
   fi
-  zgen prezto
-  zgen prezto utility
+  #zgen prezto
+  #zgen prezto utility
   zgen load zsh-users/zsh-syntax-highlighting
   zgen oh-my-zsh
   zgen oh-my-zsh plugins/git
+  zgen oh-my-zsh plugins/vi-mode
   zgen oh-my-zsh themes/arrow
   # zplug docker/cli, use:contrib/completion/zsh
   # zplug docker/compose, use:contrib/completion/zsh
-  [ $isMacos ] && zgen prezto homebrew
+  #[ $isMacos ] && zgen prezto homebrew
 fi
 
 # [ -f ~/.zplug/init.zsh ] && source ~/.zplug/init.zsh || return

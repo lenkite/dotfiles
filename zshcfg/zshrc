@@ -6,19 +6,6 @@
 
 [[ -z $dotfiles ]] && echo "ERROR: dotfiles variable not set! Check zshenv"
 
-# http://dougblack.io/words/zsh-vi-mode.html
-set -o vi
-bindkey -v
-# http://dougblack.io/words/zsh-vi-mode.html
-export KEYTIMEOUT=1 # very important for lag killing.
-
-# The behaviour of / and ? in command line is screwed up by prezto. I want to
-# remove the incremental search keybindings 
-# See
-# http://unix.stackexchange.com/questions/285208/how-to-remove-a-zsh-keybinding-if-i-dont-know-what-it-does
-# See man zshzle for these functions
-bindkey -M vicmd "?" vi-history-search-forward
-bindkey -M vicmd "/" vi-history-search-backward
 
 #  Increase history size
 ## See http://zsh.sourceforge.net/Guide/zshguide02.html#l16
@@ -98,6 +85,21 @@ else
 fi;
 
 command -v fortune 2>&1 >/dev/null && command -v cowsay 2>&1 >/dev/null && fortune | cowsay
+
+# http://dougblack.io/words/zsh-vi-mode.html
+set -o vi
+bindkey -v
+# http://dougblack.io/words/zsh-vi-mode.html
+export KEYTIMEOUT=1 # very important for lag killing.
+
+# The behaviour of / and ? in command line is screwed up by both prezto and
+# oh-my-zsh's zsh vi-mode plugin. I want to remove the incremental search
+# keybindings 
+# See
+# http://unix.stackexchange.com/questions/285208/how-to-remove-a-zsh-keybinding-if-i-dont-know-what-it-does
+# See man zshzle for these functions
+bindkey -M vicmd "?" vi-history-search-forward
+bindkey -M vicmd "/" vi-history-search-backward
 
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
