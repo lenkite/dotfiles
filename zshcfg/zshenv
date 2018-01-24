@@ -60,3 +60,6 @@ if [[ $GOROOT ]]; then
 fi
 main
 
+# See https://github.com/rupa/z/pull/200
+[[ $isWsl ]] && { unsetopt BG_NICE }
+

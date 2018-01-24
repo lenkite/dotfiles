@@ -178,12 +178,13 @@ replace_linux_home_shell() {
 
 
 install_pkgs() {
- echo " Installing packages"
+ echo " Installing packages..."
  if [[ $isMacos == true ]]; then
   brew install zsh git the_silver_searcher fortune cowsay
  elif [[ $isLinux == true ]]; then
   sudo apt-get update
   sudo apt-get install git zsh silversearcher-ag netcat-openbsd dh-autoreconf autoconf pkg-config tmux 7zip
+  setup_go_linux
  elif [[ $isCygwin == true ]]; then
    if [[ -f /tmp/apt-cyg ]]; then
      rm /tmp/apt-cyg
@@ -210,8 +211,20 @@ install_pkgs() {
  #  curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh 
  # fi
 
-
 }
+
+setup_go_linux() {
+  local gotarbin="go1.9.3.linux-amd64.tar.gz"
+  if command -v curl >/dev/null 2>&1 ; then
+    pushd /tmp
+    curl -L -O -C - https://dl.google.com/go/$gotarbin
+    sudo tar -C /usr/local -zxf $gotarbin
+    popd
+  else
+    echo "WARNING: Curl not found or not in PATH. Kindly install the same!"
+  fi
+}
+  
 
 setup_vim() {
   initialize_vars
@@ -239,7 +252,7 @@ setup_util() {
     echo "Installing mycliutil..."
     go get -v github.com/lenkite/mycliutil/neosdkurls
   else
-    echo "ERR: Go not found or not in PATH. Kindly install the same!"
+    echo "WARNING: Go not found or not in PATH. Kindly install the same!"
   fi
 }
 
