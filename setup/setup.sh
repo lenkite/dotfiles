@@ -120,9 +120,11 @@ detect_util() {
   hasCurl=$(command -v curl)
   hasZip=$(command -v zip)
   hasUnzip=$(command -v unzip)
+  hasGit=$(command -v git)
   [[ hasCurl ]] || echo "WARN: 'curl' not found. Setup may be incomplete"
   [[ hasZip ]] || echo "WARN: 'zip' not found. Setup may be incomplete"
   [[ hasUnzip ]] || echo "WARN: 'unzip' not found. Setup may be incomplete"
+  [[ hasGit ]] || echo "WARN: 'git' not found. Setup may be incomplete"
   export done_detect_util=true
 }
 
