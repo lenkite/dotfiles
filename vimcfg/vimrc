@@ -239,6 +239,7 @@ Plug 'dahu/Asif' "Dep of vim-asciidoc
 Plug 'Raimondi/VimRegStyle' "Dep of vim-asciidoc
 Plug 'vim-scripts/SyntaxRange' "dep of vim-asciidoc
 Plug 'udalov/kotlin-vim'
+Plug 'ap/vim-css-color' "highlights CSS colors
 "}
 
 " ** Plugins: Search {
@@ -323,6 +324,19 @@ nnoremap  <BS> <C-^>
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
+" Easy edit of files in same directory of current buffer
+" http://vim.wikia.com/wiki/Easy_edit_of_files_in_the_same_directory
+" http://vimcasts.org/episodes/the-edit-command/
+" Choose to use <Leader>E since <Leader>e is used by FZF :Buffers
+" cabbr <expr> %% expand('%:p:h')
+cnoremap %% <C-R>=fnameescape(expand('%:h')).'/'<cr>
+map <leader>Ew :e %%
+map <leader>Es :sp %%
+map <leader>Ev :vsp %%
+map <leader>Et :tabe %%
+
+"}
+
 
 " { * FZF NERDTree,  Dirvish, Tagbar Config
 
@@ -331,7 +345,7 @@ function! ConfigureFzf()
   map <C-p> :FZF<CR>
 endfunction
 autocmd VimEnter * if exists(":FZF") | call ConfigureFzf() | endif
-autocmd VimEnter * if exists(":Dirvish") | exe "nnoremap <Leader>fd :Dirvish\<CR>" | endif
+
 function! ConfigureNerdTree()
   " f for filess
   nnoremap <Leader>ff :NERDTreeToggle<CR>
@@ -360,9 +374,16 @@ function! ConfigureNerdTree()
   let NERDTreeMinimalUI = 1
   let NERDTreeDirArrows = 1
   let NERDTreeShowBookmarks = 1
-
 endfunction
 autocmd VimEnter * if exists(":NERDTree") | call ConfigureNerdTree() | endif
+
+function! ConfigureDirvish()
+  nnoremap <Leader>fd :Dirvish<CR>
+endfunction
+
+autocmd VimEnter * if exists(":Dirvish") | call ConfigureDirvish() | endif
+" autocmd VimEnter * if exists(":Dirvish") | exe "nnoremap <Leader>fd :Dirvish\<CR>" | endif
+
 function! ConfigureTagbar()
   nmap <Leader>o :Tagbar<CR>
 endfunction
@@ -494,7 +515,6 @@ let g:user_emmet_leader_key = '<C-y>'
 
 
 " }
-
 
 
 "{ * GLOBAL Variables 
