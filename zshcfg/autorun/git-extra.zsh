@@ -23,6 +23,11 @@ for d in */ ; do
   echo "$d"
 done
 }
+
+if [[ $hasGit ]]; then
+  git config --global credential.helper "cache --timeout=3600"  
+  git config --global credential.https://github.com/lenkite.lenkite lenkite 
+fi
 export VISUAL=vim
 export EDITOR=$VISUAL
 export GIT_EDITOR=$VISUAL
