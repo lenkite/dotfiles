@@ -56,7 +56,7 @@ load_dotpaths() {
 
 # Not sure if this is the right place
 if [[ $GOROOT ]]; then
-  export GOROOT=`cygpath -am $GOROOT`
+  [[ $isCygwin ]] && { export GOROOT=`cygpath -am $GOROOT` }
 fi
 main
 

@@ -75,7 +75,7 @@ setup_main() {
 }
 
 initialize_vars() {
-  echo "Detect host enrivornment and initializ variables.."
+  echo "Detect host enrivornment and initialize variables.."
   [ $done_detect_os ] || detect_os
   [ $done_set_uservars ] || set_uservars
   [ $done_set_homevars ] || set_homevars
@@ -183,7 +183,7 @@ install_pkgs() {
   brew install zsh git the_silver_searcher fortune cowsay
  elif [[ $isLinux == true ]]; then
   sudo apt-get update
-  sudo apt-get install git zsh silversearcher-ag netcat-openbsd dh-autoreconf autoconf pkg-config tmux 7zip
+  sudo apt-get --yes install git zsh silversearcher-ag netcat-openbsd dh-autoreconf autoconf pkg-config tmux fortune-mod cowsay
   setup_go_linux
  elif [[ $isCygwin == true ]]; then
    if [[ -f /tmp/apt-cyg ]]; then
@@ -215,10 +215,11 @@ install_pkgs() {
 
 setup_go_linux() {
   local gotarbin="go1.9.3.linux-amd64.tar.gz"
+  local goroot="/usr/local/go"
   if command -v curl >/dev/null 2>&1 ; then
     pushd /tmp
     curl -L -O -C - https://dl.google.com/go/$gotarbin
-    sudo tar -C /usr/local -zxf $gotarbin
+    [[ -d $goroot ]] && echo "setup_go_linux: $goroot already exists. Skip extraction of $gotarbin" || sudo tar -C /usr/local -zxf $gotarbin
     popd
   else
     echo "WARNING: Curl not found or not in PATH. Kindly install the same!"
