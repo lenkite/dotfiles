@@ -5,6 +5,9 @@ map <leader>X :action ChooseRunConfiguration<CR>
 map <leader>b :action CompileDirty<CR>
 "TODO: add \B for build all
 nmap <C-P> :action GotoFile<CR>
+nmap <M-P> :action GotoFile<CR>
+nmap <M-T> :action GotoType<CR>
+nmap <M-S-T> :action GotoSymbol<CR>
 nmap ]q :action  GotoNextError<CR>
 nmap <C-;> :action GotoNextError<CR>
 nmap [q :action  GotoPreviousError<CR>
@@ -24,6 +27,13 @@ nmap <A-W> :action CloseContent<CR>
 "IDE specific
 map <Leader>u :action SurroundWith<CR>
 nmap <A-CR> :action ShowIntentionActions<CR>
+nmap <M-CR> :action ShowIntentionActions<CR>
+
+"Consistent Commenting across platforms
+nmap <C-/> :action CommentByLineComment<CR>
+nmap <C-S-/> :action CommentByBlockComment<CR>
+"See Bartoz Bialeks comment at: https://youtrack.jetbrains.com/issue/VIM-862
+vnoremap <C-/> :<bs><bs><bs><bs><bs>action VimVisualSwapSelections<cr>:action CommentByLineComment<cr>
 
 "Navigation
 nmap <C-I> :action Forward<CR>

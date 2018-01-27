@@ -226,11 +226,7 @@ Plug 'wellle/targets.vim'
 Plug 'terryma/vim-expand-region'
 "}
 
-" ** Plugins: Syntax/Linting  {
-Plug 'scrooloose/syntastic'
-" }
-
-" ** Plugins: Language {
+" ** Plugins: Language, Syntax, Linting {
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 Plug 'rust-lang/rust.vim'
 Plug 'dahu/vim-asciidoc'
@@ -239,7 +235,11 @@ Plug 'dahu/Asif' "Dep of vim-asciidoc
 Plug 'Raimondi/VimRegStyle' "Dep of vim-asciidoc
 Plug 'vim-scripts/SyntaxRange' "dep of vim-asciidoc
 Plug 'udalov/kotlin-vim'
+Plug 'w0rp/ale'
+Plug 'Quramy/tsuquyomi'
+Plug 'leafgarland/typescript-vim'
 "}
+
 
 " ** Plugins: Search {
 Plug 'mhinz/vim-grepper'
@@ -445,6 +445,7 @@ function! ConfigureVimGo()
 
   au FileType go nmap <leader>i <Plug>(go-info)
   au FileType go nmap <leader>r <Plug>(go-rename)
+  au FileType go set path+=~/src,~/src/go/src
 
 
   let g:go_highlight_functions = 1
@@ -453,6 +454,8 @@ function! ConfigureVimGo()
   let g:go_highlight_types = 1
   let g:go_highlight_operators = 1
   let g:go_highlight_build_constraints = 1
+
+
 
 endfunction
 autocmd FileType go if exists(":GoBuild") | call ConfigureVimGo() | endif

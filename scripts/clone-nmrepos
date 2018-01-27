@@ -1,0 +1,7 @@
+#!/bin/bash
+
+git clone ssh://i034796@git.wdf.sap.corp:29418/AP/nmgr/nmapi2.git
+git clone ssh://i034796@git.wdf.sap.corp:29418/nmspi2.git
+git clone ssh://i034796@git.wdf.sap.corp:29418/nmcore2.git
+git clone ssh://i034796@git.wdf.sap.corp:29418/nmplafhci.git
+git clone ssh://i034796@git.wdf.sap.corp:29418/nodeassembly2.git
