@@ -11,12 +11,13 @@
 #fpath=($dotfiles/zshcfg/zfuncs $fpath)
 #autoload -Uz detect_os determine_user
 
-source $dotfiles/zshcfg/zfuncs/os-user-detect.zsh
+source $dotfiles/zshcfg/zfuncs/detect.zsh
 
 
 main() {
   detect_os
   detect_user
+  detect_util
   load_dotenv
   load_dotpaths
 
@@ -56,7 +57,10 @@ load_dotpaths() {
 
 # Not sure if this is the right place
 if [[ $GOROOT ]]; then
-  export GOROOT=`cygpath -am $GOROOT`
+  [[ $isCygwin ]] && { export GOROOT=`cygpath -am $GOROOT` }
 fi
 main
+
+# See https://github.com/rupa/z/pull/200
+[[ $isWsl ]] && { unsetopt BG_NICE }
 

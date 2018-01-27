@@ -75,11 +75,13 @@ setup_main() {
 }
 
 initialize_vars() {
-  echo "Detect host enrivornment and initializ variables.."
+  echo "- initialize_vars"
+  echo "Detect host enrivornment and initialize variables.."
   [ $done_detect_os ] || detect_os
   [ $done_set_uservars ] || set_uservars
   [ $done_set_homevars ] || set_homevars
   [ $dotfilesDir ] || detect_dotfilesdir
+  [ $done_detect_util ] || detect_util
 }
 
 detect_os() {
@@ -112,6 +114,18 @@ detect_os() {
 
 detect_dotfilesdir() {
   export dotfilesDir=$trueHome/dotfiles
+}
+
+detect_util() {
+  hasCurl=$(command -v curl)
+  hasZip=$(command -v zip)
+  hasUnzip=$(command -v unzip)
+  hasGit=$(command -v git)
+  [[ hasCurl ]] || echo "WARN: 'curl' not found. Setup may be incomplete"
+  [[ hasZip ]] || echo "WARN: 'zip' not found. Setup may be incomplete"
+  [[ hasUnzip ]] || echo "WARN: 'unzip' not found. Setup may be incomplete"
+  [[ hasGit ]] || echo "WARN: 'git' not found. Setup may be incomplete"
+  export done_detect_util=true
 }
 
 set_uservars() {
@@ -178,12 +192,13 @@ replace_linux_home_shell() {
 
 
 install_pkgs() {
- echo " Installing packages"
+ echo " Installing packages..."
  if [[ $isMacos == true ]]; then
   brew install zsh git the_silver_searcher fortune cowsay
  elif [[ $isLinux == true ]]; then
   sudo apt-get update
-  sudo apt-get install git zsh silversearcher-ag netcat-openbsd dh-autoreconf autoconf pkg-config tmux 7zip
+  sudo apt-get --yes install git zsh silversearcher-ag netcat-openbsd dh-autoreconf autoconf pkg-config tmux fortune-mod cowsay zip unzip
+  setup_go_linux
  elif [[ $isCygwin == true ]]; then
    if [[ -f /tmp/apt-cyg ]]; then
      rm /tmp/apt-cyg
@@ -210,8 +225,21 @@ install_pkgs() {
  #  curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh 
  # fi
 
-
 }
+
+setup_go_linux() {
+  local gotarbin="go1.9.3.linux-amd64.tar.gz"
+  local goroot="/usr/local/go"
+  if command -v curl >/dev/null 2>&1 ; then
+    pushd /tmp
+    curl -L -O -C - https://dl.google.com/go/$gotarbin
+    [[ -d $goroot ]] && echo "setup_go_linux: $goroot already exists. Skip extraction of $gotarbin" || sudo tar -C /usr/local -zxf $gotarbin
+    popd
+  else
+    echo "WARNING: Curl not found or not in PATH. Kindly install the same!"
+  fi
+}
+  
 
 setup_vim() {
   initialize_vars
@@ -234,18 +262,33 @@ setup_tmux() {
 }
 
 setup_util() {
-  echo "Setting up utilities.."
+  echo "- setup_util"
   if command -v go >/dev/null 2>&1 ; then
-    echo "Installing mycliutil..."
+    echo "Installing neosdkurls..."
     go get -v github.com/lenkite/mycliutil/neosdkurls
   else
-    echo "ERR: Go not found or not in PATH. Kindly install the same!"
+    echo "WARNING: Go not found or not in PATH. Kindly install the same!"
+  fi
+
+  #See https://github.com/ratishphilip/nvmsharp
+  if [[ $isCygwin || $isWsl ]]; then
+    echo "Installing nvmsharp..."
+    local nvmsharpUrl="https://raw.githubusercontent.com/ratishphilip/nvmsharp/master/nvmsharp_executable.zip"
+    if [[ $hasCurl && $hasUnzip ]]; then
+      curl -L -C - $nvmsharpUrl -o /tmp/nvmsharp.zip
+      rm -rf /tmp/nvmsharp_executable
+      unzip /tmp/nvmsharp.zip -d /tmp
+      [[ -d ~/bin ]] || mkdir ~/bin
+      cp /tmp/nvmsharp_executable/* ~/bin
+    else
+      echo "WARNING: curl and/or unzip not found or not in PATH!"
+    fi
   fi
 }
 
 setup_zsh() {
   initialize_vars
-  echo "Setting up ZSH"
+  echo "- setup_zsh"
   echo "Deleting all existing .z* files from home directory.."
   rm $trueHome/.zshrc 2> /dev/null
   rm $trueHome/.zprofile 2> /dev/null
