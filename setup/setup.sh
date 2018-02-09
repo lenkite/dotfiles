@@ -365,6 +365,5 @@ setup_vscode() {
 
 [[ "${BASH_SOURCE[0]}" != "${0}" ]] && isSetupSourced=true
 
-[ $isSetupSourced ] && echo "script ${BASH_SOURCE[0]} is being sourced. Execute full setup by calling\
- setup_main or individual setup_xxx functions" || setup_main
+setup_main
 
