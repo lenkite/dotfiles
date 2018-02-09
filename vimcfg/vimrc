@@ -229,11 +229,6 @@ Plug 'terryma/vim-expand-region'
 " ** Plugins: Language, Syntax, Linting {
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 Plug 'rust-lang/rust.vim'
-Plug 'dahu/vim-asciidoc'
-Plug 'dahu/vimple' "Dep of vim-asciidoc
-Plug 'dahu/Asif' "Dep of vim-asciidoc
-Plug 'Raimondi/VimRegStyle' "Dep of vim-asciidoc
-Plug 'vim-scripts/SyntaxRange' "dep of vim-asciidoc
 Plug 'udalov/kotlin-vim'
 Plug 'w0rp/ale'
 Plug 'Quramy/tsuquyomi'
@@ -483,6 +478,18 @@ autocmd FileType go if exists(":GoBuild") | call ConfigureVimGo() | endif
 
 " }
 
+" { * Typescript Lang Config
+" See:  https://github.com/Quramy/tsuquyomi
+"
+function! ConfigureVimTypescript()
+  autocmd FileType typescript setlocal completeopt+=menu,preview
+  let g:tsuquyomi_completion_detail = 1
+  au FileType typescript nmap <leader>i <Plug>(TsuquyomiSignatureHelp)
+  au FileType typescript imap <leader>i <C-o><Plug>(TsuquyomiSignatureHelp)
+endfunction
+autocmd FileType typescript if exists(":TsuquyomiStartServer") | call ConfigureVimTypescript() | endif
+
+" }
 
 " { Sneak Configuration
 "replace 'f' with 1-char Sneak

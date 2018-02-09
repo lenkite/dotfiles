@@ -244,13 +244,20 @@ setup_go_linux() {
 setup_vim() {
   initialize_vars
   echo "Setting up vim.."
-  export vimConfigDir=$dotfilesDir/vimcfg
-  echo "VimConfig Dir: $vimConfigDir"
+  export dotfilesVimCfgDir=$dotfilesDir/vimcfg
+  echo "VimConfig Dir: $dotfilesVimCfgDir"
   rm $trueHome/.vimrc 2> /dev/null
   rm $trueHome/_vimrc 2> /dev/null
   rm $trueHome/.ideavimrc 2> /dev/null
-  ln $vimConfigDir/vimrc $trueHome/.vimrc
-  ln $vimConfigDir/ideavimrc $trueHome/.ideavimrc
+
+  local nvimConfigDir=$trueHome/.config/nvim
+  echo "nvimConfigDir :$nvimConfigDir"
+  [[ -d  $nvimConfigDir ]] || mkdir -p $nvimConfigDir
+  rm $trueHome/.config/nvim
+  ln $dotfilesVimCfgDir/vimrc $trueHome/.vimrc
+  ln $dotfilesVimCfgDir/ideavimrc $trueHome/.ideavimrc
+  # Must fix this for windows, where it is ~/AppData/Local/nvim/init.vim
+  ln $dotfilesVimCfgDir/init.vim $nvimConfigDir/init.vim 
   echo "Setup Dir $dotfilesSetupDir"
   curl -fLo $trueHome/.vim/autoload/plug.vim --create-dirs \
       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
