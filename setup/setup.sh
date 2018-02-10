@@ -351,6 +351,8 @@ setup_zsh() {
   else
     echo "ERROR: Could not find git and hence couldn't clone zgen :("
   fi
+
+   [[ -f ~/.inputrc ]] || ln $trueHome/dotfiles/inputrc ~/.inputrc
 }
 
 setup_vscode() {
