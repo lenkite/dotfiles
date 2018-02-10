@@ -18,6 +18,7 @@ main() {
   maven_config
   neovim_config
   pet_config
+  java_config
   exec_autoruns
   exec_compinit
   vi_mode  #Keep at end cos plugins have bad habit of changing this
@@ -203,6 +204,18 @@ pet_config() {
   [[ -d ~/.config/pet ]] || mkdir -p ~/.config/pet
   [[ -e ~/.config/pet/config.toml ]] || ln $dotfiles/pet/config.toml ~/.config/pet/config.toml
   [[ -d ~/dotfiles/pet/snippets ]] || mkdir -p ~/dotfiles/pet/snippets
+}
+
+java_config() {
+  if [[ $isMacos ]]; then
+    javahome8() {
+      if [[ -f /usr/libexec/java_home ]]; then
+        local jh=$(/usr/libexec/java_home -v 1.8)
+        echo "Setting JAVA_HOME to $jh"
+        export JAVA_HOME=$jh
+      fi
+    }
+  fi
 }
 
 

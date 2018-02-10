@@ -25,9 +25,9 @@ if has('gui')
   endif
   set guioptions-=m  "remove menu bar
   set guioptions-=T  "remove toolbar
-elseif has('terminal')
+elseif has('nvim')
   let g:impact_transbg=1
-  tnoremap <S-Esc> <C-\><C-n>
+  au BufEnter * if &buftype == 'terminal' | :startinsert | endif
 endif
 
 " }
@@ -160,6 +160,7 @@ let loaded_matchparen = 1 "Parenthesis highlight is distracting like hell!
 " { * Terminal Config (for nvim)
 if has('nvim')
   let $VISUAL = 'nvr -cc split --remote-wait'
+  let $LC_ALL='C'
 endif
 "tnoremap <Esc> <C-\><C-n>
 " }
