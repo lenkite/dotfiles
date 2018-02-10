@@ -193,6 +193,7 @@ neovim_config() {
   if [[ $hasNvr ]]; then
     # alias vim=nvr
     # alias nvim=nvr
+    alias vim=nvim
   elif [[ $hasNeovim ]]; then
     alias vim=nvim
   fi

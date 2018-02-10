@@ -160,6 +160,7 @@ let loaded_matchparen = 1 "Parenthesis highlight is distracting like hell!
 if has('nvim')
   let $VISUAL = 'nvr -cc split --remote-wait'
 endif
+tnoremap <Esc> <C-\><C-n>
 " }
 
 " { * Autoreload vimrc
@@ -252,6 +253,7 @@ Plug 'yssl/QFEnter'
 Plug 'rafi/awesome-vim-colorschemes'
 "https://bluz71.github.io/2017/05/21/vim-plugins-i-like.html
 Plug 'rakr/vim-one'
+Plug 'joshdick/onedark.vim'
 "}
 
 " ** Table Alignment and Editing Plugins {
