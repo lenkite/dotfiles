@@ -194,7 +194,9 @@ replace_linux_home_shell() {
 install_pkgs() {
  echo " Installing packages..."
  if [[ $isMacos == true ]]; then
-  brew install zsh git the_silver_searcher fortune cowsay
+  brew install zsh git the_silver_searcher fortune cowsay python3 leiningen nodejs
+  brew install knqyf263/pet/pet
+  brew install --HEAD neovim 
  elif [[ $isLinux == true ]]; then
   sudo apt-get update
   sudo apt-get --yes install git zsh silversearcher-ag netcat-openbsd dh-autoreconf autoconf pkg-config tmux fortune-mod cowsay zip unzip
@@ -218,6 +220,13 @@ install_pkgs() {
    fi 
  fi
 
+ if command -v pip3 >/dev/null 2>&1 ; then
+   echo "Install python based module neovim-remote.."
+   pip3 install --user neovim-remote
+ else
+   echo "WARN: can't find pip3!"
+ fi
+
  #https://stackoverflow.com/questions/592620/check-if-a-program-exists-from-a-bash-script
  #zplug install https://github.com/zplug/zplug
  # if command -v zsh >/dev/null 2>&1 ; then
@@ -228,7 +237,7 @@ install_pkgs() {
 }
 
 setup_go_linux() {
-  local gotarbin="go1.9.3.linux-amd64.tar.gz"
+  local gotarbin="go1.9.4.linux-amd64.tar.gz"
   local goroot="/usr/local/go"
   if command -v curl >/dev/null 2>&1 ; then
     pushd /tmp

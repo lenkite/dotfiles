@@ -43,10 +43,12 @@ detect_util() {
   hasZip=$(command -v zip)
   hasUnzip=$(command -v unzip)
   hasGit=$(command -v git)
+  hasNeovim=$(command -v neovim)
   [[ hasCurl ]] || echo "WARN: 'curl' not found. Setup may be incomplete"
   [[ hasZip ]] || echo "WARN: 'zip' not found. Setup may be incomplete"
   [[ hasUnzip ]] || echo "WARN: 'unzip' not found. Setup may be incomplete"
   [[ hasGit ]] || echo "WARN: 'git' not found. Setup may be incomplete"
+  [[ hasNeovim ]] || echo "WARN: 'neovim' not found. Kindly install the same"
   export done_detect_util=true
 }
 

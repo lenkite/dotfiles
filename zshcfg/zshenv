@@ -1,3 +1,4 @@
+# vim: set sw=2 ts=2 sts=2 et tw=80 foldmarker={,} foldlevel=0 foldmethod=marker spell:
 # See ZSH startup files: http://zsh.sourceforge.net/Intro/intro_3.html
 # Link this to ~/.zshenv
 # .zshenv is sourced on all invocations.
@@ -20,7 +21,13 @@ main() {
   detect_util
   load_dotenv
   load_dotpaths
-
+  defenv_golang
+  defenv_android
+  defenv_flutter
+  defenv_git
+  defenv_kotlin
+  defenv_neosdk
+  defenv_python
   export MANPATH=":$dotfiles/man"
 }
 
@@ -55,10 +62,77 @@ load_dotpaths() {
   export PATH
 }
 
-# Not sure if this is the right place
-if [[ $GOROOT ]]; then
-  [[ $isCygwin ]] && { export GOROOT=`cygpath -am $GOROOT` }
-fi
+defenv_golang() {
+  if [[ $GOROOT ]]; then
+    [[ $isCygwin ]] && { export GOROOT=`cygpath -am $GOROOT` }
+  fi
+  if [[ $isCygwin ]]; then
+    export GOPATH=`cygpath -am ~`
+  else
+    export GOPATH="$HOME"
+  fi
+  if [[ -d /usr/local/go/ ]]; then
+    typeset -gxU path PATH
+    export GOROOT=/usr/local/go
+    path+=$GOROOT/bin
+    export PATH
+  fi
+}
+
+defenv_android() {
+  if [[ -d /usr/local/share/android-sdk ]]; then
+    export ANDROID_SDK_ROOT=/usr/local/share/android-sdk
+    export ANDROID_HOME=$ANDROID_SDK_ROOT
+  fi
+}
+
+defenv_flutter() {
+  typeset -gxU path PATH
+  if [[ -d $HOME/src/flutter/bin ]]; then
+    path+=$HOME/src/flutter/bin
+  fi
+  if [[ -d $HOME/src/flutter/flutter/bin ]]; then
+    path+=$HOME/src/flutter/flutter/bin
+  fi
+  export PATH
+}
+
+defenv_git() {
+  if command -v nvim  >/dev/null 2>&1 ; then
+    export VISUAL=nvim
+  elif command -v vim  >/dev/null 2>&1 ; then
+    export VISUAL=vim
+  else
+    export VISUAL=vi
+  fi
+  export EDITOR=$VISUAL
+  export GIT_EDITOR=$VISUAL
+}
+
+defenv_kotlin() {
+  local konanbin=$HOME/src/kotlin-native/dist/bin
+  if [[ -d $konanbin ]]; then
+    export PATH=$PATH:$konanbin
+  fi
+}
+
+defenv_neosdk() {
+  typeset -gxU path PATH
+  local neoweb=$HOME/sdk/neoweb
+  local neoee=$HOME/sdk/neoee
+  if [[ -d $neoweb ]]; then
+    path+=$neoweb/tools
+  fi
+  if [[ -d $neoee ]]; then
+    path+=$neoee/tools
+  fi
+}
+
+defenv_python() {
+  [ -d ~/Library/Python/*/bin ] && export PATH="$PATH"
+}
+
+export PATH
 main
 
 # See https://github.com/rupa/z/pull/200
