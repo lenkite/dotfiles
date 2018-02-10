@@ -189,9 +189,10 @@ maven_config() {
 neovim_config() {
   #https://github.com/mhinz/neovim-remote
   hasNvr=$(command -v nvr)
+  hasNeovim=$(command -v nvim)
   if [[ $hasNvr ]]; then
-    alias vim=nvr
-    alias nvim=nvr
+    # alias vim=nvr
+    # alias nvim=nvr
   elif [[ $hasNeovim ]]; then
     alias vim=nvim
   fi

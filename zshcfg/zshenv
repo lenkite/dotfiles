@@ -20,6 +20,7 @@ main() {
   defenv_kotlin
   defenv_neosdk
   defenv_python
+  defenv_nvr
   export MANPATH=":$dotfiles/man"
 }
 
@@ -173,7 +174,13 @@ defenv_neosdk() {
 }
 
 defenv_python() {
-  [ -d ~/Library/Python/*/bin ] && export PATH="$PATH"
+  typeset -gxU path PATH
+  local pybin=$(echo ~/Library/Python/3.*/bin | awk '{print $NF}')
+  [ -d $pybin ] && path+="$pybin" && export PATH
+}
+
+defenv_nvr() {
+  export NVIM_LISTEN_ADDRESS=/tmp/nvimsocket
 }
 
 export PATH

@@ -8,7 +8,6 @@
 "   Extensively modified in period Aug, 2017
 "   https://github.com/lenkite/dotfiles
 " }
-"
 
 " { * Prelude: Encoding, Modeline Settings
 "https://stackoverflow.com/questions/18321538/vim-error-e474-invalid-argument-listchars-tab-trail
@@ -17,7 +16,6 @@ set encoding=utf-8
 set modeline
 set modelines=1
 " }
-"
 
 " GUI VIM Config {
 
@@ -33,7 +31,6 @@ endif
 
 " }
 
-
 " { * Cygwin specific stuff
 if $OS == "Windows_NT"
   set rtp+=~/.vim
@@ -45,7 +42,6 @@ if $OS == "Windows_NT"
   behave xterm
 endif
 " }
-
 
 "{ * History, Buffers, Undo
 set history=10000               " Store lots of :cmdline history
@@ -62,7 +58,6 @@ if has('persistent_undo') && !isdirectory(expand('~').'/.vim/backups')
 endif
 "  }
 "}
-
 
 "{ * Turn Off Swap Files And Backups 
 set noswapfile
@@ -161,6 +156,12 @@ set showmatch "The vim implementation of matching parenthesis sucks
 let loaded_matchparen = 1 "Parenthesis highlight is distracting like hell!
 "}
 
+" { * Terminal Config (for nvim)
+if has('nvim')
+  let $VISUAL = 'nvr -cc split --remote-wait'
+endif
+" }
+
 " { * Autoreload vimrc
 autocmd! bufwritepost vimrc source %
 " }
@@ -181,6 +182,8 @@ Plug 'tpope/vim-fireplace' "nREPL
 " ** Plugins: Buffer and Window {
 Plug 'drn/zoomwin-vim'
 Plug 'ap/vim-buftabline'
+Plug 'mhinz/vim-startify' "Fancy start screen
+
 " }
 
 " ** Plugins: Completion And Snippets {
@@ -532,6 +535,7 @@ let g:cargo_makeprg_params='build'
 "
 set background=dark
 colorscheme gruvbox
+
 
 
 
