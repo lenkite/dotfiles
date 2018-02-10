@@ -17,8 +17,10 @@ main() {
   git_config
   maven_config
   neovim_config
+  pet_config
   exec_autoruns
   exec_compinit
+  vi_mode  #Keep at end cos plugins have bad habit of changing this
   greeting
   cd ~
 }
@@ -57,20 +59,6 @@ zsh_opts_vars() {
   zstyle ':completion:*' list-prompt '%S%M matches%s' #from prezto
   zstyle ':completion:*' menu select
 
-  # http://dougblack.io/words/zsh-vi-mode.html
-  set -o vi
-  bindkey -v
-  # http://dougblack.io/words/zsh-vi-mode.html
-  export KEYTIMEOUT=1 # very important for lag killing.
-
-  # The behaviour of / and ? in command line is screwed up by both prezto and
-  # oh-my-zsh's zsh vi-mode plugin. I want to remove the incremental search
-  # keybindings 
-  # See
-  # http://unix.stackexchange.com/questions/285208/how-to-remove-a-zsh-keybinding-if-i-dont-know-what-it-does
-  # See man zshzle for these functions
-  bindkey -M vicmd "?" vi-history-search-forward
-  bindkey -M vicmd "/" vi-history-search-backward
 
 }
 
@@ -209,6 +197,13 @@ neovim_config() {
   fi
 }
 
+pet_config() {
+  [[ -d ~/.config/pet ]] || mkdir -p ~/.config/pet
+  [[ -e ~/.config/pet/config.toml ]] || ln $dotfiles/pet/config.toml ~/.config/pet/config.toml
+  [[ -d ~/dotfiles/pet/snippets ]] || mkdir -p ~/dotfiles/pet/snippets
+}
+
+
 
 exec_autoruns() {
   if [[ -d $dotfiles ]] ; then
@@ -244,9 +239,27 @@ exec_compinit() {
   fi;
 }
 
+vi_mode() {
+  # http://dougblack.io/words/zsh-vi-mode.html
+  set -o vi
+  bindkey -v
+  # http://dougblack.io/words/zsh-vi-mode.html
+  export KEYTIMEOUT=1 # very important for lag killing.
+
+  # The behaviour of / and ? in command line is screwed up by both prezto and
+  # oh-my-zsh's zsh vi-mode plugin. I want to remove the incremental search
+  # keybindings 
+  # See
+  # http://unix.stackexchange.com/questions/285208/how-to-remove-a-zsh-keybinding-if-i-dont-know-what-it-does
+  # See man zshzle for these functions
+  bindkey -M vicmd "?" vi-history-search-forward
+  bindkey -M vicmd "/" vi-history-search-backward
+}
+
 greeting() {
   command -v fortune 2>&1 >/dev/null && command -v cowsay 2>&1 >/dev/null && fortune | cowsay
 }
+
 
 main
 

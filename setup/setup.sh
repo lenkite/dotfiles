@@ -195,8 +195,8 @@ install_pkgs() {
  echo " Installing packages..."
  if [[ $isMacos == true ]]; then
   brew install zsh git the_silver_searcher fortune cowsay python3 leiningen nodejs
-  brew install knqyf263/pet/pet
   brew install --HEAD neovim 
+ # brew install --HEAD knqyf263/pet/pet #using go get for pet
  elif [[ $isLinux == true ]]; then
   sudo apt-get update
   sudo apt-get --yes install git zsh silversearcher-ag netcat-openbsd dh-autoreconf autoconf pkg-config tmux fortune-mod cowsay zip unzip
@@ -273,17 +273,20 @@ setup_vim() {
 }
 
 setup_tmux() {
-  echo "Setting up Tmux.."
+  echo "- setup_tmux"
   ln $dotfilesDir/tmux.conf $trueHome/.tmux.conf
 }
 
 setup_util() {
   echo "- setup_util"
+
   if command -v go >/dev/null 2>&1 ; then
     echo "Installing neosdkurls..."
     go get -v github.com/lenkite/mycliutil/neosdkurls
+    echo "Installing pet..."
+    go get -v github.com/knqyf263/pet
   else
-    echo "WARNING: Go not found or not in PATH. Kindly install the same!"
+    echo "WARNING: Go not found or not in PATH. Kindly correct so lovely utilities can be installed"
   fi
 
   #See https://github.com/ratishphilip/nvmsharp
@@ -300,6 +303,7 @@ setup_util() {
       echo "WARNING: curl and/or unzip not found or not in PATH!"
     fi
   fi
+
 }
 
 setup_zsh() {
