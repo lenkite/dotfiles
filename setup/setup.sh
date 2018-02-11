@@ -8,19 +8,22 @@ usage() { echo "Usage: $0 [-c] [-v] [-t] [-u] [-z]" 1>&2; exit 1; }
 # Use getopt for simple option parsing
 # See https://stackoverflow.com/questions/16483119/example-of-how-to-use-getopts-in-bash
 # See http://wiki.bash-hackers.org/howto/getopts_tutorial
-while getopts "cvtuz" opt; do
+while getopts "cptuvz" opt; do
   case "${opt}" in
     c)
       codeSetup=true
       ;;
-    v)
-      viSetup=true
+    p)
+      pkgSetup=true
       ;;
     t)
       tmuxSetup=true
       ;;
     u)
       utilSetup=true
+      ;;
+    v)
+      viSetup=true
       ;;
     z)
       zshSetup=true
@@ -36,7 +39,7 @@ while getopts "cvtuz" opt; do
 done
 shift $((OPTIND-1))
 
-[ $codeSetup ] || [ $viSetup ] || [ $tmuxSetup ] || [ $utilSetup ] || [ $zshSetup ] || allSetup=true
+[ $codeSetup ] || [ $pkgSetup ] || [ $tmuxSetup ] || [ $utilSetup ] || [ $viSetup ] || [ $zshSetup ] || allSetup=true
 
 echo "codeSetup = $codeSetup, viSetup = $viSetup, tmuxSetup = $tmuxSetup, zshSetup = $zshSetup, utilSetup = $utilSetup, allSetup=$allSetup"
 
@@ -65,12 +68,12 @@ setup_main() {
   fi
   echo "Dotfiles Dir: $dotfilesDir"
 
-  [ $allSetup ] && install_pkgs
-  [[ $allSetup || $zshSetup ]] && setup_zsh
-  [[ $allSetup || $tmuxSetup ]] && setup_tmux
-  [[ $viSetup || $allSetup ]] && setup_vim
-  [[ $codeSetup || $allSetup ]] && setup_vscode
-  [[ $utilSetup || $allSetup ]] && setup_util
+  [[ $allSetup  || $pkgSetup  ]] && install_pkgs
+  [[ $allSetup  || $zshSetup  ]] && setup_zsh
+  [[ $allSetup  || $tmuxSetup ]] && setup_tmux
+  [[ $viSetup   || $allSetup  ]] && setup_vim
+  [[ $codeSetup || $allSetup  ]] && setup_vscode
+  [[ $utilSetup || $allSetup  ]] && setup_util
   
 }
 
@@ -202,12 +205,13 @@ install_pkgs() {
  elif [[ $isLinux == true ]]; then
   sudo apt-add-repository -y ppa:brightbox/ruby-ng
   sudo add-apt-repository -y ppa:jonathonf/vim
+  sudo add-apt-repository -y ppa:neovim-ppa/unstable
   sudo apt-get update
   sudo apt-get --yes install git zsh silversearcher-ag netcat-openbsd dh-autoreconf\
-    autoconf pkg-config tmux fortune-mod cowsay zip unzip vim ruby2.5
+    autoconf pkg-config tmux fortune-mod cowsay zip unzip python3 python3-pip vim neovim ruby2.5
+  sudo apt-get upgrade
+  sudo apt-get autoremove
   setup_go_linux
-  setup_fzf
-  setup_ctags
  elif [[ $isCygwin == true ]]; then
    if [[ -f /tmp/apt-cyg ]]; then
      rm /tmp/apt-cyg
@@ -229,6 +233,7 @@ install_pkgs() {
 
  if command -v pip3 >/dev/null 2>&1 ; then
    echo "Install python based module neovim-remote.."
+   sudo pip3 install neovim --upgrade
    pip3 install --user neovim-remote
  else
    echo "WARN: can't find pip3!"
@@ -259,8 +264,9 @@ setup_go_linux() {
 setup_fzf() {
   if [[ $hasGit ]]; then
     [[ -d ~/src ]] || mkdir -p ~/src
-    git -C ~/src clone --depth 1 https://github.com/junegunn/fzf.git
-    ~/src/fzf/install
+    [[ -d ~/src/fzf ]] || git -C ~/src clone --depth 1 https://github.com/junegunn/fzf.git
+    git -C ~/src/fzf pull
+    yes | ~/src/fzf/install
   else
     echo "WARN: Cannot install fzf from source since git not found!"
   fi
@@ -308,6 +314,8 @@ setup_tmux() {
 
 setup_util() {
   echo "- setup_util"
+  setup_fzf
+  setup_ctags
 
   if command -v go >/dev/null 2>&1 ; then
     echo "Installing neosdkurls..."
@@ -320,9 +328,9 @@ setup_util() {
 
   #See https://github.com/ratishphilip/nvmsharp
   if [[ $isCygwin || $isWsl ]]; then
-    echo "Installing nvmsharp..."
     local nvmsharpUrl="https://raw.githubusercontent.com/ratishphilip/nvmsharp/master/nvmsharp_executable.zip"
-    if [[ $isCygwin && $hasCurl && $hasUnzip ]]; then
+    if [[ $hasCurl && $hasUnzip ]]; then
+      echo "Installing nvmsharp..."
       curl -L -C - $nvmsharpUrl -o /tmp/nvmsharp.zip
       rm -rf /tmp/nvmsharp_executable
       unzip /tmp/nvmsharp.zip -d /tmp
@@ -350,8 +358,8 @@ setup_zsh() {
   for rcfile in $zshCfgDir/*; do
     if [[ $rcfile != *README* ]]; then
       if [[ -f $rcfile ]]; then
-      echo "Executing: ln -s $rcfile $trueHome/.${rcfile##*/}"
-      ln -s "$rcfile" "$trueHome/.${rcfile##*/}"
+        echo "Executing: ln -s $rcfile $trueHome/.${rcfile##*/}"
+        ln -s "$rcfile" "$trueHome/.${rcfile##*/}"
       fi
     fi
   done
@@ -367,19 +375,37 @@ setup_zsh() {
     fi
   fi
 
-  if command -v git >/dev/null 2>&1 ; then
-    echo "Installing zgen"
-    if [ -d ~/.zgen -a -d ~/.zgen/.git ]; then
-      git -C ~/.zgen reset --hard
-      git -C ~/.zgen pull
-    else
-      git clone https://github.com/tarjoilija/zgen.git "${HOME}/.zgen"
-    fi
+  if [[ -d $trueHome/.zgen ]]; then
+    echo "Removing old zgen stuff.."
+    rm -rf $trueHome/.zgen
+  fi
+
+  if [[ $hasCurl ]]; then
+    echo "Installing antigen"
+    [[ -d $trueHome/bin ]] || mkdir -p $trueHome/bin
+    local antigenLoc=$trueHome/bin/antigen.zsh
+    [[ -f $antigenLoc ]] && rm -f $antigenLoc
+    curl -L git.io/antigen > $antigenLoc
+    # if [ -d ~/.zgen -a -d ~/.zgen/.git ]; then
+    #   git -C ~/.zgen reset --hard
+    #   git -C ~/.zgen pull
+    # else
+    #   git clone https://github.com/tarjoilija/zgen.git "${HOME}/.zgen"
+    # fi
   else
     echo "ERROR: Could not find git and hence couldn't clone zgen :("
   fi
 
-   [[ -f ~/.inputrc ]] || ln $trueHome/dotfiles/inputrc ~/.inputrc
+  # https://github.com/chriskempson/base16-shell
+  echo "Installing base16-shell"
+  [[ -d $trueHome/.config ]] || mkdir -p $trueHome/.config
+  [[ -d $trueHome/.config/base16-shell ]] || git clone https://github.com/chriskempson/base16-shell.git $trueHome/.config/base16-shell
+  git -C $trueHome/.config/base16-shell pull
+
+  [[ -d $trueHome/src ]] || mkdir -p $trueHome/src
+  [[ -d $trueHome/src/base16-shell ]] && git -C $trueHome/src clone 
+
+  [[ -f ~/.inputrc ]] || ln $trueHome/dotfiles/inputrc ~/.inputrc
 }
 
 setup_vscode() {

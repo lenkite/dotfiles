@@ -21,7 +21,8 @@ main() {
   java_config
   exec_autoruns
   exec_compinit
-  vi_mode  #Keep at end cos plugins have bad habit of changing this
+  vi_mode  #Keep towards  end cos plugins have bad habit of changing this
+  base16_shell
   greeting
   cd ~
 }
@@ -59,7 +60,6 @@ zsh_opts_vars() {
   #zstyle ':completion:*' list-prompt '%SAt %p: Hit TAB for more, or the character to insert%s'
   zstyle ':completion:*' list-prompt '%S%M matches%s' #from prezto
   zstyle ':completion:*' menu select
-
 
 }
 
@@ -269,6 +269,15 @@ vi_mode() {
   # See man zshzle for these functions
   bindkey -M vicmd "?" vi-history-search-forward
   bindkey -M vicmd "/" vi-history-search-backward
+}
+
+base16_shell() {
+  if [[ -d ~/.config/base16-shell ]]; then
+    BASE16_SHELL=$HOME/.config/base16-shell/
+    [ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
+  else
+    echo "Base16 shell colors don't appear installed"
+  fi
 }
 
 greeting() {
