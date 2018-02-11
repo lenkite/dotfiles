@@ -173,8 +173,11 @@ defenv_neosdk() {
 
 defenv_python() {
   typeset -gxU path PATH
-  local pybin=$(echo ~/Library/Python/3.*/bin | awk '{print $NF}')
-  [ -d $pybin ] && path+="$pybin" && export PATH
+  if [[ $isMacos ]]; then
+    local pybin=$(echo ~/Library/Python/3.*/bin | awk '{print $NF}')
+    [ -d $pybin ] && path+="$pybin" && export PATH
+  fi
+  #TODO: configure python environment for linux/wsl too!
 }
 
 defenv_nvr() {

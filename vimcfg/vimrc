@@ -162,7 +162,6 @@ if has('nvim')
   let $VISUAL = 'nvr -cc split --remote-wait'
   let $LC_ALL='C'
 endif
-"tnoremap <Esc> <C-\><C-n>
 " }
 
 " { * Autoreload vimrc
@@ -308,10 +307,13 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 "https://www.reddit.com/r/neovim/comments/6mkvo3/builtin_terminals_or_tmux/
-tnoremap <C-h> <C-\><C-n><C-w>h
-tnoremap <C-j> <C-\><C-n><C-w>j
-tnoremap <C-k> <C-\><C-n><C-w>k
-tnoremap <C-l> <C-\><C-n><C-w>l
+
+if has('nvim')
+  tnoremap <C-h> <C-\><C-n><C-w>h
+  tnoremap <C-j> <C-\><C-n><C-w>j
+  tnoremap <C-k> <C-\><C-n><C-w>k
+  tnoremap <C-l> <C-\><C-n><C-w>l
+endif
 
 " Lovely! Got from some reddit post in the VIM forum to map backspace to last used file.
 nnoremap  <BS> <C-^>
@@ -555,7 +557,10 @@ let g:cargo_makeprg_params='build'
 " UltiSnips config
 "
 set background=dark
-colorscheme gruvbox
+try 
+  colorscheme gruvbox
+catch
+endtry
 
 
 
