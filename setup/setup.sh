@@ -233,7 +233,7 @@ install_pkgs() {
 
  if command -v pip3 >/dev/null 2>&1 ; then
    echo "Install python based module neovim-remote.."
-   sudo pip3 install neovim --upgrade
+   pip3 install neovim --upgrade
    pip3 install --user neovim-remote
  else
    echo "WARN: can't find pip3!"
