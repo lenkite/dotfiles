@@ -203,11 +203,11 @@ install_pkgs() {
   brew install --HEAD neovim 
  # brew install --HEAD knqyf263/pet/pet #using go get for pet
  elif [[ $isLinux == true ]]; then
- echo "** NOTE: If running behind proxy, export http_proxy/https_proxy"
+ echo "** NOTE: If RUNNING BEHIND PROXY, export http_proxy/https_proxy"
   sudo -E apt-add-repository -y ppa:brightbox/ruby-ng
   sudo -E add-apt-repository -y ppa:jonathonf/vim
   sudo -E add-apt-repository -y ppa:neovim-ppa/unstable
-  sudo -E apt-get update
+  #sudo -E apt-get update #cos the curl script for nodejs below already does it
   curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
   sudo -E apt-get --yes install git zsh silversearcher-ag netcat-openbsd dh-autoreconf\
     autoconf pkg-config tmux fortune-mod cowsay zip unzip python3 python3-pip ruby2.5\
