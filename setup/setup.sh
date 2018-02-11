@@ -210,7 +210,7 @@ install_pkgs() {
   sudo apt-get --yes install git zsh silversearcher-ag netcat-openbsd dh-autoreconf\
     autoconf pkg-config tmux fortune-mod cowsay zip unzip python3 python3-pip vim neovim ruby2.5
   sudo apt-get upgrade
-  sudo apt-get autoremove
+  sudo apt-get -y autoremove
   setup_go_linux
  elif [[ $isCygwin == true ]]; then
    if [[ -f /tmp/apt-cyg ]]; then
