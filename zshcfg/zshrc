@@ -9,7 +9,7 @@
 
 
 main() {
-  hacks()
+  hacks
   zsh_opts_vars
   zsh_plugins
   onthefly_setup #Keep this lightweight and move to setup.sh when big

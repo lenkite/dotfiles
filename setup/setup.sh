@@ -81,7 +81,7 @@ initialize_vars() {
   [ $done_set_uservars ] || set_uservars
   [ $done_set_homevars ] || set_homevars
   [ $dotfilesDir ] || detect_dotfilesdir
-  [ $done_detect_util ] || detect_util
+  detect_util
 }
 
 detect_os() {
@@ -121,11 +121,13 @@ detect_util() {
   hasZip=$(command -v zip)
   hasUnzip=$(command -v unzip)
   hasGit=$(command -v git)
+  hasGo=$(command -v go)
+  hasCtags=$(command -v ctags)
   [[ hasCurl ]] || echo "WARN: 'curl' not found. Setup may be incomplete"
   [[ hasZip ]] || echo "WARN: 'zip' not found. Setup may be incomplete"
   [[ hasUnzip ]] || echo "WARN: 'unzip' not found. Setup may be incomplete"
-  [[ hasGit ]] || echo "WARN: 'git' not found. Setup may be incomplete"
-  export done_detect_util=true
+  [[ hasGit ]] || echo "WARN: 'git' not found. Setup may be incomplete and need to be rerun"
+
 }
 
 set_uservars() {
@@ -198,9 +200,14 @@ install_pkgs() {
   brew install --HEAD neovim 
  # brew install --HEAD knqyf263/pet/pet #using go get for pet
  elif [[ $isLinux == true ]]; then
+  sudo apt-add-repository -y ppa:brightbox/ruby-ng
+  sudo add-apt-repository -y ppa:jonathonf/vim
   sudo apt-get update
-  sudo apt-get --yes install git zsh silversearcher-ag netcat-openbsd dh-autoreconf autoconf pkg-config tmux fortune-mod cowsay zip unzip
+  sudo apt-get --yes install git zsh silversearcher-ag netcat-openbsd dh-autoreconf\
+    autoconf pkg-config tmux fortune-mod cowsay zip unzip vim ruby2.5
   setup_go_linux
+  setup_fzf
+  setup_ctags
  elif [[ $isCygwin == true ]]; then
    if [[ -f /tmp/apt-cyg ]]; then
      rm /tmp/apt-cyg
@@ -248,7 +255,29 @@ setup_go_linux() {
     echo "WARNING: Curl not found or not in PATH. Kindly install the same!"
   fi
 }
-  
+
+setup_fzf() {
+  if [[ $hasGit ]]; then
+    [[ -d ~/src ]] || mkdir -p ~/src
+    git -C ~/src clone --depth 1 https://github.com/junegunn/fzf.git
+    ~/src/fzf/install
+  else
+    echo "WARN: Cannot install fzf from source since git not found!"
+  fi
+}
+
+setup_ctags() {
+  if [[ ! $hasCtags ]]; then
+    [[ -d ~/src ]] || mkdir -p ~/src
+    git -C ~/src clone --depth 1 https://github.com/universal-ctags/ctags.git
+    pushd ~/src/ctags
+    ./autogen.sh
+    ./configure
+    make
+    sudo make install
+    popd
+  fi
+}
 
 setup_vim() {
   initialize_vars
@@ -293,14 +322,12 @@ setup_util() {
   if [[ $isCygwin || $isWsl ]]; then
     echo "Installing nvmsharp..."
     local nvmsharpUrl="https://raw.githubusercontent.com/ratishphilip/nvmsharp/master/nvmsharp_executable.zip"
-    if [[ $hasCurl && $hasUnzip ]]; then
+    if [[ $isCygwin && $hasCurl && $hasUnzip ]]; then
       curl -L -C - $nvmsharpUrl -o /tmp/nvmsharp.zip
       rm -rf /tmp/nvmsharp_executable
       unzip /tmp/nvmsharp.zip -d /tmp
       [[ -d ~/bin ]] || mkdir ~/bin
       cp /tmp/nvmsharp_executable/* ~/bin
-    else
-      echo "WARNING: curl and/or unzip not found or not in PATH!"
     fi
   fi
 
@@ -388,4 +415,3 @@ setup_vscode() {
 [[ "${BASH_SOURCE[0]}" != "${0}" ]] && isSetupSourced=true
 
 setup_main
-
