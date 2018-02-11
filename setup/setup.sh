@@ -203,12 +203,15 @@ install_pkgs() {
   brew install --HEAD neovim 
  # brew install --HEAD knqyf263/pet/pet #using go get for pet
  elif [[ $isLinux == true ]]; then
-  sudo apt-add-repository -y ppa:brightbox/ruby-ng
-  sudo add-apt-repository -y ppa:jonathonf/vim
-  sudo add-apt-repository -y ppa:neovim-ppa/unstable
-  sudo apt-get update
-  sudo apt-get --yes install git zsh silversearcher-ag netcat-openbsd dh-autoreconf\
-    autoconf pkg-config tmux fortune-mod cowsay zip unzip python3 python3-pip vim neovim ruby2.5
+ echo "** NOTE: If running behind proxy, export http_proxy/https_proxy"
+  sudo -E apt-add-repository -y ppa:brightbox/ruby-ng
+  sudo -E add-apt-repository -y ppa:jonathonf/vim
+  sudo -E add-apt-repository -y ppa:neovim-ppa/unstable
+  sudo -E apt-get update
+  curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+  sudo -E apt-get --yes install git zsh silversearcher-ag netcat-openbsd dh-autoreconf\
+    autoconf pkg-config tmux fortune-mod cowsay zip unzip python3 python3-pip ruby2.5\
+    vim neovim nodejs
   sudo apt-get upgrade
   sudo apt-get -y autoremove
   setup_go_linux
