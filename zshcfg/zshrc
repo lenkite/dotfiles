@@ -64,7 +64,17 @@ zsh_opts_vars() {
 }
 
 zsh_plugins() {
-  # Currently using zgen as plugin manager
+
+  ## Trying antigen as plugin manager
+  # if [[ -f ~/.antigen/antigen.zsh ]]; then
+  #   source ~/.antigen/antigen.zsh
+  #   antigen bundle miekg/lean
+  #   antigen apply
+  # else
+  #   echo "ERR: antigen not found. Run 'setup.sh -z'"
+  # fi
+
+  ## Currently using zgen as plugin manager
   [ -f ~/.zgen/zgen.zsh ] && source ~/.zgen/zgen.zsh || echo "ERR: zgen not found. Re-run '~/dotfiles/setup/setup.sh -z'"
   if [[ -f ~/.zgen/zgen.zsh ]]; then
     if [[ $isCygwin ]]; then
@@ -274,7 +284,7 @@ vi_mode() {
 base16_shell() {
   if [[ -d ~/.config/base16-shell ]]; then
     BASE16_SHELL=$HOME/.config/base16-shell/
-    [ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
+    [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
   else
     echo "Base16 shell colors don't appear installed"
   fi

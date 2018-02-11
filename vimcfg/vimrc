@@ -160,6 +160,7 @@ let loaded_matchparen = 1 "Parenthesis highlight is distracting like hell!
 " { * Terminal Config (for nvim)
 if has('nvim')
   let $VISUAL = 'nvr -cc split --remote-wait'
+  set shell=/bin/zsh
   let $LC_ALL='C'
 endif
 " }

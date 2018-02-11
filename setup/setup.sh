@@ -380,20 +380,22 @@ setup_zsh() {
     rm -rf $trueHome/.zgen
   fi
 
-  if [[ $hasCurl ]]; then
-    echo "Installing antigen"
-    [[ -d $trueHome/bin ]] || mkdir -p $trueHome/bin
-    local antigenLoc=$trueHome/bin/antigen.zsh
-    [[ -f $antigenLoc ]] && rm -f $antigenLoc
-    curl -L git.io/antigen > $antigenLoc
-    # if [ -d ~/.zgen -a -d ~/.zgen/.git ]; then
-    #   git -C ~/.zgen reset --hard
-    #   git -C ~/.zgen pull
-    # else
-    #   git clone https://github.com/tarjoilija/zgen.git "${HOME}/.zgen"
-    # fi
+  # if [[ $hasCurl ]]; then
+  #   echo "Installing antigen"
+  #   local antigenDir=$trueHome/.antigen
+  #   [[ -d $antigenDir ]] || mkdir -p $antigenDir
+  #   local antigenLoc=$antigenDir/antigen.zsh
+  #   [[ -f $antigenLoc ]] && rm -f $antigenLoc
+  #   curl -L git.io/antigen > $antigenLoc
+  # else
+  #   echo "ERROR: Could not find git and hence couldn't clone zgen :("
+  # fi
+
+  if [ -d $trueHome/.zgen -a -d $trueHome/.zgen/.git ]; then
+    git -C $trueHome/.zgen reset --hard
+    git -C $trueHome/.zgen pull
   else
-    echo "ERROR: Could not find git and hence couldn't clone zgen :("
+    git clone https://github.com/tarjoilija/zgen.git "${HOME}/.zgen"
   fi
 
   # https://github.com/chriskempson/base16-shell
