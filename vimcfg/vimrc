@@ -27,7 +27,7 @@ if has('gui')
   set guioptions-=T  "remove toolbar
 elseif has('nvim')
   let g:impact_transbg=1
-  au BufEnter * if &buftype == 'terminal' | :startinsert | endif
+  "au BufEnter * if &buftype == 'terminal' | :startinsert | endif # this sucks
 endif
 
 " }
@@ -237,6 +237,7 @@ Plug 'guns/vim-clojure-static' "Syntax highlighting for clojure
 Plug 'guns/vim-clojure-highlight' "Extended highlighting.
 Plug 'guns/vim-sexp' 
 Plug 'bhurlow/vim-parinfer' 
+Plug 'markwoodhall/vim-figwheel'
 "}
 
 
@@ -541,6 +542,9 @@ let g:user_emmet_leader_key = '<C-y>'
 
 " }
 
+" Clojure/Clojurescript Config {
+au FileType clojure :command! PiggyDear Piggieback (figwheel-sidecar.repl-api/repl-env)   
+" }
 "{ * GLOBAL Variables 
 let g:skip_loading_mswin="true"  "Do not like mswin settings. Want consistent behaviour across platforms
 " Use deoplete.
