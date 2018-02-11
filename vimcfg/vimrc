@@ -104,7 +104,7 @@ set foldnestmax=3       "deepest fold is 3 levels
 set foldlevel=0
 " }
 
- " * { Syntax and Completion 
+ " * { Syntax, Spelling and Completion 
 syntax on
 set synmaxcol=2048        "long lines are slow
 filetype plugin on
@@ -125,6 +125,9 @@ set wildignore+=log/**
 set wildignore+=tmp/**
 set wildignore+=*.png,*.jpg,*.gif
 set wildignore+=.idea/**
+
+set spelllang=en
+set spellfile=~/dotfiles/spell/en.utf-8.add
 "} 
 
 " { * Clipboard
