@@ -204,17 +204,19 @@ install_pkgs() {
  # brew install --HEAD knqyf263/pet/pet #using go get for pet
  elif [[ $isLinux == true ]]; then
  echo "** NOTE: If RUNNING BEHIND PROXY, export http_proxy/https_proxy"
-  sudo -E apt-add-repository -y ppa:brightbox/ruby-ng
-  sudo -E add-apt-repository -y ppa:jonathonf/vim
-  sudo -E add-apt-repository -y ppa:neovim-ppa/unstable
+ sudo -E apt-add-repository -y ppa:brightbox/ruby-ng
+ sudo -E add-apt-repository -y ppa:jonathonf/vim
+ sudo -E add-apt-repository -y ppa:neovim-ppa/unstable
+ sudo -E add-apt-repository ppa:webupd8team/java
   #sudo -E apt-get update #cos the curl script for nodejs below already does it
   curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
   sudo -E apt-get --yes install git zsh silversearcher-ag netcat-openbsd dh-autoreconf\
     autoconf pkg-config tmux fortune-mod cowsay zip unzip python3 python3-pip ruby2.5\
-    vim neovim nodejs
+    vim neovim nodejs oracle-java8-set-default
   sudo apt-get upgrade
   sudo apt-get -y autoremove
   setup_go_linux
+  setup_maven
  elif [[ $isCygwin == true ]]; then
    if [[ -f /tmp/apt-cyg ]]; then
      rm /tmp/apt-cyg
@@ -261,6 +263,17 @@ setup_go_linux() {
     popd
   else
     echo "WARNING: Curl not found or not in PATH. Kindly install the same!"
+  fi
+}
+
+setup_maven() {
+  # I would love to use pkg manager here but sadly the pkg managers are out of date!
+  local mvnName="apache-maven-3.5.2"
+  local mvnUrl="http://apache.claz.org/maven/maven-3/3.5.2/binaries/$mvnName-bin.tar.gz"
+  if [[ $hasCurl && $isLinux ]]; then
+    curl -o /tmp/mvn.tar.gz $mvnUrl
+    sudo tar -xzf /tmp/mvn.tar.gz
+    sudo mv /tmp/$mvnName /opt/maven
   fi
 }
 

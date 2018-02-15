@@ -20,6 +20,7 @@ main() {
   defenv_kotlin
   defenv_neosdk
   defenv_python
+  defenv_maven
   defenv_nvr
   export MANPATH=":$dotfiles/man"
 }
@@ -180,8 +181,29 @@ defenv_python() {
   #TODO: configure python environment for linux/wsl too!
 }
 
+# defenv_maven() {
+#   typeset -gxU path PATH
+#   if [[ $isLinux ]]; then
+#     local mvnHome=$(echo /opt/apache-maven\* 2> /dev/null | awk '{print $NF}')
+#     if [ -d $mvnHome ]; then
+#       export M2_HOME=$mvnHome
+#       path+=$mvnHome/bin
+#       export PATH
+#     fi
+#   fi
+# }
+
 defenv_nvr() {
   export NVIM_LISTEN_ADDRESS=/tmp/nvimsocket
+}
+
+defenv_maven() {
+  local mvnHome=/opt/maven
+  if [[ $isLinux && -d $mvnHome/bin ]]; then
+    typeset -gxU path PATH
+    path+=$mvnHome/bin
+    export M2_HOME=$mvnHome
+  fi
 }
 
 export PATH
