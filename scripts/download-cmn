@@ -41,7 +41,7 @@ stackLocation=$(curl -SIs $url | grep --only-matching --extended-regexp 'Locatio
 #stackLocation=$(echo $reqHeaders | grep --only-matching --extended-regexp 'Location:[[:blank:]]*([^[:blank:]])*' | awk '{ print $2 }')
 echo "Downloading >>$stackLocation<<"
 pushd $TMPDIR
-curl -o cmn.zip "$stackUrl"
+curl -o cmn.zip "$stackLocation"
 popd
 #popd
 
