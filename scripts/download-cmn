@@ -34,9 +34,14 @@ nexus='http://nexussnap.wdf.sap.corp:8081'
 path="/nexus/service/local/artifact/maven/redirect?r=$repo&g=$gid&a=$aid&v=$version&e=zip&c=$classifier"
 url=$nexus$path
 
-stackUrl=$(curl -sI $url | grep -o -E 'Location:[[:blank:]]*(.*)' | awk '{print $2}')
-echo "Downloading $stackUrl"
-pushd /tmp
-curl -O $stackUrl
+#stackUrl=$(curl -sI $url | grep -o -E 'Location:[[:blank:]]*(.*)' | awk '{print $2}') | tr -dc '[:alnum:]' | tr '[:upper:]' '[:lower:]'
+#stackUrl=$(curl -sI $url | grep -o -E 'Location:[[:blank:]]*(.*)' | awk '{print $2}')
+# echo "stackurl is #$stackurl#"
+stackLocation=$(curl -SIs $url | grep --only-matching --extended-regexp 'Location:[[:blank:]]*([^[:blank:]]*)' | tr -d '[:cntrl:]' | awk '{ print $2 }' | tr -d '[:cntrl:]')
+#stackLocation=$(echo $reqHeaders | grep --only-matching --extended-regexp 'Location:[[:blank:]]*([^[:blank:]])*' | awk '{ print $2 }')
+echo "Downloading >>$stackLocation<<"
+pushd $TMPDIR
+curl -o cmn.zip "$stackLocation"
 popd
+#popd
 

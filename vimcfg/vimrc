@@ -8,7 +8,6 @@
 "   Extensively modified in period Aug, 2017
 "   https://github.com/lenkite/dotfiles
 " }
-"
 
 " { * Prelude: Encoding, Modeline Settings
 "https://stackoverflow.com/questions/18321538/vim-error-e474-invalid-argument-listchars-tab-trail
@@ -17,7 +16,6 @@ set encoding=utf-8
 set modeline
 set modelines=1
 " }
-"
 
 " GUI VIM Config {
 
@@ -27,12 +25,12 @@ if has('gui')
   endif
   set guioptions-=m  "remove menu bar
   set guioptions-=T  "remove toolbar
-elseif has('terminal')
-  set t_Co=256
+elseif has('nvim')
+  let g:impact_transbg=1
+  "au BufEnter * if &buftype == 'terminal' | :startinsert | endif # this sucks
 endif
 
 " }
-
 
 " { * Cygwin specific stuff
 if $OS == "Windows_NT"
@@ -45,7 +43,6 @@ if $OS == "Windows_NT"
   behave xterm
 endif
 " }
-
 
 "{ * History, Buffers, Undo
 set history=10000               " Store lots of :cmdline history
@@ -63,13 +60,11 @@ endif
 "  }
 "}
 
-
 "{ * Turn Off Swap Files And Backups 
 set noswapfile
 set nobackup
 set nowb
 "}
-
 
 " { * Indentation 
 set autoindent
@@ -81,7 +76,6 @@ set softtabstop=2
 set tabstop=2
 set expandtab
 "}
-
 
 " { * Screen Related
 "
@@ -104,15 +98,13 @@ set showcmd                    " Show incomplete cmds down the bottom
 
 "}
 
-
 "{ * Folds 
 ""
 set foldnestmax=3       "deepest fold is 3 levels
 set foldlevel=0
 " }
 
-
- " * { Syntax and Completion 
+ " * { Syntax, Spelling and Completion 
 syntax on
 set synmaxcol=2048        "long lines are slow
 filetype plugin on
@@ -133,14 +125,15 @@ set wildignore+=log/**
 set wildignore+=tmp/**
 set wildignore+=*.png,*.jpg,*.gif
 set wildignore+=.idea/**
-"} 
 
+set spelllang=en
+set spellfile=~/dotfiles/spell/en.utf-8.add
+"} 
 
 " { * Clipboard
 "https://stackoverflow.com/questions/30691466/what-is-difference-between-vims-clipboard-unnamed-and-unnamedplus-settings
-set clipboard^=unnamed,unnamedplus
+set clipboard^=unnamed
 " }
-
 
 " { * Scrolling 
 
@@ -150,14 +143,12 @@ set sidescroll=1
 
 " }
 
-
 " { * Search 
 "
  set hlsearch        " Highlight searches by default
  set ignorecase      " Ignore case when searching...
  set smartcase       " ...unless we type a capital
 " }
-
 
 " { * Matchit and Parenthesis
 if filereadable(expand("$VIMRUNTIME/macros/matchit.vim"))
@@ -169,11 +160,17 @@ set showmatch "The vim implementation of matching parenthesis sucks
 let loaded_matchparen = 1 "Parenthesis highlight is distracting like hell!
 "}
 
+" { * Terminal Config (for nvim)
+if has('nvim')
+  let $VISUAL = 'nvr -cc split --remote-wait'
+  set shell=/bin/zsh
+  let $LC_ALL='C'
+endif
+" }
 
 " { * Autoreload vimrc
 autocmd! bufwritepost vimrc source %
 " }
-
 
 "{ * Plugin List (Assumes you have vim-plug installed!
 "
@@ -185,11 +182,14 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-fireplace' "nREPL
 "}
 
 " ** Plugins: Buffer and Window {
 Plug 'drn/zoomwin-vim'
 Plug 'ap/vim-buftabline'
+Plug 'mhinz/vim-startify' "Fancy start screen
+
 " }
 
 " ** Plugins: Completion And Snippets {
@@ -229,16 +229,18 @@ Plug 'terryma/vim-expand-region'
 " ** Plugins: Language, Syntax, Linting {
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 Plug 'rust-lang/rust.vim'
-Plug 'dahu/vim-asciidoc'
-Plug 'dahu/vimple' "Dep of vim-asciidoc
-Plug 'dahu/Asif' "Dep of vim-asciidoc
-Plug 'Raimondi/VimRegStyle' "Dep of vim-asciidoc
-Plug 'vim-scripts/SyntaxRange' "dep of vim-asciidoc
 Plug 'udalov/kotlin-vim'
 Plug 'w0rp/ale'
 Plug 'Quramy/tsuquyomi'
 Plug 'leafgarland/typescript-vim'
 Plug 'ap/vim-css-color' "highlights CSS colors
+
+"Plugins for Clojure
+Plug 'guns/vim-clojure-static' "Syntax highlighting for clojure
+Plug 'guns/vim-clojure-highlight' "Extended highlighting.
+Plug 'guns/vim-sexp' 
+Plug 'bhurlow/vim-parinfer' 
+Plug 'markwoodhall/vim-figwheel'
 "}
 
 
@@ -256,7 +258,10 @@ Plug 'yssl/QFEnter'
 "Plug 'flazz/vim-colorschemes'
 Plug 'rafi/awesome-vim-colorschemes'
 "https://bluz71.github.io/2017/05/21/vim-plugins-i-like.html
-Plug 'rakr/vim-one'
+" Plug 'rakr/vim-one'
+" Plug 'morhetz/gruvbox'
+" Plug 'joshdick/onedark.vim'
+" Plug 'dracula/vim'
 "}
 
 " ** Table Alignment and Editing Plugins {
@@ -272,7 +277,6 @@ Plug 'airblade/vim-rooter'
 " Add plugins to &runtimepath
 call plug#end()
 "}
-
 
 "{ * Basic Key Mappings
 " Allow quit via single keypress (Q)
@@ -300,17 +304,20 @@ noremap Y y$
 " without switching to the normal mode.
 inoremap <C-e> <C-o>$
 
-"Let <C-H> open help, obviously not as convenient has spacemacs C-H, but
-"we will live with this for now.
-" NOTE: I decided to use window mappings
-"map <C-h> <Esc>:help 
-
 "Window management Commands
 "https://robots.thoughtbot.com/vim-splits-move-faster-and-more-naturally
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
+"https://www.reddit.com/r/neovim/comments/6mkvo3/builtin_terminals_or_tmux/
+
+if has('nvim')
+  tnoremap <C-h> <C-\><C-n><C-w>h
+  tnoremap <C-j> <C-\><C-n><C-w>j
+  tnoremap <C-k> <C-\><C-n><C-w>k
+  tnoremap <C-l> <C-\><C-n><C-w>l
+endif
 
 " Lovely! Got from some reddit post in the VIM forum to map backspace to last used file.
 nnoremap  <BS> <C-^>
@@ -337,12 +344,21 @@ map <leader>Et :tabe %%
 
 "}
 
+" { * NEOVIM specific onfig
+if has('nvim')
+  let $VISUAL = 'nvr -cc split --remote-wait'
+endif
+" }
 
-" { * FZF NERDTree,  Dirvish, Tagbar Config
+" { * FZF NERDTree,  Dirvish, Tagbar Config, Rooter
 
 function! ConfigureFzf()
   nmap <Leader>e :Buffers<CR>
   map <C-p> :FZF<CR>
+  autocmd! FileType fzf
+  autocmd  FileType fzf set laststatus=0 noshowmode noruler
+        \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+
 endfunction
 autocmd VimEnter * if exists(":FZF") | call ConfigureFzf() | endif
 
@@ -389,8 +405,14 @@ function! ConfigureTagbar()
 endfunction
 autocmd VimEnter * if exists(":Tagbar") | call ConfigureTagbar() | endif
 
-" }
+" To stop vim-rooter echoing the project directory:
+let g:rooter_silent_chdir = 1
+" To change directory for the current window only 
+let g:rooter_use_lcd = 1
 
+
+
+" }
 
 " { * Search Plugin Config
 "From https://github.com/haya14busa/incsearch.vim
@@ -424,7 +446,6 @@ call ConfigureInvestigate()
 
 
 " }
-"
 
 " { * Asciidoc Configuration
 function! UpdateAndMake()
@@ -440,12 +461,10 @@ endfunction
 autocmd FileType asciidoc call ConfigureAsciidoc()
 " }
 
-
 " { * Rust Lang Config
 "Set the compiler as cargo for rust files
 autocmd BufRead,BufNewFile Cargo.toml,Cargo.lock,*.rs compiler cargo
 "}
-
 
 " { * Go Lang Config
 "Taken from example mappings in https://github.com/fatih/vim-go
@@ -483,6 +502,18 @@ autocmd FileType go if exists(":GoBuild") | call ConfigureVimGo() | endif
 
 " }
 
+" { * Typescript Lang Config
+" See:  https://github.com/Quramy/tsuquyomi
+"
+function! ConfigureVimTypescript()
+  autocmd FileType typescript setlocal completeopt+=menu,preview
+  let g:tsuquyomi_completion_detail = 1
+  au FileType typescript nmap <leader>i <Plug>(TsuquyomiSignatureHelp)
+  au FileType typescript imap <leader>i <C-o><Plug>(TsuquyomiSignatureHelp)
+endfunction
+autocmd FileType typescript if exists(":TsuquyomiStartServer") | call ConfigureVimTypescript() | endif
+
+" }
 
 " { Sneak Configuration
 "replace 'f' with 1-char Sneak
@@ -501,14 +532,12 @@ omap t <Plug>Sneak_t
 omap T <Plug>Sneak_T
 " }
 
-
 " EasyAlign Config {
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 "}
-
 
 " Emmet Config {
 "autocmd FileType html imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
@@ -519,7 +548,9 @@ let g:user_emmet_leader_key = '<C-y>'
 
 " }
 
-
+" Clojure/Clojurescript Config {
+au FileType clojure :command! PiggyDear Piggieback (figwheel-sidecar.repl-api/repl-env)   
+" }
 "{ * GLOBAL Variables 
 let g:skip_loading_mswin="true"  "Do not like mswin settings. Want consistent behaviour across platforms
 " Use deoplete.
@@ -530,7 +561,11 @@ let g:cargo_makeprg_params='build'
 " UltiSnips config
 "
 set background=dark
-colorscheme gruvbox
+try 
+  colorscheme gruvbox
+catch
+endtry
+
 
 
 

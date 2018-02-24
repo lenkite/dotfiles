@@ -8,19 +8,22 @@ usage() { echo "Usage: $0 [-c] [-v] [-t] [-u] [-z]" 1>&2; exit 1; }
 # Use getopt for simple option parsing
 # See https://stackoverflow.com/questions/16483119/example-of-how-to-use-getopts-in-bash
 # See http://wiki.bash-hackers.org/howto/getopts_tutorial
-while getopts "cvtuz" opt; do
+while getopts "cptuvz" opt; do
   case "${opt}" in
     c)
       codeSetup=true
       ;;
-    v)
-      viSetup=true
+    p)
+      pkgSetup=true
       ;;
     t)
       tmuxSetup=true
       ;;
     u)
       utilSetup=true
+      ;;
+    v)
+      viSetup=true
       ;;
     z)
       zshSetup=true
@@ -36,7 +39,7 @@ while getopts "cvtuz" opt; do
 done
 shift $((OPTIND-1))
 
-[ $codeSetup ] || [ $viSetup ] || [ $tmuxSetup ] || [ $utilSetup ] || [ $zshSetup ] || allSetup=true
+[ $codeSetup ] || [ $pkgSetup ] || [ $tmuxSetup ] || [ $utilSetup ] || [ $viSetup ] || [ $zshSetup ] || allSetup=true
 
 echo "codeSetup = $codeSetup, viSetup = $viSetup, tmuxSetup = $tmuxSetup, zshSetup = $zshSetup, utilSetup = $utilSetup, allSetup=$allSetup"
 
@@ -65,12 +68,12 @@ setup_main() {
   fi
   echo "Dotfiles Dir: $dotfilesDir"
 
-  [ $allSetup ] && install_pkgs
-  [[ $allSetup || $zshSetup ]] && setup_zsh
-  [[ $allSetup || $tmuxSetup ]] && setup_tmux
-  [[ $viSetup || $allSetup ]] && setup_vim
-  [[ $codeSetup || $allSetup ]] && setup_vscode
-  [[ $utilSetup || $allSetup ]] && setup_util
+  [[ $allSetup  || $pkgSetup  ]] && install_pkgs
+  [[ $allSetup  || $zshSetup  ]] && setup_zsh
+  [[ $allSetup  || $tmuxSetup ]] && setup_tmux
+  [[ $viSetup   || $allSetup  ]] && setup_vim
+  [[ $codeSetup || $allSetup  ]] && setup_vscode
+  [[ $utilSetup || $allSetup  ]] && setup_util
   
 }
 
@@ -81,7 +84,7 @@ initialize_vars() {
   [ $done_set_uservars ] || set_uservars
   [ $done_set_homevars ] || set_homevars
   [ $dotfilesDir ] || detect_dotfilesdir
-  [ $done_detect_util ] || detect_util
+  detect_util
 }
 
 detect_os() {
@@ -121,11 +124,13 @@ detect_util() {
   hasZip=$(command -v zip)
   hasUnzip=$(command -v unzip)
   hasGit=$(command -v git)
+  hasGo=$(command -v go)
+  hasCtags=$(command -v ctags)
   [[ hasCurl ]] || echo "WARN: 'curl' not found. Setup may be incomplete"
   [[ hasZip ]] || echo "WARN: 'zip' not found. Setup may be incomplete"
   [[ hasUnzip ]] || echo "WARN: 'unzip' not found. Setup may be incomplete"
-  [[ hasGit ]] || echo "WARN: 'git' not found. Setup may be incomplete"
-  export done_detect_util=true
+  [[ hasGit ]] || echo "WARN: 'git' not found. Setup may be incomplete and need to be rerun"
+
 }
 
 set_uservars() {
@@ -194,11 +199,24 @@ replace_linux_home_shell() {
 install_pkgs() {
  echo " Installing packages..."
  if [[ $isMacos == true ]]; then
-  brew install zsh git the_silver_searcher fortune cowsay
+  brew install zsh git the_silver_searcher fortune cowsay python3 leiningen nodejs
+  brew install --HEAD neovim 
+ # brew install --HEAD knqyf263/pet/pet #using go get for pet
  elif [[ $isLinux == true ]]; then
-  sudo apt-get update
-  sudo apt-get --yes install git zsh silversearcher-ag netcat-openbsd dh-autoreconf autoconf pkg-config tmux fortune-mod cowsay zip unzip
+ echo "** NOTE: If RUNNING BEHIND PROXY, export http_proxy/https_proxy"
+ sudo -E apt-add-repository -y ppa:brightbox/ruby-ng
+ sudo -E add-apt-repository -y ppa:jonathonf/vim
+ sudo -E add-apt-repository -y ppa:neovim-ppa/unstable
+ sudo -E add-apt-repository ppa:webupd8team/java
+  #sudo -E apt-get update #cos the curl script for nodejs below already does it
+  curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+  sudo -E apt-get --yes install git zsh silversearcher-ag netcat-openbsd dh-autoreconf\
+    autoconf pkg-config tmux fortune-mod cowsay zip unzip python3 python3-pip ruby2.5\
+    vim neovim nodejs oracle-java8-set-default
+  sudo apt-get upgrade
+  sudo apt-get -y autoremove
   setup_go_linux
+  setup_maven
  elif [[ $isCygwin == true ]]; then
    if [[ -f /tmp/apt-cyg ]]; then
      rm /tmp/apt-cyg
@@ -218,6 +236,14 @@ install_pkgs() {
    fi 
  fi
 
+ if command -v pip3 >/dev/null 2>&1 ; then
+   echo "Install python based module neovim-remote.."
+   pip3 install neovim --upgrade
+   pip3 install --user neovim-remote
+ else
+   echo "WARN: can't find pip3!"
+ fi
+
  #https://stackoverflow.com/questions/592620/check-if-a-program-exists-from-a-bash-script
  #zplug install https://github.com/zplug/zplug
  # if command -v zsh >/dev/null 2>&1 ; then
@@ -228,7 +254,7 @@ install_pkgs() {
 }
 
 setup_go_linux() {
-  local gotarbin="go1.9.3.linux-amd64.tar.gz"
+  local gotarbin="go1.9.4.linux-amd64.tar.gz"
   local goroot="/usr/local/go"
   if command -v curl >/dev/null 2>&1 ; then
     pushd /tmp
@@ -239,51 +265,96 @@ setup_go_linux() {
     echo "WARNING: Curl not found or not in PATH. Kindly install the same!"
   fi
 }
-  
+
+setup_maven() {
+  # I would love to use pkg manager here but sadly the pkg managers are out of date!
+  local mvnName="apache-maven-3.5.2"
+  local mvnUrl="http://apache.claz.org/maven/maven-3/3.5.2/binaries/$mvnName-bin.tar.gz"
+  if [[ $hasCurl && $isLinux ]]; then
+    curl -o /tmp/mvn.tar.gz $mvnUrl
+    sudo tar -xzf /tmp/mvn.tar.gz
+    sudo mv /tmp/$mvnName /opt/maven
+  fi
+}
+
+setup_fzf() {
+  if [[ $hasGit ]]; then
+    [[ -d ~/src ]] || mkdir -p ~/src
+    [[ -d ~/src/fzf ]] || git -C ~/src clone --depth 1 https://github.com/junegunn/fzf.git
+    git -C ~/src/fzf pull
+    yes | ~/src/fzf/install
+  else
+    echo "WARN: Cannot install fzf from source since git not found!"
+  fi
+}
+
+setup_ctags() {
+  if [[ ! $hasCtags ]]; then
+    [[ -d ~/src ]] || mkdir -p ~/src
+    git -C ~/src clone --depth 1 https://github.com/universal-ctags/ctags.git
+    pushd ~/src/ctags
+    ./autogen.sh
+    ./configure
+    make
+    sudo make install
+    popd
+  fi
+}
 
 setup_vim() {
   initialize_vars
   echo "Setting up vim.."
-  export vimConfigDir=$dotfilesDir/vimcfg
-  echo "VimConfig Dir: $vimConfigDir"
+  export dotfilesVimCfgDir=$dotfilesDir/vimcfg
+  echo "VimConfig Dir: $dotfilesVimCfgDir"
   rm $trueHome/.vimrc 2> /dev/null
   rm $trueHome/_vimrc 2> /dev/null
   rm $trueHome/.ideavimrc 2> /dev/null
-  ln $vimConfigDir/vimrc $trueHome/.vimrc
-  ln $vimConfigDir/ideavimrc $trueHome/.ideavimrc
+
+  local nvimConfigDir=$trueHome/.config/nvim
+  echo "nvimConfigDir :$nvimConfigDir"
+  [[ -d  $nvimConfigDir ]] || mkdir -p $nvimConfigDir
+  rm $trueHome/.config/nvim
+  ln $dotfilesVimCfgDir/vimrc $trueHome/.vimrc
+  ln $dotfilesVimCfgDir/ideavimrc $trueHome/.ideavimrc
+  # Must fix this for windows, where it is ~/AppData/Local/nvim/init.vim
+  ln $dotfilesVimCfgDir/init.vim $nvimConfigDir/init.vim 
   echo "Setup Dir $dotfilesSetupDir"
   curl -fLo $trueHome/.vim/autoload/plug.vim --create-dirs \
       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 }
 
 setup_tmux() {
-  echo "Setting up Tmux.."
+  echo "- setup_tmux"
   ln $dotfilesDir/tmux.conf $trueHome/.tmux.conf
 }
 
 setup_util() {
   echo "- setup_util"
+  setup_fzf
+  setup_ctags
+
   if command -v go >/dev/null 2>&1 ; then
     echo "Installing neosdkurls..."
     go get -v github.com/lenkite/mycliutil/neosdkurls
+    echo "Installing pet..."
+    go get -v github.com/knqyf263/pet
   else
-    echo "WARNING: Go not found or not in PATH. Kindly install the same!"
+    echo "WARNING: Go not found or not in PATH. Kindly correct so lovely utilities can be installed"
   fi
 
   #See https://github.com/ratishphilip/nvmsharp
   if [[ $isCygwin || $isWsl ]]; then
-    echo "Installing nvmsharp..."
     local nvmsharpUrl="https://raw.githubusercontent.com/ratishphilip/nvmsharp/master/nvmsharp_executable.zip"
     if [[ $hasCurl && $hasUnzip ]]; then
+      echo "Installing nvmsharp..."
       curl -L -C - $nvmsharpUrl -o /tmp/nvmsharp.zip
       rm -rf /tmp/nvmsharp_executable
       unzip /tmp/nvmsharp.zip -d /tmp
       [[ -d ~/bin ]] || mkdir ~/bin
       cp /tmp/nvmsharp_executable/* ~/bin
-    else
-      echo "WARNING: curl and/or unzip not found or not in PATH!"
     fi
   fi
+
 }
 
 setup_zsh() {
@@ -303,8 +374,8 @@ setup_zsh() {
   for rcfile in $zshCfgDir/*; do
     if [[ $rcfile != *README* ]]; then
       if [[ -f $rcfile ]]; then
-      echo "Executing: ln -s $rcfile $trueHome/.${rcfile##*/}"
-      ln -s "$rcfile" "$trueHome/.${rcfile##*/}"
+        echo "Executing: ln -s $rcfile $trueHome/.${rcfile##*/}"
+        ln -s "$rcfile" "$trueHome/.${rcfile##*/}"
       fi
     fi
   done
@@ -320,17 +391,39 @@ setup_zsh() {
     fi
   fi
 
-  if command -v git >/dev/null 2>&1 ; then
-    echo "Installing zgen"
-    if [ -d ~/.zgen -a -d ~/.zgen/.git ]; then
-      git -C ~/.zgen reset --hard
-      git -C ~/.zgen pull
-    else
-      git clone https://github.com/tarjoilija/zgen.git "${HOME}/.zgen"
-    fi
-  else
-    echo "ERROR: Could not find git and hence couldn't clone zgen :("
+  if [[ -d $trueHome/.zgen ]]; then
+    echo "Removing old zgen stuff.."
+    rm -rf $trueHome/.zgen
   fi
+
+  # if [[ $hasCurl ]]; then
+  #   echo "Installing antigen"
+  #   local antigenDir=$trueHome/.antigen
+  #   [[ -d $antigenDir ]] || mkdir -p $antigenDir
+  #   local antigenLoc=$antigenDir/antigen.zsh
+  #   [[ -f $antigenLoc ]] && rm -f $antigenLoc
+  #   curl -L git.io/antigen > $antigenLoc
+  # else
+  #   echo "ERROR: Could not find git and hence couldn't clone zgen :("
+  # fi
+
+  if [ -d $trueHome/.zgen -a -d $trueHome/.zgen/.git ]; then
+    git -C $trueHome/.zgen reset --hard
+    git -C $trueHome/.zgen pull
+  else
+    git clone https://github.com/tarjoilija/zgen.git "${HOME}/.zgen"
+  fi
+
+  # https://github.com/chriskempson/base16-shell
+  echo "Installing base16-shell"
+  [[ -d $trueHome/.config ]] || mkdir -p $trueHome/.config
+  [[ -d $trueHome/.config/base16-shell ]] || git clone https://github.com/chriskempson/base16-shell.git $trueHome/.config/base16-shell
+  git -C $trueHome/.config/base16-shell pull
+
+  [[ -d $trueHome/src ]] || mkdir -p $trueHome/src
+  [[ -d $trueHome/src/base16-shell ]] && git -C $trueHome/src clone 
+
+  [[ -f ~/.inputrc ]] || ln $trueHome/dotfiles/inputrc ~/.inputrc
 }
 
 setup_vscode() {
@@ -365,6 +458,4 @@ setup_vscode() {
 
 [[ "${BASH_SOURCE[0]}" != "${0}" ]] && isSetupSourced=true
 
-[ $isSetupSourced ] && echo "script ${BASH_SOURCE[0]} is being sourced. Execute full setup by calling\
- setup_main or individual setup_xxx functions" || setup_main
-
+setup_main

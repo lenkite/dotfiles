@@ -1,3 +1,4 @@
+# vim: set sw=2 ts=2 sts=2 et tw=80 foldmarker={,} foldlevel=0 foldmethod=marker spell:
 # See ZSH startup files: http://zsh.sourceforge.net/Intro/intro_3.html
 # Link this to ~/.zshenv
 # .zshenv is sourced on all invocations.
@@ -6,25 +7,77 @@
 
 [ -d ~/dotfiles ] && export dotfiles=~/dotfiles || echo "Could not locate dotfiles at ~/dotfiles"
 
-# Autoloads 
-# See https://unix.stackexchange.com/questions/33255/how-to-define-and-load-your-own-shell-function-in-zsh
-#fpath=($dotfiles/zshcfg/zfuncs $fpath)
-#autoload -Uz detect_os determine_user
-
-source $dotfiles/zshcfg/zfuncs/detect.zsh
-
-
 main() {
   detect_os
   detect_user
   detect_util
   load_dotenv
   load_dotpaths
-
+  defenv_golang
+  defenv_android
+  defenv_flutter
+  defenv_git
+  defenv_kotlin
+  defenv_neosdk
+  defenv_python
+  defenv_maven
+  defenv_nvr
   export MANPATH=":$dotfiles/man"
 }
 
+detect_os() {
+  uname=`uname`
+  if [[ $uname == 'Darwin' ]]; then
+    export isMacos=true
+  elif [[ $uname == 'Linux' ]]; then
+    export isLinux=true
+  elif [[ $uname == CYGWIN* ]]; then
+    export isCygwin=true
+  else
+    echo "This Setup Script only works for Windows Cygwin, Windows Subsystem for Linux and MacOS"
+    exit -1
+  fi
+  export osreleaseFile=/proc/sys/kernel/osrelease
+  if [[ -f  $osreleaseFile ]]; then
+    osrelease=`cat $osreleaseFile`
+    if [[ $osrelease == *Microsoft* ]]; then
+      export isWsl=true
+    fi
+  fi
+}
 
+get_windows_user() {
+	local sys32dir="/mnt/c/Windows/System32"
+	local winWho=$(cd $sys32dir; whoami.exe)
+	local winUser=${winWho##*\\}
+}
+
+detect_user() {
+  linUser=`whoami`
+  if [[ $isCygwin == true ]]; then
+    winUser=$linUser
+  fi
+
+  if [[ $isWsl == true ]]; then
+    winUser=$(get_windows_user)
+  fi
+}
+
+detect_util() {
+  hasCurl=$(command -v curl)
+  hasZip=$(command -v zip)
+  hasUnzip=$(command -v unzip)
+  hasGit=$(command -v git)
+  hasNeovim=$(command -v neovim)
+  hasPet=$(command -v pet)
+  [[ hasCurl ]] || echo "WARN: 'curl' not found. Setup may be incomplete"
+  [[ hasZip ]] || echo "WARN: 'zip' not found. Setup may be incomplete"
+  [[ hasUnzip ]] || echo "WARN: 'unzip' not found. Setup may be incomplete"
+  [[ hasGit ]] || echo "WARN: 'git' not found. Setup may be incomplete"
+  [[ hasNeovim ]] || echo "WARN: 'neovim' not found. Kindly install the same"
+  [[ hasPet ]] || echo "WARN: 'pet' (https://github.com/knqyf263/pet) not found. Kindly install"
+  export done_detect_util=true
+}
 
 # Source ~/.env. ~/.env should export user/system
 # specific environment variables
@@ -55,10 +108,105 @@ load_dotpaths() {
   export PATH
 }
 
-# Not sure if this is the right place
-if [[ $GOROOT ]]; then
-  [[ $isCygwin ]] && { export GOROOT=`cygpath -am $GOROOT` }
-fi
+defenv_golang() {
+  if [[ $GOROOT ]]; then
+    [[ $isCygwin ]] && { export GOROOT=`cygpath -am $GOROOT` }
+  fi
+  if [[ $isCygwin ]]; then
+    export GOPATH=`cygpath -am ~`
+  else
+    export GOPATH="$HOME"
+  fi
+  if [[ -d /usr/local/go/ ]]; then
+    typeset -gxU path PATH
+    export GOROOT=/usr/local/go
+    path+=$GOROOT/bin
+    export PATH
+  fi
+}
+
+defenv_android() {
+  if [[ -d /usr/local/share/android-sdk ]]; then
+    export ANDROID_SDK_ROOT=/usr/local/share/android-sdk
+    export ANDROID_HOME=$ANDROID_SDK_ROOT
+  fi
+}
+
+defenv_flutter() {
+  typeset -gxU path PATH
+  if [[ -d $HOME/src/flutter/bin ]]; then
+    path+=$HOME/src/flutter/bin
+  fi
+  if [[ -d $HOME/src/flutter/flutter/bin ]]; then
+    path+=$HOME/src/flutter/flutter/bin
+  fi
+  export PATH
+}
+
+defenv_git() {
+  if command -v nvim  >/dev/null 2>&1 ; then
+    export VISUAL=nvim
+  else
+    export VISUAL=vim
+  fi
+  export EDITOR=$VISUAL
+  export GIT_EDITOR=$VISUAL
+}
+
+defenv_kotlin() {
+  local konanbin=$HOME/src/kotlin-native/dist/bin
+  if [[ -d $konanbin ]]; then
+    export PATH=$PATH:$konanbin
+  fi
+}
+
+defenv_neosdk() {
+  typeset -gxU path PATH
+  local neoweb=$HOME/sdk/neoweb
+  local neoee=$HOME/sdk/neoee
+  if [[ -d $neoweb ]]; then
+    path+=$neoweb/tools
+  fi
+  if [[ -d $neoee ]]; then
+    path+=$neoee/tools
+  fi
+}
+
+defenv_python() {
+  typeset -gxU path PATH
+  if [[ $isMacos ]]; then
+    local pybin=$(echo ~/Library/Python/3.*/bin | awk '{print $NF}')
+    [ -d $pybin ] && path+="$pybin" && export PATH
+  fi
+  #TODO: configure python environment for linux/wsl too!
+}
+
+# defenv_maven() {
+#   typeset -gxU path PATH
+#   if [[ $isLinux ]]; then
+#     local mvnHome=$(echo /opt/apache-maven\* 2> /dev/null | awk '{print $NF}')
+#     if [ -d $mvnHome ]; then
+#       export M2_HOME=$mvnHome
+#       path+=$mvnHome/bin
+#       export PATH
+#     fi
+#   fi
+# }
+
+defenv_nvr() {
+  export NVIM_LISTEN_ADDRESS=/tmp/nvimsocket
+}
+
+defenv_maven() {
+  local mvnHome=/opt/maven
+  if [[ $isLinux && -d $mvnHome/bin ]]; then
+    typeset -gxU path PATH
+    path+=$mvnHome/bin
+    export M2_HOME=$mvnHome
+  fi
+}
+
+export PATH
 main
 
 # See https://github.com/rupa/z/pull/200

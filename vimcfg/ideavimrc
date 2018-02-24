@@ -44,7 +44,7 @@ nmap <C-O> :action Back<CR>
 vnoremap <leader>u :<bs><bs><bs><bs><bs>action VimVisualSwapSelections<cr>:action SurroundWith<cr>
 
 "Yank to clipboard by default
-"set clipboard+=unnamed
+set clipboard+=unnamed
 "set clipboard+=unnamedplus
 
 " Parameter hInts.
