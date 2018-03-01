@@ -20,6 +20,7 @@ main() {
   defenv_kotlin
   defenv_neosdk
   defenv_python
+  defenv_java
   defenv_maven
   defenv_nvr
   export MANPATH=":$dotfiles/man"
@@ -169,6 +170,13 @@ defenv_neosdk() {
   fi
   if [[ -d $neoee ]]; then
     path+=$neoee/tools
+  fi
+}
+
+defenv_java() {
+  jvmHome=/usr/lib/jvm/java-8-oracle/
+  if [[ $isLinux && -d $jvmHome ]]; then
+    export JAVA_HOME=$jvmHome
   fi
 }
 
