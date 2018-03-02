@@ -234,6 +234,9 @@ Plug 'w0rp/ale'
 Plug 'Quramy/tsuquyomi'
 Plug 'leafgarland/typescript-vim'
 Plug 'ap/vim-css-color' "highlights CSS colors
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown'
+Plug 'shime/vim-livedown'
 
 "Plugins for Clojure
 Plug 'guns/vim-clojure-static' "Syntax highlighting for clojure
@@ -256,6 +259,7 @@ Plug 'yssl/QFEnter'
 
 " ** Plugins: Color Schemes {
 "Plug 'flazz/vim-colorschemes'
+Plug 'chriskempson/base16-vim'
 Plug 'rafi/awesome-vim-colorschemes'
 "https://bluz71.github.io/2017/05/21/vim-plugins-i-like.html
 " Plug 'rakr/vim-one'
@@ -558,13 +562,14 @@ let g:cargo_makeprg_params='build'
 "}
 
 
-" UltiSnips config
-"
-set background=dark
-try 
-  colorscheme gruvbox
-catch
-endtry
+"base16-vim
+if filereadable(expand("~/.vimrc_background"))
+  let base16colorspace=256
+  try 
+    source ~/.vimrc_background
+  catch
+  endtry
+endif
 
 
 
