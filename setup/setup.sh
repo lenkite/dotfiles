@@ -422,6 +422,9 @@ setup_zsh() {
   [[ -d $trueHome/.config/base16-shell ]] || git clone https://github.com/chriskempson/base16-shell.git $trueHome/.config/base16-shell
   git -C $trueHome/.config/base16-shell pull
 
+  [[ -d ~/src/dircolors-solarized ]] ||  git -C $trueHome/.config clone https://github.com/seebi/dircolors-solarized.git
+  git -C $trueHome/.config/dircolors-solarized pull
+
   [[ -d $trueHome/src ]] || mkdir -p $trueHome/src
   [[ -d $trueHome/src/base16-shell ]] && git -C $trueHome/src clone 
 
