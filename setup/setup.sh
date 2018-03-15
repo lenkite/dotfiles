@@ -338,6 +338,8 @@ setup_util() {
     go get -v github.com/lenkite/mycliutil/neosdkurls
     echo "Installing pet..."
     go get -v github.com/knqyf263/pet
+    echo "Installing delve..."
+    go get -u github.com/derekparker/delve/cmd/dlv
   else
     echo "WARNING: Go not found or not in PATH. Kindly correct so lovely utilities can be installed"
   fi

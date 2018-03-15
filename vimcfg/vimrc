@@ -199,6 +199,10 @@ Plug 'honza/vim-snippets'
 Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
 "Plug 'maralla/completor.vim'
 Plug 'mattn/emmet-vim'
+if has('nvim')
+  Plug 'zchee/deoplete-go'
+  Plug 'sebdah/vim-delve'
+endif
 "}
 
 " ** Plugins: Navigation: Fuzzy Find, Vimfiler, Tags , etc {
@@ -488,13 +492,18 @@ function! ConfigureVimGo()
   au FileType go set path+=~/src,~/src/go/src
 
 
+  "See https://hackernoon.com/my-neovim-setup-for-go-7f7b6e805876
   let g:go_highlight_functions = 1
   let g:go_highlight_methods = 1
   let g:go_highlight_fields = 1
   let g:go_highlight_types = 1
   let g:go_highlight_operators = 1
   let g:go_highlight_build_constraints = 1
-
+  let g:go_fmt_command = "goimports"
+  " Error and warning signs.
+  let g:ale_sign_error = '⤫'
+  let g:ale_sign_warning = '⚠'
+  let g:go_auto_type_info = 1
 
 
 endfunction
@@ -565,6 +574,12 @@ try
   colorscheme gruvbox
 catch
 endtry
+
+
+if has('nvim')
+    " Enable deoplete on startup
+    let g:deoplete#enable_at_startup = 1
+endif
 
 
 
