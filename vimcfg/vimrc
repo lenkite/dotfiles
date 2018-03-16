@@ -1,6 +1,5 @@
 " vim: set sw=2 ts=2 sts=2 et tw=80 foldmarker={,} foldlevel=0 foldmethod=marker spell:
 
-
 " NOTE {
 "   Tarun Ramakrishna Elankath's vimrc file. Been using VIM for 12 years now. 
 "   Re-created from scratch on Aug 20, 2011
@@ -200,14 +199,14 @@ Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' 
 Plug 'mattn/emmet-vim'
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  Plug 'zchee/deoplete-go', { 'do': 'make'}
 else
   Plug 'Shougo/deoplete.nvim'
   Plug 'roxma/nvim-yarp'
   Plug 'roxma/vim-hug-neovim-rpc'
   Plug 'sebdah/vim-delve'
+  Plug 'Shougo/vimshel'
 endif
-let g:deoplete#enable_at_startup = 1
-
 "}
 
 " ** Plugins: Navigation: Fuzzy Find, Vimfiler, Tags , etc {
@@ -502,17 +501,25 @@ function! ConfigureVimGo()
 
 
   "See https://hackernoon.com/my-neovim-setup-for-go-7f7b6e805876
+  let g:go_fmt_command = "goimports"
+  let g:go_highlight_build_constraints = 1
+  let g:go_highlight_extra_types = 1
+  let g:go_highlight_fields = 1
   let g:go_highlight_functions = 1
   let g:go_highlight_methods = 1
-  let g:go_highlight_fields = 1
-  let g:go_highlight_types = 1
   let g:go_highlight_operators = 1
-  let g:go_highlight_build_constraints = 1
-  let g:go_fmt_command = "goimports"
-  " Error and warning signs.
-  let g:ale_sign_error = '⤫'
-  let g:ale_sign_warning = '⚠'
-  let g:go_auto_type_info = 1
+  let g:go_highlight_structs = 1
+  let g:go_highlight_types = 1
+
+  "Deoplete Configuration
+  let g:deoplete#enable_at_startup = 1
+  let g:deoplete#num_processes = 1
+
+  " " Error and warning signs.
+  " let g:ale_sign_error = '⤫'
+  " let g:ale_sign_warning = '⚠'
+  "let g:go_auto_type_info = 1
+	let g:go_auto_sameids = 1
 
 
 endfunction
@@ -585,9 +592,6 @@ if filereadable(expand("~/.vimrc_background"))
   endtry
 endif
 
-
-" Enable deoplete on startup
-"let g:deoplete#enable_at_startup = 1
 
 
 

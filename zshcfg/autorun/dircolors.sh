@@ -1,3 +1,4 @@
 colorsFile=~/.config/dircolors-solarized/dircolors.256dark
-[[ -f $colorsFile ]] && eval `dircolors $colorsFile`
+hasDircolors=$(command -v dircolors)
+[[ -f $colorsFile ]] && [[ $hasDircolors ]] && $eval `dircolors $colorsFile`
 
