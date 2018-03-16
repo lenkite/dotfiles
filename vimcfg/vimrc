@@ -197,12 +197,17 @@ Plug 'SirVer/ultisnips'
 Plug 'ervandew/supertab'
 Plug 'honza/vim-snippets'
 Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
-"Plug 'maralla/completor.vim'
 Plug 'mattn/emmet-vim'
 if has('nvim')
-  Plug 'zchee/deoplete-go'
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
   Plug 'sebdah/vim-delve'
 endif
+let g:deoplete#enable_at_startup = 1
+
 "}
 
 " ** Plugins: Navigation: Fuzzy Find, Vimfiler, Tags , etc {
@@ -581,10 +586,8 @@ if filereadable(expand("~/.vimrc_background"))
 endif
 
 
-if has('nvim')
-    " Enable deoplete on startup
-    let g:deoplete#enable_at_startup = 1
-endif
+" Enable deoplete on startup
+"let g:deoplete#enable_at_startup = 1
 
 
 
