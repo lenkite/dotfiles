@@ -19,6 +19,7 @@ main() {
   neovim_config
   pet_config
   java_config
+  def_autoloads
   exec_autoruns
   exec_compinit
   vi_mode  #Keep towards  end cos plugins have bad habit of changing this

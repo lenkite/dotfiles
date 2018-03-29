@@ -205,7 +205,7 @@ else
   Plug 'roxma/nvim-yarp'
   Plug 'roxma/vim-hug-neovim-rpc'
   Plug 'sebdah/vim-delve'
-  Plug 'Shougo/vimshel'
+  Plug 'Shougo/vimshell'
 endif
 "}
 
