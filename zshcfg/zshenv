@@ -94,7 +94,7 @@ load_dotpaths() {
   export PATH="/bin:/usr/bin:$PATH"
   # http://zsh.sourceforge.net/Guide/zshguide02.html#l24
   typeset -gxU path PATH
-  path+=( $dotfiles/scripts ~/bin )
+  path+=( ~/.local/bin $dotfiles/scripts ~/bin )
   if [[ -d ~/src/fzf/bin ]]; then
     path+=( ~/src/fzf/bin )
   fi
