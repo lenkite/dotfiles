@@ -321,6 +321,13 @@ setup_vim() {
   echo "Setup Dir $dotfilesSetupDir"
   curl -fLo $trueHome/.vim/autoload/plug.vim --create-dirs \
       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  if command -v pip3 >/dev/null 2>&1 ; then
+    echo "Install python based module neovim-remote.."
+    pip3 install neovim --upgrade
+    pip3 install --user neovim-remote
+  else
+    echo "WARN: can't find pip3!"
+  fi
 }
 
 setup_tmux() {
