@@ -91,10 +91,16 @@ load_dotenv() {
 # path component to env PATH 
 load_dotpaths() {
   #ensure that cygwin stuff is first in path, so that windows path doesn't take priority
-  export PATH="/bin:/usr/bin:~/.fzf/bin:$PATH"
+  export PATH="/bin:/usr/bin:$PATH"
   # http://zsh.sourceforge.net/Guide/zshguide02.html#l24
   typeset -gxU path PATH
   path+=( $dotfiles/scripts ~/bin )
+  if [[ -d ~/src/fzf/bin ]]; then
+    path+=( ~/src/fzf/bin )
+  fi
+  if [[ -d ~/.fzf/bin ]]; then
+    path+=( ~/.fzf/bin )
+  fi
   pathsf=~/.paths
   if [[ -f $pathsf ]]; then
     #http://stackoverflow.com/questions/12651355/zsh-read-lines-from-file-into-array
