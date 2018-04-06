@@ -2,5 +2,8 @@
 *.json
 *.log
 tags
+*.lock
+*.temp
+temp
 .DS_Store
 **/.DS_Store
