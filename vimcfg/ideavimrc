@@ -64,8 +64,8 @@ nmap <A-,> :action ShowSettings<CR>
 "FIXME: this is not working. figure out why.
 nmap <A-B> :action ToggleBreakpointAction<CR>
 
-"Definition list (aka outline view in eclipse, file strucuture in intellij ide)
-nmap <Leader>d  :action FileStructurePopup<CR>
+"Definition Outline list (aka outline view in eclipse, file structure in intellij ide)
+nmap <Leader>o  :action FileStructurePopup<CR>
 
 "Find usages, also called find references
 nmap <Leader>g :action FindUsages<CR>

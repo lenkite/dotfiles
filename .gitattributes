@@ -2,10 +2,12 @@
 *.java text eol=lf
 *.sh text eol=lf
 *.zsh text eol=lf
+*.spl binary
 zshrc text eol=lf
 zshenv text eol=lf
 
 # Declare binary files
 *.jar	binary
 *.class binary
+
 

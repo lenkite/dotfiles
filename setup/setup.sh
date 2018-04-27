@@ -254,7 +254,7 @@ install_pkgs() {
 }
 
 setup_go_linux() {
-  local gotarbin="go1.9.4.linux-amd64.tar.gz"
+  local gotarbin="go1.10.1.linux-amd64.tar.gz"
   local goroot="/usr/local/go"
   if command -v curl >/dev/null 2>&1 ; then
     pushd /tmp
@@ -272,17 +272,17 @@ setup_maven() {
   local mvnUrl="http://apache.claz.org/maven/maven-3/3.5.2/binaries/$mvnName-bin.tar.gz"
   if [[ $hasCurl && $isLinux ]]; then
     curl -o /tmp/mvn.tar.gz $mvnUrl
-    sudo tar -xzf /tmp/mvn.tar.gz
+    sudo tar -C /tmp -xzf /tmp/mvn.tar.gz
     sudo mv /tmp/$mvnName /opt/maven
   fi
 }
 
 setup_fzf() {
   if [[ $hasGit ]]; then
-    [[ -d ~/src ]] || mkdir -p ~/src
-    [[ -d ~/src/fzf ]] || git -C ~/src clone --depth 1 https://github.com/junegunn/fzf.git
-    git -C ~/src/fzf pull
-    yes | ~/src/fzf/install
+    [[ -d $trueHome/src ]] || mkdir -p $trueHome/src
+    [[ -d $trueHome/src/fzf ]] || git -C $trueHome/src clone --depth 1 https://github.com/junegunn/fzf.git
+    git -C $trueHome/src/fzf pull
+    yes | $trueHome/src/fzf/install
   else
     echo "WARN: Cannot install fzf from source since git not found!"
   fi
@@ -321,6 +321,13 @@ setup_vim() {
   echo "Setup Dir $dotfilesSetupDir"
   curl -fLo $trueHome/.vim/autoload/plug.vim --create-dirs \
       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  if command -v pip3 >/dev/null 2>&1 ; then
+    echo "Install python based module neovim-remote.."
+    pip3 install neovim --upgrade
+    pip3 install --user neovim-remote
+  else
+    echo "WARN: can't find pip3!"
+  fi
 }
 
 setup_tmux() {
@@ -332,12 +339,18 @@ setup_util() {
   echo "- setup_util"
   setup_fzf
   setup_ctags
+  [[ $GOPATH ]] || export GOPATH=$trueHome
+  if ! command -v go >/dev/null 2>&1 ; then
+   export PATH=$PATH:/usr/local/go/bin
+  fi
 
   if command -v go >/dev/null 2>&1 ; then
     echo "Installing neosdkurls..."
     go get -v github.com/lenkite/mycliutil/neosdkurls
     echo "Installing pet..."
     go get -v github.com/knqyf263/pet
+    echo "Installing delve..."
+    go get -u github.com/derekparker/delve/cmd/dlv
   else
     echo "WARNING: Go not found or not in PATH. Kindly correct so lovely utilities can be installed"
   fi
@@ -411,7 +424,7 @@ setup_zsh() {
     git -C $trueHome/.zgen reset --hard
     git -C $trueHome/.zgen pull
   else
-    git clone https://github.com/tarjoilija/zgen.git "${HOME}/.zgen"
+    git clone https://github.com/tarjoilija/zgen.git "${trueHome}/.zgen"
   fi
 
   # https://github.com/chriskempson/base16-shell
@@ -420,13 +433,13 @@ setup_zsh() {
   [[ -d $trueHome/.config/base16-shell ]] || git clone https://github.com/chriskempson/base16-shell.git $trueHome/.config/base16-shell
   git -C $trueHome/.config/base16-shell pull
 
-  [[ -d ~/src/dircolors-solarized ]] ||  git -C $trueHome/.config clone https://github.com/seebi/dircolors-solarized.git
+  [[ -d $trueHome/src/dircolors-solarized ]] ||  git -C $trueHome/.config clone https://github.com/seebi/dircolors-solarized.git
   git -C $trueHome/.config/dircolors-solarized pull
 
   [[ -d $trueHome/src ]] || mkdir -p $trueHome/src
   [[ -d $trueHome/src/base16-shell ]] && git -C $trueHome/src clone 
 
-  [[ -f ~/.inputrc ]] || ln $trueHome/dotfiles/inputrc ~/.inputrc
+  [[ -f $trueHome/.inputrc ]] || ln $trueHome/dotfiles/inputrc $trueHome/.inputrc
 }
 
 setup_vscode() {
