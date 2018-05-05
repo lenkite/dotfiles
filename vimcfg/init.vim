@@ -28,6 +28,7 @@ let g:impact_transbg=1
 "{ * Basics: Undo, Swap, Backup, Indent, Syntax, Spelling, Screen, Folds
 set autowrite                  " Writes contents of file on next rewind last first make etc
 set smartcase       " ignores case (default) unless we type a capital
+set completeopt=longest,menuone
 
 " { ** Persistent Undo 
 set undofile
@@ -204,6 +205,7 @@ Plug 'terryma/vim-expand-region'
 Plug 'Shougo/neosnippet.vim'
 Plug 'Shougo/neosnippet-snippets'
 Plug 'honza/vim-snippets'
+Plug 'ervandew/supertab'
 
 Plug 'mattn/emmet-vim'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -248,7 +250,6 @@ Plug 'junegunn/vim-easy-align'
 Plug 'chriskempson/base16-vim'
 Plug 'rafi/awesome-vim-colorschemes'
 "}
-
 
 call plug#end() "Intialize Plugin system
 "}
@@ -391,29 +392,29 @@ function! ConfigureVimGo()
   au FileType go set path+=~/src,~/src/go/src
 
 
-  "See https://hackernoon.com/my-neovim-setup-for-go-7f7b6e805876
-  let g:go_fmt_command = "goimports"
-  let g:go_highlight_build_constraints = 1
-  let g:go_highlight_extra_types = 1
-  let g:go_highlight_fields = 1
-  let g:go_highlight_functions = 1
-  let g:go_highlight_methods = 1
-  let g:go_highlight_operators = 1
-  let g:go_highlight_structs = 1
-  let g:go_highlight_types = 1
-
-  "Deoplete Configuration
-  let g:deoplete#enable_at_startup = 1
-  let g:deoplete#num_processes = 1
-
-  " " Error and warning signs.
-  " let g:ale_sign_error = '⤫'
-  " let g:ale_sign_warning = '⚠'
-  "let g:go_auto_type_info = 1
-	let g:go_auto_sameids = 1
 
 
 endfunction
+"See https://hackernoon.com/my-neovim-setup-for-go-7f7b6e805876
+let g:go_fmt_command = "goimports"
+let g:go_highlight_build_constraints = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_structs = 1
+let g:go_highlight_types = 1
+
+"Deoplete Configuration
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#num_processes = 1
+
+" " Error and warning signs.
+" let g:ale_sign_error = '⤫'
+" let g:ale_sign_warning = '⚠'
+"let g:go_auto_type_info = 1
+let g:go_auto_sameids = 1
 autocmd FileType go if exists(":GoBuild") | call ConfigureVimGo() | endif
 
 " }
@@ -422,8 +423,6 @@ autocmd FileType go if exists(":GoBuild") | call ConfigureVimGo() | endif
 " See:  https://github.com/Quramy/tsuquyomi
 "
 function! ConfigureVimTypescript()
-  autocmd FileType typescript setlocal completeopt+=menu,preview
-  let g:tsuquyomi_completion_detail = 1
   au FileType typescript nmap <leader>i <Plug>(TsuquyomiSignatureHelp)
   au FileType typescript imap <leader>i <C-o><Plug>(TsuquyomiSignatureHelp)
 endfunction
