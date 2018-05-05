@@ -176,7 +176,6 @@ Plug 'tpope/vim-fireplace' "nREPL
 "}
 
 " ** Plugins: Buffer and Window {
-Plug 'drn/zoomwin-vim'
 Plug 'ap/vim-buftabline'
 Plug 'mhinz/vim-startify' "Fancy start screen
 "}
