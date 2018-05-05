@@ -153,7 +153,6 @@ set sidescroll=1
 if filereadable(expand("$VIMRUNTIME/macros/matchit.vim"))
   source $VIMRUNTIME/macros/matchit.vim
 endif
-
 set matchtime=1 "time in tenths of a second to show the matching parenthesis
 set showmatch "The vim implementation of matching parenthesis sucks
 let loaded_matchparen = 1 "Parenthesis highlight is distracting like hell!
@@ -188,7 +187,6 @@ Plug 'tpope/vim-fireplace' "nREPL
 Plug 'drn/zoomwin-vim'
 Plug 'ap/vim-buftabline'
 Plug 'mhinz/vim-startify' "Fancy start screen
-
 " }
 
 " ** Plugins: Completion And Snippets {
@@ -584,7 +582,6 @@ let g:cargo_makeprg_params='build'
 
 
 "base16-vim
-
 try 
   if !has('mac') 
     if filereadable(expand("~/.vimrc_background"))
