@@ -193,7 +193,8 @@ Plug 'mhinz/vim-startify' "Fancy start screen
 Plug 'SirVer/ultisnips'
 Plug 'ervandew/supertab'
 Plug 'honza/vim-snippets'
-Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
+"Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
+Plug 'mdempsky/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
 Plug 'mattn/emmet-vim'
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -243,6 +244,7 @@ Plug 'ap/vim-css-color' "highlights CSS colors
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 Plug 'shime/vim-livedown'
+Plug 'vim-scripts/SyntaxRange'
 
 "Plugins for Clojure
 Plug 'guns/vim-clojure-static' "Syntax highlighting for clojure
@@ -360,7 +362,7 @@ if has('nvim')
 endif
 " }
 
-" { * FZF NERDTree,  Dirvish, Tagbar Config, Rooter
+" { * Configure: fzf NERDTree,  Dirvish, Tagbar Config, Rooter
 
 function! ConfigureFzf()
   nmap <Leader>e :Buffers<CR>
@@ -424,7 +426,7 @@ let g:rooter_use_lcd = 1
 
 " }
 
-" { * Search Plugin Config
+" { * Configure: incsearch
 "From https://github.com/haya14busa/incsearch.vim
 function! ConfigureIncSeaarch()
   map /  <Plug>(incsearch-forward)
@@ -457,7 +459,7 @@ call ConfigureInvestigate()
 
 " }
 
-" { * Asciidoc Configuration
+" { * Configure: Asciidoc 
 function! UpdateAndMake()
   :update
   :silent! make
@@ -471,12 +473,12 @@ endfunction
 autocmd FileType asciidoc call ConfigureAsciidoc()
 " }
 
-" { * Rust Lang Config
+" { * Configure Rust Lang
 "Set the compiler as cargo for rust files
 autocmd BufRead,BufNewFile Cargo.toml,Cargo.lock,*.rs compiler cargo
 "}
 
-" { * Go Lang Config
+" { * Configure Go Lang
 "Taken from example mappings in https://github.com/fatih/vim-go
 "
 function! ConfigureVimGo()
@@ -498,34 +500,33 @@ function! ConfigureVimGo()
   au FileType go set path+=~/src,~/src/go/src
 
 
-  "See https://hackernoon.com/my-neovim-setup-for-go-7f7b6e805876
-  let g:go_fmt_command = "goimports"
-  let g:go_highlight_build_constraints = 1
-  let g:go_highlight_extra_types = 1
-  let g:go_highlight_fields = 1
-  let g:go_highlight_functions = 1
-  let g:go_highlight_methods = 1
-  let g:go_highlight_operators = 1
-  let g:go_highlight_structs = 1
-  let g:go_highlight_types = 1
-
-  "Deoplete Configuration
-  let g:deoplete#enable_at_startup = 1
-  let g:deoplete#num_processes = 1
-
-  " " Error and warning signs.
-  " let g:ale_sign_error = '⤫'
-  " let g:ale_sign_warning = '⚠'
-  "let g:go_auto_type_info = 1
-	let g:go_auto_sameids = 1
-
 
 endfunction
+"See https://hackernoon.com/my-neovim-setup-for-go-7f7b6e805876
+let g:go_fmt_command = "goimports"
+let g:go_highlight_build_constraints = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_structs = 1
+let g:go_highlight_types = 1
+
+"Deoplete Configuration
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#num_processes = 1
+
+" " Error and warning signs.
+" let g:ale_sign_error = '⤫'
+" let g:ale_sign_warning = '⚠'
+"let g:go_auto_type_info = 1
+let g:go_auto_sameids = 1
 autocmd FileType go if exists(":GoBuild") | call ConfigureVimGo() | endif
 
 " }
 
-" { * Typescript Lang Config
+" { * Configure Typescript Lang 
 " See:  https://github.com/Quramy/tsuquyomi
 "
 function! ConfigureVimTypescript()
@@ -538,7 +539,7 @@ autocmd FileType typescript if exists(":TsuquyomiStartServer") | call ConfigureV
 
 " }
 
-" { Sneak Configuration
+" { * Configure: Sneak
 "replace 'f' with 1-char Sneak
 nmap f <Plug>Sneak_f
 nmap F <Plug>Sneak_F
@@ -555,14 +556,14 @@ omap t <Plug>Sneak_t
 omap T <Plug>Sneak_T
 " }
 
-" EasyAlign Config {
+" * Configure: EasyAlign {
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 "}
 
-" Emmet Config {
+" * Configure: Emmet {
 "autocmd FileType html imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
 "autocmd FileType html imap  <tab> emmet#expandAbbrIntelligent("\<tab>")
 "autocmd FileType css imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
@@ -571,15 +572,15 @@ let g:user_emmet_leader_key = '<C-y>'
 
 " }
 
-" Clojure/Clojurescript Config {
+" * Configure: Clojure/Clojurescript {
 au FileType clojure :command! PiggyDear Piggieback (figwheel-sidecar.repl-api/repl-env)   
 " }
-"{ * GLOBAL Variables 
+"
+"{ * MISC GLOBAL Variables 
 let g:skip_loading_mswin="true"  "Do not like mswin settings. Want consistent behaviour across platforms
 " Use deoplete.
 let g:cargo_makeprg_params='build'
 "}
-
 
 "base16-vim
 try 

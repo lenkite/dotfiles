@@ -223,6 +223,7 @@ Plug 'ap/vim-css-color' "highlights CSS colors
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 Plug 'shime/vim-livedown'
+Plug 'vim-scripts/SyntaxRange'
 "}
 
 " ** Plugins: Search {
