@@ -305,12 +305,15 @@ setup_vim() {
   initialize_vars
   echo "Setting up vim.."
   export dotfilesVimCfgDir=$dotfilesDir/vimcfg
-  echo "VimConfig Dir: $dotfilesVimCfgDir"
+  local nvimConfigDir=$trueHome/.config/nvim
+  echo "dotfilesVimCfgDir: $dotfilesVimCfgDir"
+  echo "nvimConfigDir: $dotfilesVimCfgDir"
+
   rm $trueHome/.vimrc 2> /dev/null
   rm $trueHome/_vimrc 2> /dev/null
   rm $trueHome/.ideavimrc 2> /dev/null
+  rm $nvimConfigDir/init.vim 2> /dev/null
 
-  local nvimConfigDir=$trueHome/.config/nvim
   echo "nvimConfigDir :$nvimConfigDir"
   [[ -d  $nvimConfigDir ]] || mkdir -p $nvimConfigDir
   rm $trueHome/.config/nvim
@@ -319,8 +322,12 @@ setup_vim() {
   # Must fix this for windows, where it is ~/AppData/Local/nvim/init.vim
   ln $dotfilesVimCfgDir/init.vim $nvimConfigDir/init.vim 
   echo "Setup Dir $dotfilesSetupDir"
+
   curl -fLo $trueHome/.vim/autoload/plug.vim --create-dirs \
       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
   if command -v pip3 >/dev/null 2>&1 ; then
     echo "Install python based module neovim-remote.."
     pip3 install neovim --upgrade
