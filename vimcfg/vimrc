@@ -190,9 +190,10 @@ Plug 'mhinz/vim-startify' "Fancy start screen
 " }
 
 " ** Plugins: Completion And Snippets {
-Plug 'SirVer/ultisnips'
-Plug 'ervandew/supertab'
-Plug 'honza/vim-snippets'
+Plug 'Shougo/neosnippet'
+Plug 'Shougo/neosnippet-snippets'
+"Plug 'honza/vim-snippets'
+"Plug 'ervandew/supertab'
 Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
 Plug 'mattn/emmet-vim'
 if has('nvim')
@@ -420,6 +421,34 @@ let g:rooter_silent_chdir = 1
 " To change directory for the current window only 
 let g:rooter_use_lcd = 1
 
+
+
+" }
+
+" { * Neosnippet Config
+" https://computableverse.com/blog/my-terminal-setup
+" imap <expr><TAB>
+"  \ pumvisible() ? "\<C-n>" :
+"  \ neosnippet#expandable_or_jumpable() ?
+"  \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+" smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+"  \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+" I want to use my tab more smarter. If we are inside a completion menu jump
+" " to the next item. Otherwise check if there is any snippet to expand, if yes
+" " expand it. Also if inside a snippet and we need to jump tab jumps. If none
+" " of the above matches we just call our usual 'tab'.
+function! s:neosnippet_complete()
+	if pumvisible()
+		return "\<c-n>"
+	else
+		if neosnippet#expandable_or_jumpable() 
+			return "\<Plug>(neosnippet_expand_or_jump)"
+		endif
+		return "\<tab>"
+	endif
+endfunction
+imap <expr><TAB> <SID>neosnippet_complete()
 
 
 " }
