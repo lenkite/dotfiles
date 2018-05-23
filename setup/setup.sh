@@ -204,16 +204,15 @@ install_pkgs() {
  # brew install --HEAD knqyf263/pet/pet #using go get for pet
  elif [[ $isLinux == true ]]; then
  echo "** NOTE: If RUNNING BEHIND PROXY, export http_proxy/https_proxy"
- sudo -E apt-add-repository -y ppa:brightbox/ruby-ng
- sudo -E add-apt-repository -y ppa:jonathonf/vim
  sudo -E add-apt-repository -y ppa:neovim-ppa/unstable
  sudo -E add-apt-repository ppa:webupd8team/java
-  #sudo -E apt-get update #cos the curl script for nodejs below already does it
-  curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
-  sudo -E apt-get --yes install git zsh silversearcher-ag netcat-openbsd dh-autoreconf\
-    autoconf pkg-config tmux fortune-mod cowsay zip unzip python3 python3-pip ruby2.5\
-    vim neovim nodejs oracle-java8-set-default
-  sudo apt-get upgrade
+  # BEGIN: Nodejs install. Taken from https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions
+  curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+  sudo apt-get install -y nodejs
+  # END : Nodejs install
+  sudo -E apt-get --yes install git curl zsh silversearcher-ag netcat-openbsd dh-autoreconf\
+    autoconf pkg-config tmux fortune-mod cowsay zip unzip python3 python3-pip ruby\
+    vim neovim nodejs rar unrar oracle-java8-set-default
   sudo apt-get -y autoremove
   setup_go_linux
   setup_maven
@@ -254,7 +253,7 @@ install_pkgs() {
 }
 
 setup_go_linux() {
-  local gotarbin="go1.10.1.linux-amd64.tar.gz"
+  local gotarbin="go1.10.2.linux-amd64.tar.gz"
   local goroot="/usr/local/go"
   if command -v curl >/dev/null 2>&1 ; then
     pushd /tmp
