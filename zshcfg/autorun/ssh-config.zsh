@@ -21,7 +21,7 @@ if [[ $hasSshAgent ]]; then
 		/usr/bin/ssh-agent | sed 's/^echo/#echo/' > ${SSH_ENV}
 		chmod 600 ${SSH_ENV}
 		. ${SSH_ENV} > /dev/null
-		/usr/bin/ssh-add -t 28800 # identity lifetime 8 hours
+		# /usr/bin/ssh-add -t 28800 # identity lifetime 8 hours
 	}
 
 	# Source SSH settings, if applicable

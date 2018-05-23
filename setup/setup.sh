@@ -8,7 +8,7 @@ usage() { echo "Usage: $0 [-c] [-v] [-t] [-u] [-z]" 1>&2; exit 1; }
 # Use getopt for simple option parsing
 # See https://stackoverflow.com/questions/16483119/example-of-how-to-use-getopts-in-bash
 # See http://wiki.bash-hackers.org/howto/getopts_tutorial
-while getopts "cptuvz" opt; do
+while getopts "cmpuvz" opt; do
   case "${opt}" in
     c)
       codeSetup=true
@@ -16,8 +16,8 @@ while getopts "cptuvz" opt; do
     p)
       pkgSetup=true
       ;;
-    t)
-      tmuxSetup=true
+    m)
+      miscSetup=true
       ;;
     u)
       utilSetup=true
@@ -39,9 +39,9 @@ while getopts "cptuvz" opt; do
 done
 shift $((OPTIND-1))
 
-[ $codeSetup ] || [ $pkgSetup ] || [ $tmuxSetup ] || [ $utilSetup ] || [ $viSetup ] || [ $zshSetup ] || allSetup=true
+[ $codeSetup ] || [ $pkgSetup ] || [ $miscSetup ] || [ $utilSetup ] || [ $viSetup ] || [ $zshSetup ] || allSetup=true
 
-echo "codeSetup = $codeSetup, viSetup = $viSetup, tmuxSetup = $tmuxSetup, zshSetup = $zshSetup, utilSetup = $utilSetup, allSetup=$allSetup"
+echo "codeSetup = $codeSetup, viSetup = $viSetup, miscSetup = $miscSetup, zshSetup = $zshSetup, utilSetup = $utilSetup, allSetup=$allSetup"
 
 setup_main() {
   initialize_vars
@@ -70,10 +70,10 @@ setup_main() {
 
   [[ $allSetup  || $pkgSetup  ]] && install_pkgs
   [[ $allSetup  || $zshSetup  ]] && setup_zsh
-  [[ $allSetup  || $tmuxSetup ]] && setup_tmux
   [[ $viSetup   || $allSetup  ]] && setup_vim
   [[ $codeSetup || $allSetup  ]] && setup_vscode
   [[ $utilSetup || $allSetup  ]] && setup_util
+  [[ $allSetup  || $miscSetup ]] && setup_misc
   
 }
 
@@ -337,9 +337,14 @@ setup_vim() {
   fi
 }
 
-setup_tmux() {
-  echo "- setup_tmux"
+setup_misc() {
+  echo "- setup_misc"
+  echo "Linking $trueHome/.tmux.conf to $dotfilesDir/tmux.conf ..."
   ln $dotfilesDir/tmux.conf $trueHome/.tmux.conf
+  sshCfg=$trueHome/.ssh/config 
+  [[ -f $sshCfg ]] && rm $sshCfg
+  echo "Linking $sshCfg to $dotfilesDir/sshCfg/config ..."
+  ln $dotfilesDir/sshCfg/config $sshCfg
 }
 
 setup_util() {
