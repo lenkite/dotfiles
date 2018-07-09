@@ -183,6 +183,8 @@ defenv_java() {
   jvmHome=/usr/lib/jvm/java-8-oracle/
   if [[ $isLinux && -d $jvmHome ]]; then
     export JAVA_HOME=$jvmHome
+  elif [[ $isMacos && -f /usr/libexec/java_home ]]; then
+    export JAVA_HOME=$(/usr/libexec/java_home)
   fi
 }
 
