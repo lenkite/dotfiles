@@ -212,7 +212,7 @@ install_pkgs() {
   # END : Nodejs install
   sudo -E apt-get --yes install git curl zsh silversearcher-ag netcat-openbsd dh-autoreconf\
     autoconf pkg-config tmux fortune-mod cowsay zip unzip python3 python3-pip ruby\
-    vim neovim nodejs rar unrar oracle-java8-set-default
+    vim neovim nodejs rar unrar 
   sudo apt-get -y autoremove
   setup_go_linux
   setup_maven
@@ -253,7 +253,8 @@ install_pkgs() {
 }
 
 setup_go_linux() {
-  local gotarbin="go1.10.2.linux-amd64.tar.gz"
+  echo "- setup_go_linux"
+  local gotarbin="go1.10.3.linux-amd64.tar.gz"
   local goroot="/usr/local/go"
   if command -v curl >/dev/null 2>&1 ; then
     pushd /tmp
