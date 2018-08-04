@@ -194,6 +194,11 @@ defenv_python() {
     local pybin=$(echo ~/Library/Python/3.*/bin | awk '{print $NF}')
     [ -d $pybin ] && path+="$pybin" && export PATH
   fi
+  # http://virtualenvwrapper.readthedocs.io/en/latest/_sources/install.txt
+  if [[ -f /usr/bin/python3 ]]; then
+    export WORKON_HOME=$HOME/.virtualenvs
+    export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+  fi
   #TODO: configure python environment for linux/wsl too!
 }
 

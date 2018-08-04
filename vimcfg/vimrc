@@ -243,6 +243,7 @@ Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 Plug 'shime/vim-livedown'
 Plug 'vim-scripts/SyntaxRange'
+Plug 'python-mode/python-mode', { 'branch': 'develop' }
 
 "Plugins for Clojure
 Plug 'guns/vim-clojure-static' "Syntax highlighting for clojure
@@ -501,6 +502,7 @@ autocmd BufRead,BufNewFile Cargo.toml,Cargo.lock,*.rs compiler cargo
 "Taken from example mappings in https://github.com/fatih/vim-go
 "
 function! ConfigureVimGo()
+  setlocal nospell
   au FileType go nmap <Leader>x <Plug>(go-run)
   au FileType go nmap <leader>b <Plug>(go-build)
   au FileType go nmap <leader>t <Plug>(go-test)
@@ -517,8 +519,6 @@ function! ConfigureVimGo()
   au FileType go nmap <leader>i <Plug>(go-info)
   au FileType go nmap <leader>r <Plug>(go-rename)
   au FileType go set path+=~/src,~/src/go/src
-
-
 
 endfunction
 "See https://hackernoon.com/my-neovim-setup-for-go-7f7b6e805876
@@ -545,10 +545,22 @@ autocmd FileType go if exists(":GoBuild") | call ConfigureVimGo() | endif
 
 " }
 
+" { * Configure Python Mode
+" https://github.com/python-mode/python-mode
+"
+function! ConfigurePythonMode()
+  setlocal nospell
+endfunction
+autocmd FileType python if exists(":PymodeVersion") | call ConfigurePythonMode() | endif
+let g:pymode_run_bind = '<leader>x'
+
+" }
+
 " { * Configure Typescript Lang 
 " See:  https://github.com/Quramy/tsuquyomi
 "
 function! ConfigureVimTypescript()
+  setlocal nospell
   autocmd FileType typescript setlocal completeopt+=menu,preview
   let g:tsuquyomi_completion_detail = 1
   au FileType typescript nmap <leader>i <Plug>(TsuquyomiSignatureHelp)
