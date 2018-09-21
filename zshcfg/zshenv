@@ -8,6 +8,7 @@
 [ -d ~/dotfiles ] && export dotfiles=~/dotfiles || echo "Could not locate dotfiles at ~/dotfiles"
 
 main() {
+  export ZSH_DISABLE_COMPFIX=true
   detect_os
   detect_user
   detect_util
@@ -22,6 +23,7 @@ main() {
   defenv_python
   defenv_java
   defenv_maven
+  defenv_zeal
   defenv_nvr
   export MANPATH=":$dotfiles/man"
 }
@@ -202,18 +204,6 @@ defenv_python() {
   #TODO: configure python environment for linux/wsl too!
 }
 
-# defenv_maven() {
-#   typeset -gxU path PATH
-#   if [[ $isLinux ]]; then
-#     local mvnHome=$(echo /opt/apache-maven\* 2> /dev/null | awk '{print $NF}')
-#     if [ -d $mvnHome ]; then
-#       export M2_HOME=$mvnHome
-#       path+=$mvnHome/bin
-#       export PATH
-#     fi
-#   fi
-# }
-
 defenv_nvr() {
   export NVIM_LISTEN_ADDRESS=/tmp/nvimsocket
 }
@@ -224,6 +214,13 @@ defenv_maven() {
     typeset -gxU path PATH
     path+=$mvnHome/bin
     export M2_HOME=$mvnHome
+  fi
+}
+
+defenv_zeal() {
+  if [[ -d "/mnt/c/Program Files/Zeal" ]]; then
+    typeset -gxU path PATH
+    path+=/mnt/c/Program\ Files/Zeal
   fi
 }
 

@@ -8,7 +8,7 @@ usage() { echo "Usage: $0 [-c] [-v] [-t] [-u] [-z]" 1>&2; exit 1; }
 # Use getopt for simple option parsing
 # See https://stackoverflow.com/questions/16483119/example-of-how-to-use-getopts-in-bash
 # See http://wiki.bash-hackers.org/howto/getopts_tutorial
-while getopts "cmpuvz" opt; do
+while getopts "cmpsuvz" opt; do
   case "${opt}" in
     c)
       codeSetup=true
@@ -18,6 +18,9 @@ while getopts "cmpuvz" opt; do
       ;;
     m)
       miscSetup=true
+      ;;
+    s)
+      sdkSetup=true
       ;;
     u)
       utilSetup=true
@@ -39,9 +42,9 @@ while getopts "cmpuvz" opt; do
 done
 shift $((OPTIND-1))
 
-[ $codeSetup ] || [ $pkgSetup ] || [ $miscSetup ] || [ $utilSetup ] || [ $viSetup ] || [ $zshSetup ] || allSetup=true
+[ $codeSetup ] || [ $pkgSetup ] || [ $miscSetup ] || [ $utilSetup ] || [ $viSetup ] || [ $zshSetup ] || [ $sdkSetup ] || allSetup=true
 
-echo "codeSetup = $codeSetup, viSetup = $viSetup, miscSetup = $miscSetup, zshSetup = $zshSetup, utilSetup = $utilSetup, allSetup=$allSetup"
+echo "codeSetup = $codeSetup, sdkSetup = $sdkSetup, viSetup = $viSetup, miscSetup = $miscSetup, zshSetup = $zshSetup, utilSetup = $utilSetup, allSetup=$allSetup"
 
 setup_main() {
   initialize_vars
@@ -71,6 +74,7 @@ setup_main() {
   [[ $allSetup  || $pkgSetup  ]] && install_pkgs
   [[ $allSetup  || $zshSetup  ]] && setup_zsh
   [[ $viSetup   || $allSetup  ]] && setup_vim
+  [[ $sdkSetup  || $allSetup  ]] && setup_sdk
   [[ $codeSetup || $allSetup  ]] && setup_vscode
   [[ $utilSetup || $allSetup  ]] && setup_util
   [[ $allSetup  || $miscSetup ]] && setup_misc
@@ -195,6 +199,39 @@ replace_linux_home_shell() {
 	fi
 }
 
+gh_download_linux_release() {
+	if [[ -z $1 ]]; then
+		echo "(gh_download_linux_release) user/org needed for first param"
+		exit 1
+	fi
+	
+	if [[ -z $2 ]]; then
+		echo "(gh_download_linux_release) repo name needed as second param"
+		exit 1
+	fi
+
+  if [[ -z $3 ]]; then
+    echo "(gh_download_linux_release) filter string (valid grep regex) needed as third param"
+		exit 1
+  fi
+	local filter=$3
+  local latestRelUrl="https://api.github.com/repos/$1/$2/releases/latest"
+  # Uncomment only for debugging since bash funcs are like commands and can't give proper return values
+	#echo "(gh_download_linux_release) Querying : $latestRelUrl"
+  local downloadUrl=$(curl -s $latestRelUrl | grep browser_download_url | grep $filter | cut -d '"' -f 4)
+	if [[ -z $downloadUrl ]]; then
+		echo "(gh_download_linux_release) Failed to obtain release info form: $latestRelUrl"
+		exit 2
+	fi
+	local downloadPath="/tmp/${downloadUrl##*/}"
+	# Uncomment only for debugging
+	#echo "(gh_download_linux_release) Downloading into $downloadPath from $downloadUrl"
+	local res=$(cd /tmp && curl -s -k -O -L -C - $downloadUrl)
+	local downloadResult=$?
+	[[ -f $downloadPath ]]  || ( echo "Could not download: $downloadUrl"  && return 3 )
+	echo $downloadPath
+	return $downloadResult
+}
 
 install_pkgs() {
  echo " Installing packages..."
@@ -212,10 +249,8 @@ install_pkgs() {
   # END : Nodejs install
   sudo -E apt-get --yes install git curl zsh silversearcher-ag netcat-openbsd dh-autoreconf\
     autoconf pkg-config tmux fortune-mod cowsay zip unzip python3 python3-pip ruby\
-    vim neovim nodejs rar unrar 
+    vim neovim nodejs rar unrar oracle-java8-installer
   sudo apt-get -y autoremove
-  setup_go_linux
-  setup_maven
  elif [[ $isCygwin == true ]]; then
    if [[ -f /tmp/apt-cyg ]]; then
      rm /tmp/apt-cyg
@@ -253,14 +288,24 @@ install_pkgs() {
 }
 
 setup_go_linux() {
-  echo "- setup_go_linux"
-  local gotarbin="go1.10.3.linux-amd64.tar.gz"
+  echo "-- setup_go_linux"
+	local needVersion="1.10.4"
+  local gotarbin="go$needVersion.linux-amd64.tar.gz"
   local goroot="/usr/local/go"
-  if command -v curl >/dev/null 2>&1 ; then
-    pushd /tmp
-    curl -L -O -C - https://dl.google.com/go/$gotarbin
-    [[ -d $goroot ]] && echo "setup_go_linux: $goroot already exists. Skip extraction of $gotarbin" || sudo tar -C /usr/local -zxf $gotarbin
-    popd
+	[[ $hasGo ]] && goVersion=$(go version | cut -d " " -f3)
+  if [[ $hasCurl && $isLinux ]]; then
+		if [[ ! $goVersion == "go$needVersion" ]]; then
+		  echo "(setup_go_linux) Go version: $goVersion "
+			pushd /tmp
+			curl -L -O -C - https://dl.google.com/go/$gotarbin
+			#[[ -d $goroot ]] && echo "setup_go_linux: $goroot already exists. Skip extraction of $gotarbin" || sudo tar -C /usr/local -zxf $gotarbin
+			[[ -d /usr/local/go ]] && sudo rm -rf /usr/local/go
+			sudo tar -C /usr/local -zxf $gotarbin
+			popd
+			echo "(setup_go_linux) Go has been installed"
+		else 
+			echo "(setup_go_linux) Go already at version $needVersion"
+		fi
   else
     echo "WARNING: Curl not found or not in PATH. Kindly install the same!"
   fi
@@ -268,13 +313,24 @@ setup_go_linux() {
 
 setup_maven() {
   # I would love to use pkg manager here but sadly the pkg managers are out of date!
-  local mvnName="apache-maven-3.5.2"
-  local mvnUrl="http://apache.claz.org/maven/maven-3/3.5.2/binaries/$mvnName-bin.tar.gz"
+  echo "-- setup_maven"
+	local mvnVersion="3.5.4"
+  local mvnName="apache-maven-$mvnVersion"
+  local mvnTar="$mvnName-bin.tar.gz"
+  local mvnUrl="http://www.strategylions.com.au/mirror/maven/maven-3/$mvnVersion/binaries/$mvnTar"
   if [[ $hasCurl && $isLinux ]]; then
-    curl -o /tmp/mvn.tar.gz $mvnUrl
-    sudo tar -C /tmp -xzf /tmp/mvn.tar.gz
+		echo " (setup_maven) Downloading: $mvnUrl"
+    [[ -f /tmp/$mvnTar ]] || $(cd /tmp && curl -O -L $mvnUrl)
+    sudo tar -C /tmp -xzf /tmp/$mvnTar
+		[[ -d /opt/maven ]] && sudo rm -rf /opt/maven
     sudo mv /tmp/$mvnName /opt/maven
+    echo " (setup_maven) done"
   fi
+}
+
+setup_go() {
+ 	echo "-- setup_go"
+	[[ $isLinux ]] && setup_go_linux
 }
 
 setup_fzf() {
@@ -299,6 +355,47 @@ setup_ctags() {
     sudo make install
     popd
   fi
+}
+
+setup_ripgrep() {
+  echo "-- setup_ripgrep"
+	if [[ $isLinux ]]; then
+		echo "(setup_ripgrep) Downloading ripgrep Linux release ..."
+		pkg=$(gh_download_linux_release "BurntSushi" "ripgrep" "amd64")
+		if [[ $? == 0 ]]; then
+			echo "(setup_ripgrep) Downloaded as $pkg. Installing..."
+			sudo dpkg -i $pkg
+		fi
+	fi
+}
+
+setup_jq() {
+  echo "-- setup_jq"
+	if [[ $isLinux ]]; then
+		echo "(setup_jq) Downloading jq Linux release ..."
+		binary=$(gh_download_linux_release "stedolan" "jq" "linux64")
+		if [[ $? == 0 ]]; then
+			echo "(setup_jq) Downloaded as $binary. Installing..."
+			chmod +x $binary
+			sudo cp $binary /usr/local/bin/jq
+		fi
+	fi
+}
+
+setup_fd() {
+  echo "-- setup_fd"
+	if [[ $isLinux ]]; then
+		echo "(setup_fd) Downloading fd Linux release ..."
+		pkg=$(gh_download_linux_release "sharkdp" "fd" 'fd_.*amd64.deb')
+		if [[ $? == 0 ]]; then
+			echo "(setup_fd) Downloaded as $pkg. Installing..."
+			sudo dpkg -i $pkg
+		fi
+	fi
+}
+
+setup_rq() {
+  echo "-- setup_rq"
 }
 
 setup_vim() {
@@ -343,43 +440,52 @@ setup_misc() {
   ln $dotfilesDir/tmux.conf $trueHome/.tmux.conf
   sshCfg=$trueHome/.ssh/config 
   [[ -f $sshCfg ]] && rm $sshCfg
-  echo "Linking $sshCfg to $dotfilesDir/sshCfg/config ..."
-  ln $dotfilesDir/sshCfg/config $sshCfg
+  echo "Linking $sshCfg to $dotfilesDir/sshcfg/config ..."
+  ln $dotfilesDir/sshcfg/config $sshCfg
 }
 
 setup_util() {
   echo "- setup_util"
   setup_fzf
   setup_ctags
-  [[ $GOPATH ]] || export GOPATH=$trueHome
-  if ! command -v go >/dev/null 2>&1 ; then
-   export PATH=$PATH:/usr/local/go/bin
-  fi
+  setup_ripgrep
+  setup_jq
+  setup_fd
+  #setup_rq
+  #[[ $GOPATH ]] || export GOPATH=$trueHome
+  #if ! command -v go >/dev/null 2>&1 ; then
+  # export PATH=$PATH:/usr/local/go/bin
+  #fi
 
-  if command -v go >/dev/null 2>&1 ; then
-    echo "Installing neosdkurls..."
-    go get -v github.com/lenkite/mycliutil/neosdkurls
-    echo "Installing pet..."
-    go get -v github.com/knqyf263/pet
-    echo "Installing delve..."
-    go get -u github.com/derekparker/delve/cmd/dlv
-  else
-    echo "WARNING: Go not found or not in PATH. Kindly correct so lovely utilities can be installed"
-  fi
+  #if command -v go >/dev/null 2>&1 ; then
+  #  echo "Installing neosdkurls..."
+  #  go get -v github.com/lenkite/mycliutil/neosdkurls
+  #  echo "Installing pet..."
+  #  go get -v github.com/knqyf263/pet
+  #  echo "Installing delve..."
+  #  go get -u github.com/derekparker/delve/cmd/dlv
+  #else
+  #  echo "WARNING: Go not found or not in PATH. Kindly correct so lovely utilities can be installed"
+  #fi
 
-  #See https://github.com/ratishphilip/nvmsharp
-  if [[ $isCygwin || $isWsl ]]; then
-    local nvmsharpUrl="https://raw.githubusercontent.com/ratishphilip/nvmsharp/master/nvmsharp_executable.zip"
-    if [[ $hasCurl && $hasUnzip ]]; then
-      echo "Installing nvmsharp..."
-      curl -L -C - $nvmsharpUrl -o /tmp/nvmsharp.zip
-      rm -rf /tmp/nvmsharp_executable
-      unzip /tmp/nvmsharp.zip -d /tmp
-      [[ -d ~/bin ]] || mkdir ~/bin
-      cp /tmp/nvmsharp_executable/* ~/bin
-    fi
-  fi
+  ##See https://github.com/ratishphilip/nvmsharp
+  #if [[ $isCygwin || $isWsl ]]; then
+  #  local nvmsharpUrl="https://raw.githubusercontent.com/ratishphilip/nvmsharp/master/nvmsharp_executable.zip"
+  #  if [[ $hasCurl && $hasUnzip ]]; then
+  #    echo "Installing nvmsharp..."
+  #    curl -L -C - $nvmsharpUrl -o /tmp/nvmsharp.zip
+  #    rm -rf /tmp/nvmsharp_executable
+  #    unzip /tmp/nvmsharp.zip -d /tmp
+  #    [[ -d ~/bin ]] || mkdir ~/bin
+  #    cp /tmp/nvmsharp_executable/* ~/bin
+  #  fi
+  #fi
+}
 
+setup_sdk() {
+  echo "- setup_sdk"
+  setup_maven
+	setup_go
 }
 
 setup_zsh() {

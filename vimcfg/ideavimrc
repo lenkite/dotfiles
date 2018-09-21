@@ -69,6 +69,7 @@ nmap <Leader>o  :action FileStructurePopup<CR>
 
 "Find usages, also called find references
 nmap <Leader>g :action FindUsages<CR>
+nmap <Leader>Gc :action GenerateConstructor<CR>
 
 "surround
 set surround

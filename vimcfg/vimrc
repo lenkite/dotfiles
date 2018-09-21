@@ -261,6 +261,7 @@ Plug 'haya14busa/incsearch.vim'
 Plug 'tmhedberg/matchit'
 Plug 'rhysd/devdocs.vim' "for devdocs.io
 Plug 'keith/investigate.vim' "opens dash on macOS
+Plug 'KabbAmine/zeavim.vim' "for opening zeal on windows
 Plug 'yssl/QFEnter'
 "}
 
@@ -460,7 +461,9 @@ function! ConfigureIncSeaarch()
   map g# <Plug>(incsearch-nohl-g#)
 endfunction
 autocmd VimEnter * if exists(":IncSearchMap") | call ConfigureIncSeaarch() | endif
+" }
 
+" { * Configure: vim grepper
 function! ConfigureVimGrepper()
   " This defines an |operator| "gs" that takes any |{motion}| and uses that
   " selection to populate the search prompt. The query is quoted automatically.
@@ -469,13 +472,28 @@ function! ConfigureVimGrepper()
   xmap gs  <plug>(GrepperOperator)
 endfunction
 autocmd VimEnter * if exists(":Grepper") | call ConfigureVimGrepper() | endif
+" }
 
+" { * Configure Docu Search Plugins
 function! ConfigureInvestigate()
   let g:investigate_use_dash=1 "opens documentation using gK in dash on macos
   let g:investigate_syntax_for_godoc="go"
 endfunction
 call ConfigureInvestigate()
 
+function! ConfigureZeal()
+  let g:zv_disable_mapping=1
+  if $isWsl == "true"
+    let g:zv_zeal_executable = '/mnt/c/Program Files/Zeal/zeal.exe'
+    " nmap <leader>z <Plug>Zeavim
+    " vmap <leader>z <Plug>ZVVisSelection
+    "nmap gK <Plug>ZVOperator
+    nmap <leader>gK <Plug>Zeavim
+    " nmap <leader><leader>z <Plug>ZVKeyDocset
+  endif
+endfunction
+call ConfigureZeal()
+autocmd VimEnter * if exists(":Zeavim") | call ConfigureZeal() | endif
 
 " }
 
