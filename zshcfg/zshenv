@@ -26,7 +26,6 @@ main() {
   defenv_zeal
   defenv_nvr
   export MANPATH=":$dotfiles/man"
-  export ZSH_DISABLE_COMPFIX="true"
 }
 
 detect_os() {
