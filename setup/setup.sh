@@ -129,8 +129,10 @@ detect_util() {
   hasUnzip=$(command -v unzip)
   hasGit=$(command -v git)
   hasGo=$(command -v go)
-  hasCtags=$(command -v ctags)
+  ctags --help > /dev/null 2>&1
+  [[ $? -ge 0 ]] && hasCtags=false || hasCtags=true
   [[ hasCurl ]] || echo "WARN: 'curl' not found. Setup may be incomplete"
+  [[ hasCtags ]] || echo "WARN: 'ctags' not found or GNU version not installed"
   [[ hasZip ]] || echo "WARN: 'zip' not found. Setup may be incomplete"
   [[ hasUnzip ]] || echo "WARN: 'unzip' not found. Setup may be incomplete"
   [[ hasGit ]] || echo "WARN: 'git' not found. Setup may be incomplete and need to be rerun"
@@ -352,6 +354,16 @@ setup_go() {
   [[ $isLinux ]] && setup_go_linux
 }
 
+setup_cloud() {
+  echo "-- setup_cloud"
+  if [[ $isMacos ]]; then
+    echo " Installing CF-CLI..."
+    [[ $isMacos ]] && brew install cloudfoundry/tap/cf-cli
+    echo " Installing Docker..."
+    brew install docker
+  fi
+}
+
 setup_fzf() {
   if [[ $hasGit ]]; then
     [[ -d $trueHome/src ]] || mkdir -p $trueHome/src
@@ -364,7 +376,13 @@ setup_fzf() {
 }
 
 setup_ctags() {
-  if [[ ! $hasCtags ]]; then
+  echo "--setup_ctags"
+  if [[ $isMacos ]]; then
+    # https://github.com/universal-ctags/homebrew-universal-ctags
+    brew install --HEAD universal-ctags/universal-ctags/universal-ctags
+  fi
+
+  if [[ $isLinux ]]; then
     [[ -d ~/src ]] || mkdir -p ~/src
     git -C ~/src clone --depth 1 https://github.com/universal-ctags/ctags.git
     pushd ~/src/ctags
@@ -418,6 +436,7 @@ setup_fd() {
 			sudo dpkg -i $pkg
 		fi
 	fi
+  [[ $isMacos ]] && brew install fd
 }
 
 setup_rq() {
@@ -472,8 +491,8 @@ setup_misc() {
 
 setup_util() {
   echo "- setup_util"
-  setup_fzf
   setup_ctags
+  setup_fzf
   setup_ripgrep
   setup_jq
   setup_fd
@@ -513,6 +532,7 @@ setup_sdk() {
   setup_jdk
   setup_maven
   setup_go
+  setup_cloud
 }
 
 setup_zsh() {
