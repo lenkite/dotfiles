@@ -234,10 +234,9 @@ gh_download_linux_release() {
 }
 
 install_pkgs() {
- echo " Installing packages..."
+ echo "- (install_pkgs) Installing packages..."
  if [[ $isMacos == true ]]; then
-  brew install zsh git the_silver_searcher fortune cowsay python3 leiningen nodejs
-  brew install --HEAD neovim 
+  brew install zsh git the_silver_searcher fortune cowsay python3 leiningen nodejs go neovim
  # brew install --HEAD knqyf263/pet/pet #using go get for pet
  elif [[ $isLinux == true ]]; then
  echo "** NOTE: If RUNNING BEHIND PROXY, export http_proxy/https_proxy"
@@ -309,6 +308,11 @@ setup_go_linux() {
   else
     echo "WARNING: Curl not found or not in PATH. Kindly install the same!"
   fi
+
+  if [[ $isMacos == true ]]; then
+      # TODO check for upgrade option too
+      brew install golang
+  fi
 }
 
 setup_maven() {
@@ -326,11 +330,26 @@ setup_maven() {
     sudo mv /tmp/$mvnName /opt/maven
     echo " (setup_maven) done"
   fi
+
+  if [[ $isMacos ]]; then
+      brew install maven --ignore-dependencies	
+  fi
+}
+
+setup_jdk() {
+  echo "-- setup_jdk"
+  if [[ $isLinux ]]; then
+    echo "(setup_jdk) NOT YET IMPLEMENTED FOR LINUX"
+  fi
+  if [[ $isMacos ]]; then
+	echo "(setup_jdk) Installing Oracle JDK 8"
+	brew cask install caskroom/versions/java8
+  fi
 }
 
 setup_go() {
- 	echo "-- setup_go"
-	[[ $isLinux ]] && setup_go_linux
+  echo "-- setup_go"
+  [[ $isLinux ]] && setup_go_linux
 }
 
 setup_fzf() {
@@ -367,6 +386,10 @@ setup_ripgrep() {
 			sudo dpkg -i $pkg
 		fi
 	fi
+	if [[ $isMacos ]]; then
+	  brew tap burntsushi/ripgrep https://github.com/BurntSushi/ripgrep.git
+   	  brew install ripgrep-bin
+	fi
 }
 
 setup_jq() {
@@ -379,6 +402,9 @@ setup_jq() {
 			chmod +x $binary
 			sudo cp $binary /usr/local/bin/jq
 		fi
+	fi
+	if [[ $isMacos == true ]]; then
+		brew install jq
 	fi
 }
 
@@ -484,8 +510,9 @@ setup_util() {
 
 setup_sdk() {
   echo "- setup_sdk"
+  setup_jdk
   setup_maven
-	setup_go
+  setup_go
 }
 
 setup_zsh() {

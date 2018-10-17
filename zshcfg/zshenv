@@ -132,6 +132,17 @@ defenv_golang() {
     path+=$GOROOT/bin
     export PATH
   fi
+
+  if [[ $isMacos ]]; then
+    brewGoBaseDir=/usr/local/Cellar/go
+    goDirName=$(ls -t1 $brewGoBaseDir | head -n1)
+    if [[ -d  $brewGoBaseDir/$goDirName ]]; then
+      typeset -gxU path PATH
+      export GOROOT=$brewGoBaseDir/$goDirName
+      path+=$GOROOT/bin
+      export PATH
+    fi
+  fi
 }
 
 defenv_android() {
