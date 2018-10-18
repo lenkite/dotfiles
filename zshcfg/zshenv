@@ -139,7 +139,7 @@ defenv_golang() {
     goDirName=$(ls -t1 $brewGoBaseDir | head -n1)
     if [[ -d  $brewGoBaseDir/$goDirName ]]; then
       typeset -gxU path PATH
-      export GOROOT=$brewGoBaseDir/$goDirName
+      export GOROOT=$brewGoBaseDir/$goDirName/libexec
       path+=$GOROOT/bin
       export PATH
     fi
