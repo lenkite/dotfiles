@@ -8,7 +8,7 @@ usage() { echo "Usage: $0 [-c] [-v] [-t] [-u] [-z]" 1>&2; exit 1; }
 # Use getopt for simple option parsing
 # See https://stackoverflow.com/questions/16483119/example-of-how-to-use-getopts-in-bash
 # See http://wiki.bash-hackers.org/howto/getopts_tutorial
-while getopts "cmpsuvz" opt; do
+while getopts "cmpsuvtz" opt; do
   case "${opt}" in
     c)
       codeSetup=true
@@ -31,6 +31,9 @@ while getopts "cmpsuvz" opt; do
     z)
       zshSetup=true
       ;;
+    t)
+      settingsSetup=true
+      ;;
     \?)  
       usage
       ;;
@@ -42,7 +45,7 @@ while getopts "cmpsuvz" opt; do
 done
 shift $((OPTIND-1))
 
-[ $codeSetup ] || [ $pkgSetup ] || [ $miscSetup ] || [ $utilSetup ] || [ $viSetup ] || [ $zshSetup ] || [ $sdkSetup ] || allSetup=true
+[ $codeSetup ] || [ $pkgSetup ] || [ $miscSetup ] || [ $utilSetup ] || [ $viSetup ] || [ $zshSetup ] || [ $sdkSetup ] || [ $settingsSetup ] || allSetup=true
 
 echo "codeSetup = $codeSetup, sdkSetup = $sdkSetup, viSetup = $viSetup, miscSetup = $miscSetup, zshSetup = $zshSetup, utilSetup = $utilSetup, allSetup=$allSetup"
 
@@ -77,6 +80,7 @@ setup_main() {
   [[ $sdkSetup  || $allSetup  ]] && setup_sdk
   [[ $codeSetup || $allSetup  ]] && setup_vscode
   [[ $utilSetup || $allSetup  ]] && setup_util
+  [[ $settingsSetup || $allSetup ]] && setup_settings
   [[ $allSetup  || $miscSetup ]] && setup_misc
   
 }
@@ -439,6 +443,11 @@ setup_fd() {
   [[ $isMacos ]] && brew install fd
 }
 
+setup_tmux() {
+  echo "-- setup_tmux"
+  [[ $isMacos ]] && brew install tmux
+}
+
 setup_rq() {
   echo "-- setup_rq"
 }
@@ -496,6 +505,7 @@ setup_util() {
   setup_ripgrep
   setup_jq
   setup_fd
+  setup_tmux
   #setup_rq
   #[[ $GOPATH ]] || export GOPATH=$trueHome
   #if ! command -v go >/dev/null 2>&1 ; then
@@ -525,6 +535,14 @@ setup_util() {
   #    cp /tmp/nvmsharp_executable/* ~/bin
   #  fi
   #fi
+}
+
+setup_settings() {
+  if [[ $isMacos ]]; then
+    echo "Setting InitialKeyRepeaaat and KeyRepeat"
+    defaults write -g KeyRepeat -int 2
+    defaults write -g InitialKeyRepeat -int 11
+  fi
 }
 
 setup_sdk() {
