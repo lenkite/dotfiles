@@ -540,8 +540,8 @@ setup_util() {
 setup_settings() {
   if [[ $isMacos ]]; then
     echo "Setting InitialKeyRepeaaat and KeyRepeat"
-    defaults write -g KeyRepeat -int 2
-    defaults write -g InitialKeyRepeat -int 11
+    defaults write -g KeyRepeat -int 1
+    defaults write -g InitialKeyRepeat -int 10
   fi
 }
 

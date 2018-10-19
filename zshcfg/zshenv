@@ -25,7 +25,7 @@ main() {
   defenv_maven
   defenv_zeal
   defenv_nvr
-  defenv_ctags
+  #defenv_ctags
   export MANPATH=":$dotfiles/man"
 }
 
@@ -219,18 +219,6 @@ defenv_python() {
 defenv_nvr() {
   export NVIM_LISTEN_ADDRESS=/tmp/nvimsocket
   if [[ $isMacos ]]; then
-  fi
-}
-
-defenv_ctags() {
-  if [[ $isMacos ]]; then
-    local baseDir=/usr/local/Cellar/universal-ctags
-    local dirName=$(ls -t1 $baseDir | head -n1)
-    if [[ -d  $baseDir/$dirName ]]; then
-      path=($baseDir/$dirName $path)
-      typeset -gxU path PATH
-      export PATH
-    fi
   fi
 }
 
