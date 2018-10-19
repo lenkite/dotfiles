@@ -183,9 +183,10 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-fireplace' "nREPL
 "}
 
-" ** Plugins: Buffer and Window {
+" ** Plugins: Buffer, Window, Sessions {
 Plug 'ap/vim-buftabline'
 Plug 'mhinz/vim-startify' "Fancy start screen
+Plug 'christoomey/vim-tmux-navigator' "https://blog.bugsnag.com/tmux-and-vim/
 " }
 
 " ** Plugins: Completion And Snippets {

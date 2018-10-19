@@ -443,10 +443,17 @@ setup_fd() {
   [[ $isMacos ]] && brew install fd
 }
 
-setup_tmux() {
-  echo "-- setup_tmux"
-  [[ $isMacos ]] && brew install tmux
+setup_sed() {
+  echo "-- setup_sed"
+  if [[ $isMacos ]]; then
+    sedPath=$(which sed)
+    [[ $sedPath == *"local"* ]] \
+      && brew upgrade gnu-sed --with-default-names \
+      || brew install gnu-sed --with-default-names
+  fi
 }
+
+
 
 setup_rq() {
   echo "-- setup_rq"
@@ -490,6 +497,10 @@ setup_vim() {
 
 setup_misc() {
   echo "- setup_misc"
+  hasTmux=$(command -v tmux)
+  if [[ $isMacos ]]; then
+    [[ $hasTmux ]] && brew upgrade tmux || brew install tmux
+  fi
   echo "Linking $trueHome/.tmux.conf to $dotfilesDir/tmux.conf ..."
   ln $dotfilesDir/tmux.conf $trueHome/.tmux.conf
   sshCfg=$trueHome/.ssh/config 
@@ -505,7 +516,7 @@ setup_util() {
   setup_ripgrep
   setup_jq
   setup_fd
-  setup_tmux
+  setup_sed
   #setup_rq
   #[[ $GOPATH ]] || export GOPATH=$trueHome
   #if ! command -v go >/dev/null 2>&1 ; then
