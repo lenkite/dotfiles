@@ -198,6 +198,7 @@ Plug 'mattn/emmet-vim'
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   Plug 'zchee/deoplete-go', { 'do': 'make'}
+  Plug 'zchee/deoplete-jedi'
 else
   Plug 'Shougo/deoplete.nvim'
   Plug 'roxma/nvim-yarp'
@@ -306,6 +307,17 @@ nnoremap <esc><esc> :noh<return>
 " Quickly select the text that was just pasted. This allows you to, e.g.,
 " indent it after pasting.
 noremap gV `[v`]
+
+
+" From http://vim.wikia.com/wiki/Move_cursor_by_display_lines_when_wrapping
+nnoremap j gj
+nnoremap k gk
+vnoremap j gj
+vnoremap k gk
+
+
+
+
 
 " Make Y yank everything from the cursor to the end of the line. This makes Y
 " act more like C or D because by default, Y yanks the current line (i.e. the

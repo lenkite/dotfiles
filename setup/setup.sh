@@ -368,6 +368,15 @@ setup_cloud() {
   fi
 }
 
+setup_python() {
+  echo "-- setup_python"
+  if [[ $isMacos ]]; then
+    echo " Installing pipenv..."
+    pip3 install pipenv
+    pip3 install --upgrade jedi 
+  fi
+}
+
 setup_fzf() {
   if [[ $hasGit ]]; then
     [[ -d $trueHome/src ]] || mkdir -p $trueHome/src
@@ -443,13 +452,22 @@ setup_fd() {
   [[ $isMacos ]] && brew install fd
 }
 
-setup_sed() {
-  echo "-- setup_sed"
+setup_sed_awk_grep() {
+  echo "-- setup_sed_awk_grep"
+  export HOMEBREW_NO_AUTO_UPDATE=1
   if [[ $isMacos ]]; then
-    sedPath=$(which sed)
+    local sedPath=$(which sed)
     [[ $sedPath == *"local"* ]] \
       && brew upgrade gnu-sed --with-default-names \
       || brew install gnu-sed --with-default-names
+    local awkPath=$(which awk)
+    [[ $sedPath == *"local"* ]] \
+      && brew upgrade gawk --with-default-names \
+      || brew install gawk --with-default-names
+    local grepPath=$(which grep)
+    [[ $grepPath == *"local"* ]] \
+      && brew upgrade grep --with-default-names \
+      || brew install grep --with-default-names
   fi
 }
 
@@ -516,23 +534,25 @@ setup_util() {
   setup_ripgrep
   setup_jq
   setup_fd
-  setup_sed
+  setup_sed_awk_grep
   #setup_rq
   #[[ $GOPATH ]] || export GOPATH=$trueHome
   #if ! command -v go >/dev/null 2>&1 ; then
   # export PATH=$PATH:/usr/local/go/bin
   #fi
 
-  #if command -v go >/dev/null 2>&1 ; then
-  #  echo "Installing neosdkurls..."
-  #  go get -v github.com/lenkite/mycliutil/neosdkurls
-  #  echo "Installing pet..."
-  #  go get -v github.com/knqyf263/pet
-  #  echo "Installing delve..."
-  #  go get -u github.com/derekparker/delve/cmd/dlv
-  #else
-  #  echo "WARNING: Go not found or not in PATH. Kindly correct so lovely utilities can be installed"
-  #fi
+  if command -v go >/dev/null 2>&1 ; then
+    echo "Installing neosdkurls..."
+    go get -v github.com/lenkite/mycliutil/neosdkurls
+    echo "Installing pet..."
+    go get -v github.com/knqyf263/pet
+    echo "Installing delve..."
+    go get -u github.com/derekparker/delve/cmd/dlv
+    echo "Installing yolo..."
+    go get github.com/azer/yolo
+  else
+    echo "WARNING: Go not found or not in PATH. Kindly correct so lovely utilities can be installed"
+  fi
 
   ##See https://github.com/ratishphilip/nvmsharp
   #if [[ $isCygwin || $isWsl ]]; then
@@ -562,6 +582,7 @@ setup_sdk() {
   setup_maven
   setup_go
   setup_cloud
+  setup_python
 }
 
 setup_zsh() {
