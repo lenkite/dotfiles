@@ -69,7 +69,7 @@ set nowb
 set autoindent
 set smartindent
 set smarttab
-autocmd FileType make set noexpandtab shiftwidth=8 softtabstop=0 "Make files need a Tab!
+autocmd FileType make set noexpandtab shiftwidth=8 softtabstop=0 nosmarttab "Make files need a Tab!
 set shiftwidth=2
 set softtabstop=2
 set tabstop=2

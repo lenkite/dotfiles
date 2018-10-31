@@ -242,8 +242,8 @@ gh_download_linux_release() {
 install_pkgs() {
  echo "- (install_pkgs) Installing packages..."
  if [[ $isMacos == true ]]; then
-  brew install zsh git the_silver_searcher fortune cowsay python3 leiningen nodejs go neovim
- # brew install --HEAD knqyf263/pet/pet #using go get for pet
+  brew install zsh git the_silver_searcher fortune cowsay python3 leiningen nodejs go 
+  brew install --HEAD neovim
  elif [[ $isLinux == true ]]; then
  echo "** NOTE: If RUNNING BEHIND PROXY, export http_proxy/https_proxy"
  sudo -E add-apt-repository -y ppa:neovim-ppa/unstable
