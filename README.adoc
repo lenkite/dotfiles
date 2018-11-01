@@ -32,6 +32,7 @@ Open a shell and execute the following command:
 curl -sfL  https://raw.github.com/lenkite/dotfiles/master/setup/setup.sh | bash
 ----
 
+
 == Customize Path and Environment Variables
 === Personal environment variables
 Create optional file `~.env`. This is sourced by `~/.zshenv` . You should
@@ -48,4 +49,17 @@ This file is sourced by `~/.zshrc` at the end.
 == autorun Cotributions
 Put your contributions with a `.zsh' extension in `dotfiles/zshcfg/autorun`. These will be sourced by `zshrc`.
 
+== Setup of SDK and Utilities 
+Enter fresh shell instance
+----
+./setup/setup.sh -s # For SDK's
+# Now Exit and Relaunch your Shell
+./setup/setup.sh -u  # For utilities tools
+----
 
+== Setup For Coding 
+Setup VIM , Intellij and VS Code
+Enter fresh shell instance and `cd ~/dotfiles && ./setup/setup.sh -c`
+
+== Setup of Misc App Settings 
+Setup App Settings for tmux, SSH, etc
