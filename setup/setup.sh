@@ -294,7 +294,7 @@ install_pkgs() {
 
 setup_go_linux() {
   echo "-- setup_go_linux"
-	local needVersion="1.10.4"
+	local needVersion="1.11.1"
   local gotarbin="go$needVersion.linux-amd64.tar.gz"
   local goroot="/usr/local/go"
 	[[ $hasGo ]] && goVersion=$(go version | cut -d " " -f3)
@@ -305,6 +305,7 @@ setup_go_linux() {
 			curl -L -O -C - https://dl.google.com/go/$gotarbin
 			#[[ -d $goroot ]] && echo "setup_go_linux: $goroot already exists. Skip extraction of $gotarbin" || sudo tar -C /usr/local -zxf $gotarbin
 			[[ -d /usr/local/go ]] && sudo rm -rf /usr/local/go
+      echo "Untarring $gotarbin..."
 			sudo tar -C /usr/local -zxf $gotarbin
 			popd
 			echo "(setup_go_linux) Go has been installed"
@@ -317,7 +318,7 @@ setup_go_linux() {
 
   if [[ $isMacos == true ]]; then
       # TODO check for upgrade option too
-      brew install golang
+      [[ $hasGo ]] && brew upgrade golang || brew install golang
   fi
 }
 
@@ -516,16 +517,6 @@ setup_vim() {
 
 setup_misc() {
   echo "- setup_misc"
-  hasTmux=$(command -v tmux)
-  if [[ $isMacos ]]; then
-    [[ $hasTmux ]] && brew upgrade tmux || brew install tmux
-  fi
-  echo "Linking $trueHome/.tmux.conf to $dotfilesDir/tmux.conf ..."
-  ln $dotfilesDir/tmux.conf $trueHome/.tmux.conf
-  sshCfg=$trueHome/.ssh/config 
-  [[ -f $sshCfg ]] && rm $sshCfg
-  echo "Linking $sshCfg to $dotfilesDir/sshcfg/config ..."
-  ln $dotfilesDir/sshcfg/config $sshCfg
 }
 
 setup_util() {
@@ -572,11 +563,31 @@ setup_util() {
 }
 
 setup_settings() {
+  echo "- setup_settings"
+  hasTmux=$(command -v tmux)
+  if [[ $isMacos ]]; then
+    [[ $hasTmux ]] && brew upgrade tmux || brew install tmux
+  elif [[ $isLinux ]]; then
+    [[ $hasTmux ]] || sudo -E apt-get --yes install tmux
+  else
+    echo "Don't know how to instal tmux for this OS"
+  fi
   if [[ $isMacos ]]; then
     echo "Setting InitialKeyRepeaaat and KeyRepeat"
     defaults write -g KeyRepeat -int 1
     defaults write -g InitialKeyRepeat -int 10
   fi
+
+  tmuxCfg=$trueHome/.tmux.conf
+  [[ -f  $tmuxCfg ]] && rm $tmuxCfg
+  echo "Linking $tmuxCfg to $dotfilesDir/tmux.conf ..."
+  ln $dotfilesDir/tmux.conf $tmuxCfg
+
+  sshCfg=$trueHome/.ssh/config 
+  [[ -f $sshCfg ]] && rm $sshCfg
+  echo "Linking $sshCfg to $dotfilesDir/sshcfg/config ..."
+  ln $dotfilesDir/sshcfg/config $sshCfg
+
 }
 
 setup_sdk() {
