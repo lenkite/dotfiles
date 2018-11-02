@@ -377,7 +377,18 @@ setup_python() {
     pip3 install --upgrade jedi 
   fi
 }
+setup_clojure() {
+  echo "-- setup_clojure"
+  hasClj=$(command -v clj)
+  hasLein=$(command -v lein)
+  if [[ $isMacos ]]; then
+    echo " Installing clojure..."
+    [[ $hasClj ]] && brew upgrade clojure || brew install clojure
+    echo " Installing lein..."
+    [[ $hasLein ]] && brew upgrade leiningen|| brew install leiningen
+  fi
 
+}
 setup_fzf() {
   echo "-- setup_fzf"
   if [[ $hasGit ]]; then
@@ -592,11 +603,12 @@ setup_settings() {
 
 setup_sdk() {
   echo "- setup_sdk"
-  setup_jdk
-  setup_maven
-  setup_go
-  setup_cloud
-  setup_python
+  # setup_jdk
+  # setup_maven
+  # setup_go
+  # setup_cloud
+  # setup_python
+  setup_clojure
 }
 
 setup_zsh() {
