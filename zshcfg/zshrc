@@ -119,8 +119,9 @@ os_specific_aliases() {
   fi
   if [[ "$isWsl" == true ]]; then
     start() {
-      local target_path=$(wslpath -r -s -w $1)
-      (cd /mnt/c && /mnt/c/Windows/explorer.exe $target_path)
+      local targ_path=$(wslpath -wa $1)
+      echo "targetpath is $targ_path"
+      (cd /mnt/c && /mnt/c/Windows/explorer.exe $targ_path)
     }
     compdef start=ls
   fi
