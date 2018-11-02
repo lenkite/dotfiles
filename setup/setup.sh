@@ -47,7 +47,7 @@ shift $((OPTIND-1))
 
 [ $codeSetup ] || [ $pkgSetup ] || [ $miscSetup ] || [ $utilSetup ] || [ $viSetup ] || [ $zshSetup ] || [ $sdkSetup ] || [ $settingsSetup ] || allSetup=true
 
-echo "codeSetup = $codeSetup, sdkSetup = $sdkSetup, viSetup = $viSetup, miscSetup = $miscSetup, zshSetup = $zshSetup, utilSetup = $utilSetup, allSetup=$allSetup"
+echo "codeSetup = $codeSetup, sdkSetup = $sdkSetup, viSetup = $viSetup, miscSetup = $miscSetup, zshSetup = $zshSetup, utilSetup = $utilSetup, settingsSetup = $settingsSetup, allSetup=$allSetup"
 
 setup_main() {
   initialize_vars
@@ -78,7 +78,7 @@ setup_main() {
   [[ $allSetup  || $zshSetup  ]] && setup_zsh
   [[ $viSetup   || $allSetup  ]] && setup_vim
   [[ $sdkSetup  || $allSetup  ]] && setup_sdk
-  [[ $codeSetup || $allSetup  ]] && setup_vscode
+  [[ $codeSetup || $allSetup  ]] && setup_code
   [[ $utilSetup || $allSetup  ]] && setup_util
   [[ $settingsSetup || $allSetup ]] && setup_settings
   [[ $allSetup  || $miscSetup ]] && setup_misc
@@ -377,8 +377,20 @@ setup_python() {
     pip3 install --upgrade jedi 
   fi
 }
+setup_clojure() {
+  echo "-- setup_clojure"
+  hasClj=$(command -v clj)
+  hasLein=$(command -v lein)
+  if [[ $isMacos ]]; then
+    echo " Installing clojure..."
+    [[ $hasClj ]] && brew upgrade clojure || brew install clojure
+    echo " Installing lein..."
+    [[ $hasLein ]] && brew upgrade leiningen|| brew install leiningen
+  fi
 
+}
 setup_fzf() {
+  echo "-- setup_fzf"
   if [[ $hasGit ]]; then
     [[ -d $trueHome/src ]] || mkdir -p $trueHome/src
     [[ -d $trueHome/src/fzf ]] || git -C $trueHome/src clone --depth 1 https://github.com/junegunn/fzf.git
@@ -390,7 +402,7 @@ setup_fzf() {
 }
 
 setup_ctags() {
-  echo "--setup_ctags"
+  echo "-- setup_ctags"
   if [[ $isMacos ]]; then
     # https://github.com/universal-ctags/homebrew-universal-ctags
     brew install --HEAD universal-ctags/universal-ctags/universal-ctags
@@ -480,7 +492,7 @@ setup_rq() {
 
 setup_vim() {
   initialize_vars
-  echo "Setting up vim.."
+  echo "-- setup_vim"
   export dotfilesVimCfgDir=$dotfilesDir/vimcfg
   local nvimConfigDir=$trueHome/.config/nvim
   echo "dotfilesVimCfgDir: $dotfilesVimCfgDir"
@@ -541,6 +553,8 @@ setup_util() {
     go get -u github.com/derekparker/delve/cmd/dlv
     echo "Installing yolo..."
     go get github.com/azer/yolo
+    echo "Installing zlook..."
+    go get github.com/elankath/zlook/cmd/zlook
   else
     echo "WARNING: Go not found or not in PATH. Kindly correct so lovely utilities can be installed"
   fi
@@ -585,15 +599,23 @@ setup_settings() {
   echo "Linking $sshCfg to $dotfilesDir/sshcfg/config ..."
   ln $dotfilesDir/sshcfg/config $sshCfg
 
+  # Setup lein profile
+  [[ -d $trueHome/.lein ]] || mkdir -p $trueHome/.lein
+  local leinCfg=$trueHome/.lein/profiles.clj
+  echo "Linking lein profiles.clj to $leinCfg"
+  [[ -f $leinCfg ]] && rm $leinCfg
+  ln $dotfilesDir/leincfg/profiles.clj $leinCfg
+
 }
 
 setup_sdk() {
   echo "- setup_sdk"
-  setup_jdk
-  setup_maven
-  setup_go
-  setup_cloud
-  setup_python
+  # setup_jdk
+  # setup_maven
+  # setup_go
+  # setup_cloud
+  # setup_python
+  setup_clojure
 }
 
 setup_zsh() {
@@ -668,8 +690,16 @@ setup_zsh() {
   [[ -f $trueHome/.inputrc ]] || ln $trueHome/dotfiles/inputrc $trueHome/.inputrc
 }
 
+
+setup_code() {
+  echo " - setup_code"
+  # setup_vim
+  # setup_vscode
+  setup_intellij
+}
+
 setup_vscode() {
-  echo "Setting up vscode"
+  echo "-- setup_vscode"
   sourceDir=$dotfilesDir/vscode
   if [[ $isMacos == true ]]; then
     targetDir="$HOME/Library/Application Support/Code/User"
@@ -697,6 +727,11 @@ setup_vscode() {
   echo "Executing ln -s $sourceDir/settings.json $targetDir"
   ln -s "$sourceDir/settings.json" "$targetDir"
 }
+
+setup_intellij()  {
+  echo "-- setup_intellij"
+}
+
 
 [[ "${BASH_SOURCE[0]}" != "${0}" ]] && isSetupSourced=true
 

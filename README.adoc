@@ -14,11 +14,6 @@ Removed all dependencies from all ZSH frameworks as they are slow and suck at cr
 - Install link:https://chocolatey.org/[Chocolatey], the fantastic windows package manager for software.
 - If you are on Windows 10 with at-least the Creators Update please install the https://msdn.microsoft.com/commandline/wsl["Windows Subsystem for Linux"] which is also called by the terrible name of "Bash on Ubuntu on Windows". Refer to the https://msdn.microsoft.com/en-us/commandline/wsl/install_guide[Installation Guide]. 
 - After installing WSL, install wsltty for a better console: https://github.com/mintty/wsltty
-- IF you are on an older build of Windows,  install link:Cygwin[http://cygwin.com/]. Cygwin Support will be dropped in the future as Cygwin is slow as hell.
- ** Cygwin: Make sure you install the following cygwin components are selected for installation: `zsh`,`wget`,`curl`, `git`, `zip`, `unzip`.
- ** Cygwin: Change Home Directory to Windows Home Directory. See: https://stackoverflow.com/questions/1494658/how-can-i-change-my-cygwin-home-folder-after-installation. You need to basically add a line `db_home:  /%H` to `/etc/nsswitch.conf`.
- ** Cygwin: Change Shell to ZSH. See https://stackoverflow.com/questions/22363210/set-default-shell-in-cygwin/37815158#37815158. You need to add/edit the line containing `db_shell`.
- ** Cygwin: Install apt-cyg. See https://github.com/transcode-open/apt-cyg
 
 === MacOS 
 - Install link:Homebrew[https://brew.sh/]
@@ -31,6 +26,7 @@ Open a shell and execute the following command:
 ----
 curl -sfL  https://raw.github.com/lenkite/dotfiles/master/setup/setup.sh | bash
 ----
+
 
 == Customize Path and Environment Variables
 === Personal environment variables
@@ -48,4 +44,17 @@ This file is sourced by `~/.zshrc` at the end.
 == autorun Cotributions
 Put your contributions with a `.zsh' extension in `dotfiles/zshcfg/autorun`. These will be sourced by `zshrc`.
 
+== Setup of SDK and Utilities 
+Enter fresh shell instance
+----
+./setup/setup.sh -s # For SDK's
+# Now Exit and Relaunch your Shell
+./setup/setup.sh -u  # For utilities tools
+----
 
+== Setup For Coding 
+Setup VIM , Intellij and VS Code
+Enter fresh shell instance and `cd ~/dotfiles && ./setup/setup.sh -c`
+
+== Setup of Misc App Settings 
+Setup App Settings for tmux, SSH, etc

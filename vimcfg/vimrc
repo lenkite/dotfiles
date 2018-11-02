@@ -171,7 +171,6 @@ autocmd! bufwritepost vimrc source %
 " }
 
 "{ * Plugin List (Assumes you have vim-plug installed!
-"
 call plug#begin('~/.vim/plugged')
 
 " ** Plugins: Tpope: Bracket mappings, surround, commentary, repeat {  
@@ -251,10 +250,10 @@ Plug 'python-mode/python-mode', { 'branch': 'develop' }
 Plug 'guns/vim-clojure-static' "Syntax highlighting for clojure
 Plug 'guns/vim-clojure-highlight' "Extended highlighting.
 Plug 'guns/vim-sexp' 
+Plug 'tpope/vim-sexp-mappings-for-regular-people'
 Plug 'bhurlow/vim-parinfer' 
 Plug 'markwoodhall/vim-figwheel'
 "}
-
 
 " ** Plugins: Search {
 Plug 'mhinz/vim-grepper'
@@ -280,6 +279,14 @@ Plug 'rafi/awesome-vim-colorschemes'
 
 " ** Table Alignment and Editing Plugins {
 Plug 'junegunn/vim-easy-align'
+" }
+
+" ** Shell,Terminal, Dispatch {
+Plug 'tpope/vim-dispatch/'
+if has('nvim')
+  Plug 'radenling/vim-dispatch-neovim'
+endif
+
 " }
 
 " { ** Misc Plugins: Light weight status line. airline/powerline suck
