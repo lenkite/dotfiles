@@ -47,7 +47,7 @@ shift $((OPTIND-1))
 
 [ $codeSetup ] || [ $pkgSetup ] || [ $miscSetup ] || [ $utilSetup ] || [ $viSetup ] || [ $zshSetup ] || [ $sdkSetup ] || [ $settingsSetup ] || allSetup=true
 
-echo "codeSetup = $codeSetup, sdkSetup = $sdkSetup, viSetup = $viSetup, miscSetup = $miscSetup, zshSetup = $zshSetup, utilSetup = $utilSetup, allSetup=$allSetup"
+echo "codeSetup = $codeSetup, sdkSetup = $sdkSetup, viSetup = $viSetup, miscSetup = $miscSetup, zshSetup = $zshSetup, utilSetup = $utilSetup, settingsSetup = $settingsSetup, allSetup=$allSetup"
 
 setup_main() {
   initialize_vars
@@ -598,6 +598,13 @@ setup_settings() {
   [[ -f $sshCfg ]] && rm $sshCfg
   echo "Linking $sshCfg to $dotfilesDir/sshcfg/config ..."
   ln $dotfilesDir/sshcfg/config $sshCfg
+
+  # Setup lein profile
+  [[ -d $trueHome/.lein ]] || mkdir -p $trueHome/.lein
+  local leinCfg=$trueHome/.lein/profiles.clj
+  echo "Linking lein profiles.clj to $leinCfg"
+  [[ -f $leinCfg ]] && rm $leinCfg
+  ln $dotfilesDir/leincfg/profiles.clj $leinCfg
 
 }
 

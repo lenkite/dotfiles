@@ -250,6 +250,7 @@ Plug 'python-mode/python-mode', { 'branch': 'develop' }
 Plug 'guns/vim-clojure-static' "Syntax highlighting for clojure
 Plug 'guns/vim-clojure-highlight' "Extended highlighting.
 Plug 'guns/vim-sexp' 
+Plug 'tpope/vim-sexp-mappings-for-regular-people'
 Plug 'bhurlow/vim-parinfer' 
 Plug 'markwoodhall/vim-figwheel'
 "}
