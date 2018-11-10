@@ -163,6 +163,9 @@ if has('nvim')
   let $VISUAL = 'nvr -cc split --remote-wait'
   set shell=/bin/zsh
   let $LC_ALL='C'
+  "Hit double escape to get out of terminal mode. Umm no this messes up fzf
+  "escape
+	"tnoremap <Esc><Esc> <C-\><C-n> 
 endif
 " }
 
@@ -251,8 +254,10 @@ Plug 'guns/vim-clojure-static' "Syntax highlighting for clojure
 Plug 'guns/vim-clojure-highlight' "Extended highlighting.
 Plug 'guns/vim-sexp' 
 Plug 'tpope/vim-sexp-mappings-for-regular-people'
+Plug 'tpope/vim-salve'
 Plug 'bhurlow/vim-parinfer' 
 Plug 'markwoodhall/vim-figwheel'
+Plug 'gberenfield/cljfold.vim'
 "}
 
 " ** Plugins: Search {
@@ -642,7 +647,7 @@ let g:user_emmet_leader_key = '<C-y>'
 " }
 
 " * Configure: Clojure/Clojurescript {
-au FileType clojure :command! PiggyDear Piggieback (figwheel-sidecar.repl-api/repl-env)   
+"au FileType clojure :command! PiggyDear Piggieback (figwheel-sidecar.repl-api/repl-env)   
 " }
 "
 "{ * MISC GLOBAL Variables 
