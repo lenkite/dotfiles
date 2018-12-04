@@ -1,4 +1,4 @@
-" vim: set sw=2 ts=2 sts=2 et tw=80 foldmarker={,} foldlevel=0 foldmethod=marker spell:
+" vim: set sw=2 ts=2 sts=2 et tw=80 foldmarker={,} foldlevel=1 foldmethod=marker spell:
 
 " NOTE {
 "   Tarun Ramakrishna Elankath's vimrc file. Been using VIM for 12 years now. 
@@ -99,8 +99,8 @@ set showcmd                    " Show incomplete cmds down the bottom
 
 "{ * Folds 
 ""
-set foldnestmax=3       "deepest fold is 3 levels
-set foldlevel=0
+" set foldnestmax=1       "deepest fold is 2 levels
+" set foldlevel=0
 " }
 
  " * { Syntax, Spelling and Completion 
@@ -178,6 +178,7 @@ call plug#begin('~/.vim/plugged')
 
 " ** Plugins: Tpope: Bracket mappings, surround, commentary, repeat {  
 Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
@@ -198,15 +199,13 @@ Plug 'ervandew/supertab'
 Plug 'mdempsky/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
 Plug 'mattn/emmet-vim'
 if has('nvim')
+  " Plug 'autozimu/LanguageClient-neovim', {
+			" \ 'branch': 'next',
+			" \ 'do': 'bash install.sh',
+			" \ }
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   Plug 'zchee/deoplete-go', { 'do': 'make'}
   Plug 'zchee/deoplete-jedi'
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-  Plug 'sebdah/vim-delve'
-  Plug 'Shougo/vimshell'
 endif
 "}
 
@@ -245,6 +244,7 @@ Plug 'leafgarland/typescript-vim'
 Plug 'ap/vim-css-color' "highlights CSS colors
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }}
 Plug 'shime/vim-livedown'
 Plug 'vim-scripts/SyntaxRange'
 Plug 'python-mode/python-mode', { 'branch': 'develop' }
@@ -255,9 +255,12 @@ Plug 'guns/vim-clojure-highlight' "Extended highlighting.
 Plug 'guns/vim-sexp' 
 Plug 'tpope/vim-sexp-mappings-for-regular-people'
 Plug 'tpope/vim-salve'
-Plug 'bhurlow/vim-parinfer' 
 Plug 'markwoodhall/vim-figwheel'
 Plug 'gberenfield/cljfold.vim'
+"Plug 'bhurlow/vim-parinfer'
+Plug 'eraserhd/parinfer-rust', {'do':
+        \  'cargo build --release'}
+Plug 'luochen1990/rainbow'
 "}
 
 " ** Plugins: Search {
@@ -339,7 +342,7 @@ noremap Y y$
 " Make Ctrl-e jump to the end of the current line in the insert mode. This is
 " handy when you are in the middle of a line and would like to go to its end
 " without switching to the normal mode.
-inoremap <C-e> <C-o>$
+"inoremap <C-e> <C-o>$ "Tpops vim-rsi plugin now handles this.
 
 "Window management Commands
 "https://robots.thoughtbot.com/vim-splits-move-faster-and-more-naturally
@@ -469,7 +472,6 @@ imap <expr><CR> <SID>neosnippet_complete()
 smap <expr><CR> <SID>neosnippet_complete()
 "smap <expr><TAB> <SID>neosnippet_complete()
 
-
 " }
 
 " { * Configure: incsearch
@@ -536,6 +538,20 @@ endfunction
 autocmd FileType asciidoc call ConfigureAsciidoc()
 " }
 
+" { * Configure Lang Client/Server
+function! ConfigureLangClient()
+  au FileType rust nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+  au FileType rust nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+  au FileType ruls nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+endfunction
+let g:LanguageClient_serverCommands = {
+      \ 'rust': ['rustup', 'run', 'stable', 'rls'],
+      \ }
+" Automatically start language servers.
+let g:LanguageClient_autoStart = 1
+autocmd FileType rust call ConfigureLangClient()
+" }
+
 " { * Configure Rust Lang
 "Set the compiler as cargo for rust files
 autocmd BufRead,BufNewFile Cargo.toml,Cargo.lock,*.rs compiler cargo
@@ -575,9 +591,12 @@ let g:go_highlight_operators = 1
 let g:go_highlight_structs = 1
 let g:go_highlight_types = 1
 
-"Deoplete Configuration
+" { * Completion Configuration
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#num_processes = 1
+let g:SuperTabDefaultCompletionType = "<c-n>"
+"}
+
 
 " " Error and warning signs.
 " let g:ale_sign_error = '⤫'
@@ -648,6 +667,11 @@ let g:user_emmet_leader_key = '<C-y>'
 
 " * Configure: Clojure/Clojurescript {
 "au FileType clojure :command! PiggyDear Piggieback (figwheel-sidecar.repl-api/repl-env)   
+au FileType clojure noremap <C-]> <Plug>FireplaceDjump 
+au FileType clojure noremap <C-T> <C-O>
+au FileType clojure let g:rainbow_active = 1 
+au FileType clojure set showmatch
+
 " }
 "
 "{ * MISC GLOBAL Variables 
