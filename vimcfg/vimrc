@@ -127,6 +127,11 @@ set wildignore+=.idea/**
 
 set spelllang=en
 set spellfile=~/dotfiles/spell/en.utf-8.add
+
+" suppress the annoying 'match x of y', 'The only match' and 'Pattern not found' messages
+set shortmess+=c
+    " IMPORTANTE: :help Ncm2PopupOpen for more information
+    set completeopt=noinsert,menuone,noselect
 "} 
 
 " { * Clipboard
@@ -184,6 +189,8 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-fireplace' "nREPL
+Plug 'tpope/vim-vinegar' "on recommendation from https://martin-ueding.de/articles/cpp-with-vim/index.html
+Plug 'tpope/vim-apathy'
 "}
 
 " ** Plugins: Buffer, Window, Sessions {
@@ -193,19 +200,29 @@ Plug 'christoomey/vim-tmux-navigator' "https://blog.bugsnag.com/tmux-and-vim/
 " }
 
 " ** Plugins: Completion And Snippets {
-Plug 'Shougo/neosnippet'
-Plug 'Shougo/neosnippet-snippets'
+" Plug 'Shougo/neosnippet' "commented out due to problem with LanguageClient
+" Plug 'Shougo/neosnippet-snippets'
+Plug 'SirVer/ultisnips'  "since LanguageClient only supports this and causes problemsiwth neosnippet
 Plug 'ervandew/supertab'
+Plug 'honza/vim-snippets'
 Plug 'mdempsky/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
 Plug 'mattn/emmet-vim'
 if has('nvim')
-  " Plug 'autozimu/LanguageClient-neovim', {
-			" \ 'branch': 'next',
-			" \ 'do': 'bash install.sh',
-			" \ }
+  Plug 'autozimu/LanguageClient-neovim', {
+			\ 'branch': 'next',
+			\ 'do': 'bash install.sh',
+			\ }
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   Plug 'zchee/deoplete-go', { 'do': 'make'}
   Plug 'zchee/deoplete-jedi'
+  Plug 'Shougo/deoppet.nvim', { 'do': ':UpdateRemotePlugins' }
+  " Plug 'ncm2/ncm2'
+  " Plug 'roxma/nvim-yarp'
+  " Plug 'ncm2/ncm2-bufword'
+  " Plug 'ncm2/ncm2-path'
+  " Plug 'ncm2/ncm2-jedi'
+  " Plug 'ncm2/ncm2-go'
+  " Plug 'mhartington/nvim-typescript'
 endif
 "}
 
@@ -454,25 +471,6 @@ let g:rooter_use_lcd = 1
 
 " }
 
-" { * Neosnippet Config
-" https://computableverse.com/blog/my-terminal-setup
-
-
-" I want to use my tab more smarter. If we are inside a completion menu jump
-" to the next item. Otherwise check if there is any snippet to expand, if yes
-"  expand it. Also if inside a snippet and we need to jump tab jumps. If none
-"  of the above matches we just call our usual 'tab'.
-function! s:neosnippet_complete()
-  if neosnippet#expandable_or_jumpable() 
-    return "\<Plug>(neosnippet_expand_or_jump)"
-  endif
-  return "\<CR>"
-endfunction
-imap <expr><CR> <SID>neosnippet_complete()
-smap <expr><CR> <SID>neosnippet_complete()
-"smap <expr><TAB> <SID>neosnippet_complete()
-
-" }
 
 " { * Configure: incsearch
 "From https://github.com/haya14busa/incsearch.vim
@@ -540,16 +538,30 @@ autocmd FileType asciidoc call ConfigureAsciidoc()
 
 " { * Configure Lang Client/Server
 function! ConfigureLangClient()
+  set completefunc=LanguageClient#complete
+  set formatexpr=LanguageClient_textDocument_rangeFormatting()
   au FileType rust nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
   au FileType rust nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
   au FileType ruls nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+  au FileType ruls nnoremap <silent> <leader> :r LanguageClient#textDocument_rename()<CR>
+  nnoremap <silent> gh :call LanguageClient#textDocument_hover()<CR>
+  nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+  nnoremap <silent> gr :call LanguageClient#textDocument_references()<CR>
+  nnoremap <silent> gs :call LanguageClient#textDocument_documentSymbol()<CR>
+  nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
 endfunction
-let g:LanguageClient_serverCommands = {
-      \ 'rust': ['rustup', 'run', 'stable', 'rls'],
-      \ }
-" Automatically start language servers.
-let g:LanguageClient_autoStart = 1
-autocmd FileType rust call ConfigureLangClient()
+if has('nvim')
+  let g:LanguageClient_serverCommands = {
+        \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
+        \ 'cpp': ['cquery', '--log-file=/tmp/cq.log'],
+        \ 'c': ['cquery', '--log-file=/tmp/cq.log'],
+        \ }
+  " Automatically start language servers.
+  let g:LanguageClient_autoStart = 1
+  let g:LanguageClient_loadSettings = 1
+  let g:LanguageClient_settingsPath  = expand('~/dotfiles/cquery_settings.json')
+  autocmd FileType rust,cpp,python call ConfigureLangClient()
+endif
 " }
 
 " { * Configure Rust Lang
@@ -592,9 +604,37 @@ let g:go_highlight_structs = 1
 let g:go_highlight_types = 1
 
 " { * Completion Configuration
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#num_processes = 1
-let g:SuperTabDefaultCompletionType = "<c-n>"
+ let g:deoplete#enable_at_startup = 1
+ let g:deoplete#num_processes = 1
+ let g:SuperTabDefaultCompletionType = "<c-n>"  "https://stackoverflow.com/questions/17104861/vim-supertab-plugin-reverses-the-direction-when-navigating-completion-menu
+
+" from https://github.com/ncm2/ncm2
+" Use <TAB> to select the popup menu:
+" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+if has('nvim')
+  " wrap existing omnifunc
+  " Note that omnifunc does not run in background and may probably block the
+  " editor. If you don't want to be blocked by omnifunc too often, you could
+  " add 180ms delay before the omni wrapper:
+  "  'on_complete': ['ncm2#on_complete#delay', 180,
+  "               \ 'ncm2#on_complete#omni', 'csscomplete#CompleteCSS'],
+  
+  " au User Ncm2Plugin call ncm2#register_source({
+  "       \ 'name' : 'css',
+  "       \ 'priority': 9, 
+  "       \ 'subscope_enable': 1,
+  "       \ 'scope': ['css','scss'],
+  "       \ 'mark': 'css',
+  "       \ 'word_pattern': '[\w\-]+',
+  "       \ 'complete_pattern': ':\s*',
+  "       \ 'on_complete': ['ncm2#on_complete#omni', 'csscomplete#CompleteCSS'],
+  "       \ })
+  " " enable ncm2 for all buffers
+  "  autocmd BufEnter * if exists("ncm2") | call ncm2#enable_for_buffer() | endif
+endif
+
 "}
 
 
@@ -694,6 +734,40 @@ try
 catch
 endtry
 
+
+let g:ulti_expand_res = 0 "default value, just set once
+function! CompleteSnippet()
+  if empty(v:completed_item)
+    return
+  endif
+
+  call UltiSnips#ExpandSnippet()
+  if g:ulti_expand_res > 0
+    return
+  endif
+  
+  let l:complete = type(v:completed_item) == v:t_dict ? v:completed_item.word : v:completed_item
+  let l:comp_len = len(l:complete)
+
+  let l:cur_col = mode() == 'i' ? col('.') - 2 : col('.') - 1
+  let l:cur_line = getline('.')
+
+  let l:start = l:comp_len <= l:cur_col ? l:cur_line[:l:cur_col - l:comp_len] : ''
+  let l:end = l:cur_col < len(l:cur_line) ? l:cur_line[l:cur_col + 1 :] : ''
+
+  call setline('.', l:start . l:end)
+  call cursor('.', l:cur_col - l:comp_len + 2)
+
+  call UltiSnips#Anon(l:complete)
+endfunction
+autocmd CompleteDone * call CompleteSnippet()
+
+imap <silent><expr> <tab> pumvisible() ? "\<c-y>" : "\<tab>"
+
+let g:UltiSnipsExpandTrigger="<NUL>"
+let g:UltiSnipsListSnippets="<NUL>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 
 
 
