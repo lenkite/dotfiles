@@ -242,7 +242,7 @@ gh_download_linux_release() {
 install_pkgs() {
  echo "- (install_pkgs) Installing packages..."
  if [[ $isMacos == true ]]; then
-  brew install zsh git the_silver_searcher fortune cowsay python3 leiningen nodejs go 
+  brew install zsh git the_silver_searcher fortune cowsay python3 leiningen nodejs go rlwrap yarn
   brew install --HEAD neovim
    sudo easy_install pip 
  elif [[ $isLinux == true ]]; then
@@ -253,9 +253,9 @@ install_pkgs() {
   curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
   sudo apt-get install -y nodejs
   # END : Nodejs install
-  sudo -E apt-get --yes install git curl zsh silversearcher-ag netcat-openbsd dh-autoreconf\
-    autoconf pkg-config tmux fortune-mod cowsay zip unzip python3 python3-pip ruby\
-    vim neovim nodejs rar unrar oracle-java8-installer
+  sudo -E apt-get --yes install git curl zsh silversearcher-ag netcat-openbsd dh-autoreconf \
+    autoconf pkg-config tmux fortune-mod cowsay zip unzip python3 python3-pip ruby \
+    vim neovim nodejs rar unrar oracle-java8-installer rlwrap yarn
   sudo apt-get -y autoremove
  elif [[ $isCygwin == true ]]; then
    if [[ -f /tmp/apt-cyg ]]; then
@@ -587,7 +587,7 @@ setup_settings() {
   if [[ $isMacos ]]; then
     echo "Setting InitialKeyRepeaaat and KeyRepeat"
     defaults write -g KeyRepeat -int 1
-    defaults write -g InitialKeyRepeat -int 10
+    defaults write -g InitialKeyRepeat -int 12
   fi
 
   tmuxCfg=$trueHome/.tmux.conf
