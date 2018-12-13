@@ -295,7 +295,7 @@ install_pkgs() {
 
 setup_go_linux() {
   echo "-- setup_go_linux"
-	local needVersion="1.11.1"
+	local needVersion="1.11.2"
   local gotarbin="go$needVersion.linux-amd64.tar.gz"
   local goroot="/usr/local/go"
 	[[ $hasGo ]] && goVersion=$(go version | cut -d " " -f3)
