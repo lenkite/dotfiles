@@ -525,6 +525,7 @@ setup_vim() {
   else
     echo "WARN: can't find pip3!"
   fi
+  vim +PlugInstall +qall
 }
 
 setup_misc() {

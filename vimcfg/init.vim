@@ -118,7 +118,12 @@ Plug 'leafgarland/typescript-vim'
 Plug 'ap/vim-css-color' "highlights CSS colors
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }}
+
+if executable("yarn") 
+  Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
+else
+  Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }}
+endif
 Plug 'shime/vim-livedown'
 Plug 'vim-scripts/SyntaxRange'
 Plug 'python-mode/python-mode', { 'branch': 'develop' }
@@ -551,6 +556,8 @@ omap T <Plug>Sneak_T
 " }
 
 " * Configure: EasyAlign {
+" Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
+vmap <Enter> <Plug>(EasyAlign)
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
@@ -572,6 +579,7 @@ au FileType clojure noremap <C-]> <Plug>FireplaceDjump
 au FileType clojure noremap <C-T> <C-O>
 au FileType clojure let g:rainbow_active = 1 
 au FileType clojure set showmatch
+let g:salve_auto_start_repl=1
 
 " }
 "

@@ -1,0 +1,14 @@
+<keymap name="TarunsMacOSXKeyMap" parent="Mac OS X 10.5+" version="1" disable-mnemonics="true">
+  <action id="GotoFile">
+    <keyboard-shortcut first-keystroke="meta P"/>
+  </action>
+  <action id="GotoClass">
+    <keyboard-shortcut first-keystroke="meta shift P"/>
+  </action>
+  <action id="GotoSymbol">
+    <keyboard-shortcut first-keystroke="meta shift O"/>
+  </action>
+  <action id="GotoRelated">
+    <keyboard-shortcut first-keystroke="meta meta UP"/>
+  </action>
+</keymap>

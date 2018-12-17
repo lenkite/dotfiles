@@ -1,0 +1,7 @@
+#!/bin/bash
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+pushd $SCRIPT_DIR/..
+jar cf settings.jar -C intellij-settings . &&  \
+      echo "Created settings.jar" && \
+      [[ -d /tmp ]] && cp settings.jar /tmp && echo "Also copied settings.jar to /tmp"
+popd
