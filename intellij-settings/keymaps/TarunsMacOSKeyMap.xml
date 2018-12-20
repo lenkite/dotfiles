@@ -1,14 +1,197 @@
-<keymap name="TarunsMacOSXKeyMap" parent="Mac OS X 10.5+" version="1" disable-mnemonics="true">
-  <action id="GotoFile">
-    <keyboard-shortcut first-keystroke="meta P"/>
+<keymap version="1" name="TarunsMacOSXKeyMap" parent="Mac OS X 10.5+">
+  <action id=":cursive.actions.paredit/backward">
+    <keyboard-shortcut first-keystroke="meta left" />
   </action>
+  <action id=":cursive.repl.actions/load-file" />
+  <action id=":cursive.repl.actions/switch-namespace" />
+  <action id=":cursive.repl.actions/sync-files" />
+  <action id="Back">
+    <keyboard-shortcut first-keystroke="meta open_bracket" />
+    <keyboard-shortcut first-keystroke="ctrl o" />
+  </action>
+  <action id="ChangesView.GroupBy.Directory" />
+  <action id="ChangesView.Move" />
+  <action id="ChooseDebugConfiguration">
+    <keyboard-shortcut first-keystroke="shift f10" />
+  </action>
+  <action id="ChooseRunConfiguration">
+    <keyboard-shortcut first-keystroke="shift f9" />
+  </action>
+  <action id="CommentByBlockComment">
+    <keyboard-shortcut first-keystroke="shift ctrl slash" />
+  </action>
+  <action id="CommentByLineComment">
+    <keyboard-shortcut first-keystroke="ctrl slash" />
+  </action>
+  <action id="Compile" />
+  <action id="CompileDirty">
+    <keyboard-shortcut first-keystroke="meta b" second-keystroke="b" />
+  </action>
+  <action id="CompileProject">
+    <keyboard-shortcut first-keystroke="meta b" second-keystroke="r" />
+  </action>
+  <action id="Console.Execute.Multiline" />
+  <action id="Console.Jdbc.Execute" />
+  <action id="Coverage">
+    <keyboard-shortcut first-keystroke="ctrl f9" />
+  </action>
+  <action id="DatabaseView.PropertiesAction" />
+  <action id="Debug">
+    <keyboard-shortcut first-keystroke="f10" />
+  </action>
+  <action id="DebugClass" />
+  <action id="DirDiffMenu.SynchronizeDiff.All" />
+  <action id="EditorContextInfo">
+    <keyboard-shortcut first-keystroke="shift meta i" />
+  </action>
+  <action id="EditorSelectWord">
+    <keyboard-shortcut first-keystroke="meta t" />
+  </action>
+  <action id="EditorSplitLine" />
+  <action id="EditorToggleCase" />
+  <action id="EditorUnSelectWord">
+    <keyboard-shortcut first-keystroke="shift meta t" />
+  </action>
+  <action id="ExportToTextFile" />
+  <action id="FileChooser.TogglePathShowing" />
+  <action id="FileStructurePopup">
+    <keyboard-shortcut first-keystroke="shift meta o" />
+  </action>
+  <action id="FindUsages">
+    <keyboard-shortcut first-keystroke="shift meta u" />
+  </action>
+  <action id="FindUsagesInFile" />
+  <action id="Forward">
+    <keyboard-shortcut first-keystroke="meta close_bracket" />
+    <keyboard-shortcut first-keystroke="ctrl i" />
+  </action>
+  <action id="Generate.Missing.Members.ES6" />
+  <action id="Generate.Missing.Members.TypeScript" />
+  <action id="GotoChangedFile" />
   <action id="GotoClass">
-    <keyboard-shortcut first-keystroke="meta shift P"/>
+    <keyboard-shortcut first-keystroke="shift meta p" />
   </action>
-  <action id="GotoSymbol">
-    <keyboard-shortcut first-keystroke="meta shift O"/>
+  <action id="GotoDeclaration">
+    <mouse-shortcut keystroke="meta button1" />
+    <mouse-shortcut keystroke="button2" />
+  </action>
+  <action id="GotoFile">
+    <keyboard-shortcut first-keystroke="meta p" />
+  </action>
+  <action id="GotoImplementation">
+    <keyboard-shortcut first-keystroke="shift ctrl close_bracket" />
+  </action>
+  <action id="GotoLine" />
+  <action id="GotoNamespace" />
+  <action id="GotoNextError">
+    <keyboard-shortcut first-keystroke="ctrl comma" />
+  </action>
+  <action id="GotoPreviousError">
+    <keyboard-shortcut first-keystroke="shift ctrl comma" />
   </action>
   <action id="GotoRelated">
-    <keyboard-shortcut first-keystroke="meta meta UP"/>
+    <keyboard-shortcut first-keystroke="ctrl meta o" />
+  </action>
+  <action id="GotoSuperMethod">
+    <keyboard-shortcut first-keystroke="shift meta y" />
+  </action>
+  <action id="GotoSymbol">
+    <keyboard-shortcut first-keystroke="ctrl meta p" />
+  </action>
+  <action id="GotoTest" />
+  <action id="GotoTypeDeclaration">
+    <mouse-shortcut keystroke="shift meta button1" />
+    <mouse-shortcut keystroke="shift button2" />
+  </action>
+  <action id="Groovy.Shell.Execute" />
+  <action id="HighlightUsagesInFile" />
+  <action id="HippieBackwardCompletion">
+    <keyboard-shortcut first-keystroke="shift meta slash" />
+  </action>
+  <action id="HippieCompletion">
+    <keyboard-shortcut first-keystroke="meta slash" />
+  </action>
+  <action id="Images.Editor.ActualSize">
+    <keyboard-shortcut first-keystroke="meta divide" />
+  </action>
+  <action id="Images.ShowThumbnails" />
+  <action id="ImplementMethods" />
+  <action id="Jdbc.OpenEditor.DDL">
+    <mouse-shortcut keystroke="meta button1" />
+    <mouse-shortcut keystroke="button2" />
+  </action>
+  <action id="KotlinShellExecute" />
+  <action id="MakeModule">
+    <keyboard-shortcut first-keystroke="meta b" second-keystroke="m" />
+  </action>
+  <action id="MethodHierarchy.OverrideMethodAction" />
+  <action id="NewElementSamePlace">
+    <keyboard-shortcut first-keystroke="shift meta n" />
+  </action>
+  <action id="NewScratchFile" />
+  <action id="OpenFile">
+    <keyboard-shortcut first-keystroke="meta o" />
+  </action>
+  <action id="OptimizeImports">
+    <keyboard-shortcut first-keystroke="shift ctrl o" />
+  </action>
+  <action id="OverrideMethods" />
+  <action id="ParameterInfo">
+    <keyboard-shortcut first-keystroke="meta i" />
+  </action>
+  <action id="QuickImplementations">
+    <keyboard-shortcut first-keystroke="shift ctrl d" />
+  </action>
+  <action id="ReformatCode">
+    <keyboard-shortcut first-keystroke="shift meta m" />
+  </action>
+  <action id="Replace">
+    <keyboard-shortcut first-keystroke="meta l" />
+  </action>
+  <action id="ReplaceInPath">
+    <keyboard-shortcut first-keystroke="shift meta l" />
+  </action>
+  <action id="Resume">
+    <keyboard-shortcut first-keystroke="meta alt r" />
+  </action>
+  <action id="Run">
+    <keyboard-shortcut first-keystroke="f9" />
+  </action>
+  <action id="RunDashboard.Debug" />
+  <action id="RunDashboard.ShowConfigurations" />
+  <action id="ShelveChanges.UnshelveWithDialog" />
+  <action id="ShowIntentionActions">
+    <keyboard-shortcut first-keystroke="meta enter" />
+  </action>
+  <action id="ShowRecentFindUsagesGroup">
+    <keyboard-shortcut first-keystroke="ctrl meta u" />
+  </action>
+  <action id="ShowReformatFileDialog">
+    <keyboard-shortcut first-keystroke="shift ctrl m" />
+  </action>
+  <action id="ShowSettingsAndFindUsages" />
+  <action id="ShowUsages">
+    <keyboard-shortcut first-keystroke="meta u" />
+  </action>
+  <action id="SurroundWith">
+    <keyboard-shortcut first-keystroke="meta y" />
+  </action>
+  <action id="ToggleLineBreakpoint">
+    <keyboard-shortcut first-keystroke="shift ctrl b" />
+  </action>
+  <action id="ToggleMethodBreakpoint">
+    <keyboard-shortcut first-keystroke="shift meta b" />
+  </action>
+  <action id="ToggleTemporaryLineBreakpoint" />
+  <action id="UML.ActualSize">
+    <keyboard-shortcut first-keystroke="meta divide" />
+  </action>
+  <action id="Vcs.Log.FocusTextFilter" />
+  <action id="Vcs.MoveChangedLinesToChangelist" />
+  <action id="Vcs.UpdateProject" />
+  <action id="ViewBreakpoints" />
+  <action id="ViewSource" />
+  <action id="XDebugger.AttachToProcess">
+    <keyboard-shortcut first-keystroke="ctrl f10" />
   </action>
 </keymap>
