@@ -74,6 +74,10 @@ if has('nvim')
   Plug 'zchee/deoplete-jedi'
   Plug 'Shougo/deoppet.nvim', { 'do': ':UpdateRemotePlugins' }
   Plug 'roxma/nvim-yarp'
+  Plug 'davidhalter/jedi-vim'
+  Plug 'machakann/vim-highlightedyank'
+  Plug 'tmhedberg/SimpylFold'
+
   " Plug 'ncm2/ncm2'
   " Plug 'ncm2/ncm2-bufword'
   " Plug 'ncm2/ncm2-path'
@@ -415,6 +419,7 @@ function! ConfigureLangClient()
   nnoremap <silent> gr :call LanguageClient#textDocument_references()<CR>
   nnoremap <silent> gs :call LanguageClient#textDocument_documentSymbol()<CR>
   nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+
 endfunction
 if has('nvim')
   let g:LanguageClient_serverCommands = {
@@ -426,7 +431,14 @@ if has('nvim')
   let g:LanguageClient_autoStart = 1
   let g:LanguageClient_loadSettings = 1
   let g:LanguageClient_settingsPath  = expand('~/dotfiles/cquery_settings.json')
+  " disable autocompletion, cause we use deoplete for completion
+  let g:jedi#completions_enabled = 0
+
+  " open the go-to function in split, not another buffer
+  let g:jedi#use_splits_not_buffers = "right"
   autocmd FileType rust,cpp,python call ConfigureLangClient()
+  " https://jdhao.github.io/2018/12/24/centos_nvim_install_use_guide_en/
+  hi HighlightedyankRegion cterm=reverse gui=reverse
 endif
 " }
 
