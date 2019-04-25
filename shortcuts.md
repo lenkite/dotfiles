@@ -36,7 +36,7 @@ the right keymap.
  explicitly enabled for Intellij. See
  https://medium.com/@geapi/permanent-function-keys-intellij-macbook-pro-w-touchbar-d6fc78781b90.
  Also do the same for the `Terminal` app so that youc an use `Fn` Keys inside
- the terminal.
+ the terminal. It might be necessary to restart program after enabling this.
 
  Open `Preferences` (via `Cmd-,`.), Navigate to `Keymap` and select `Always
  show function keys`. Please _un-install_ the _Karabiner Elements_ app as it prevents use
@@ -152,7 +152,11 @@ the right keymap.
 | (Attach only works for Go atm) |                    |                    |                 |
 | _Breakpoints/Stepping_         |                    |                    |                 |
 | Toggle Line Breakpoint         | `Ctrl-S-B`         | same               | same            |
-| Toggle Method Breakpoint       | `Cmd-S-B`          | `Alt-S-B`          |                 |
+| Toggle Method Breakpoint       | `Cmd-S-B`          | `Alt-S-B`          | same            |
+| Step Over                      | `F6`               | same               | same            |
+| Step Over                      | `F6`               | same               | same            |
+         
+
 
 ## Generation
 
