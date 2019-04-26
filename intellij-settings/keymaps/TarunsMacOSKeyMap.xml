@@ -32,9 +32,11 @@
   </action>
   <action id="Console.Execute.Multiline" />
   <action id="Console.Jdbc.Execute" />
+  <action id="CopyElement" />
   <action id="Coverage">
     <keyboard-shortcut first-keystroke="ctrl f9" />
   </action>
+  <action id="DatabaseView.CopyTable" />
   <action id="DatabaseView.PropertiesAction" />
   <action id="Debug">
     <keyboard-shortcut first-keystroke="f10" />
@@ -61,12 +63,21 @@
     <keyboard-shortcut first-keystroke="shift meta u" />
   </action>
   <action id="FindUsagesInFile" />
+  <action id="ForceStepInto">
+    <keyboard-shortcut first-keystroke="ctrl f5" />
+  </action>
+  <action id="ForceStepOver">
+    <keyboard-shortcut first-keystroke="ctrl f6" />
+  </action>
   <action id="Forward">
     <keyboard-shortcut first-keystroke="meta close_bracket" />
     <keyboard-shortcut first-keystroke="ctrl i" />
   </action>
   <action id="Generate.Missing.Members.ES6" />
   <action id="Generate.Missing.Members.TypeScript" />
+  <action id="Git.Reword.Commit">
+    <keyboard-shortcut first-keystroke="f2" />
+  </action>
   <action id="GotoChangedFile" />
   <action id="GotoClass">
     <keyboard-shortcut first-keystroke="shift meta p" />
@@ -125,10 +136,12 @@
     <keyboard-shortcut first-keystroke="meta b" second-keystroke="m" />
   </action>
   <action id="MethodHierarchy.OverrideMethodAction" />
+  <action id="Move" />
   <action id="NewElementSamePlace">
     <keyboard-shortcut first-keystroke="shift meta n" />
   </action>
   <action id="NewScratchFile" />
+  <action id="NextDiff" />
   <action id="OpenFile">
     <keyboard-shortcut first-keystroke="meta o" />
   </action>
@@ -142,8 +155,15 @@
   <action id="QuickImplementations">
     <keyboard-shortcut first-keystroke="shift ctrl d" />
   </action>
+  <action id="Refactorings.QuickListPopupAction">
+    <keyboard-shortcut first-keystroke="shift meta r" />
+  </action>
   <action id="ReformatCode">
     <keyboard-shortcut first-keystroke="shift meta m" />
+  </action>
+  <action id="Refresh" />
+  <action id="RenameElement">
+    <keyboard-shortcut first-keystroke="meta r" />
   </action>
   <action id="Replace">
     <keyboard-shortcut first-keystroke="meta l" />
@@ -151,8 +171,9 @@
   <action id="ReplaceInPath">
     <keyboard-shortcut first-keystroke="shift meta l" />
   </action>
+  <action id="Rerun" />
   <action id="Resume">
-    <keyboard-shortcut first-keystroke="meta alt r" />
+    <keyboard-shortcut first-keystroke="f8" />
   </action>
   <action id="Run">
     <keyboard-shortcut first-keystroke="f9" />
@@ -160,6 +181,9 @@
   <action id="RunDashboard.Debug" />
   <action id="RunDashboard.ShowConfigurations" />
   <action id="ShelveChanges.UnshelveWithDialog" />
+  <action id="ShelvedChanges.Rename">
+    <keyboard-shortcut first-keystroke="f2" />
+  </action>
   <action id="ShowIntentionActions">
     <keyboard-shortcut first-keystroke="meta enter" />
   </action>
@@ -172,6 +196,18 @@
   <action id="ShowSettingsAndFindUsages" />
   <action id="ShowUsages">
     <keyboard-shortcut first-keystroke="meta u" />
+  </action>
+  <action id="SmartStepInto">
+    <keyboard-shortcut first-keystroke="shift f5" />
+  </action>
+  <action id="StepInto">
+    <keyboard-shortcut first-keystroke="f5" />
+  </action>
+  <action id="StepOut">
+    <keyboard-shortcut first-keystroke="f7" />
+  </action>
+  <action id="StepOver">
+    <keyboard-shortcut first-keystroke="f6" />
   </action>
   <action id="SurroundWith">
     <keyboard-shortcut first-keystroke="meta y" />
@@ -186,6 +222,8 @@
   <action id="UML.ActualSize">
     <keyboard-shortcut first-keystroke="meta divide" />
   </action>
+  <action id="UML.ApplyCurrentLayout" />
+  <action id="UsageView.Rerun" />
   <action id="Vcs.Log.FocusTextFilter" />
   <action id="Vcs.MoveChangedLinesToChangelist" />
   <action id="Vcs.UpdateProject" />

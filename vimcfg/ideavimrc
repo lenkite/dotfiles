@@ -6,8 +6,6 @@ map <leader>b :action CompileDirty<CR>
 "TODO: add \B for build all
 nmap <C-P> :action GotoFile<CR>
 nmap <M-P> :action GotoFile<CR>
-nmap <M-T> :action GotoType<CR>
-nmap <M-S-T> :action GotoSymbol<CR>
 nmap ]q :action  GotoNextError<CR>
 nmap <C-;> :action GotoNextError<CR>
 nmap [q :action  GotoPreviousError<CR>

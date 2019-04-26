@@ -61,27 +61,37 @@ the right keymap.
 ## File Navigation
 
 
-| Action                              | Shortcut Key (Mac) | Shortcut (Win/Lin) | VIM Shortcut |
-| --                                  | ---                | --                 | --           |
-| Goto Quick Definition (Preview)     | `gd`(N)            | same               | same         |
-| Goto Declaration, Push stack        | `gD`(N)            | same               | same         |
-| Goto 1rst Implmentation, Push stack | `CTRL-]`(N)        | same               | same         |
-| Pop stack                           | `CTRL-T`(N)        | same               | same         |
-|                                     |                    |                    |              |
-| Navigate Back                       | `Cmd-[`            | `Alt-[`            | `Ctrl-O`     |
-| Navigate Forward                    | `Cmd-]`            | `Alt-]`            | `Ctrl-I`     |
-|                                     |                    |                    |              |
-| Navigate File                       | `Cmd-P`            | `Alt-P`            | `Ctrl-P`     |
-| Navigate Class/Type                 | `Cmd-Shift-P`      | `Alt-Shift-P`      |              |
-| Navigate Symbol                     | `Cmd-Ctrl-P`       | `Alt-Ctrl-P`       |              |
-| Open File Structure/Outline         | `Cmd-Shift-O`      | `Alt-Shift-O`      |              |
-| Navigate Related/Linked File/Symb   | `Cmd-Ctrl-O`       | `Alt-Ctrl-O`       | `:A`         |
-|                                     |                    |                    |              |
-| Navigate Super                      | `Cmd-Y`            | `Alt-Y`            |              |
-|                                     |                    |                    |              |
-| Next Error                          | `Ctrl-,`           | same               | `]q`         |
-| Prev Error                          | `Ctrl-Shift-,`     | same               | `[q`         |
-| Open File for Edit                  | `Cmd-O`            | Open File          | `:e`         |
+| Action                              | Shortcut Key (Mac) | Shortcut (Win/Lin) | VIM Shortcut   |
+| --                                  | ---                | --                 | --             |
+| Goto Quick Definition (Preview)     | `Cmd-D`            | same               | `gd`           |
+| Goto Implementation with Choice     | `Cmd-Shift-D`      | same               | `Ctrl-Shift-[` |
+| Goto 1rst Implmentation, Push stack | `CTRL-]`(N)        | same               | same           |
+| Pop stack                           | `CTRL-T`(N)        | same               | same           |
+|                                     |                    |                    |                |
+| Navigate Back                       | `Cmd-[`            | `Alt-[`            | `Ctrl-O`       |
+| Navigate Forward                    | `Cmd-]`            | `Alt-]`            | `Ctrl-I`       |
+|                                     |                    |                    |                |
+| Navigate File                       | `Cmd-P`            | `Alt-P`            | `Ctrl-P`       |
+| Navigate Class/Type                 | `Cmd-Shift-P`      | `Alt-Shift-P`      |                |
+| Navigate Symbol                     | `Cmd-Ctrl-P`       | `Alt-Ctrl-P`       |                |
+| Navigate Recent Files               | `Cmd-P`            | `Alt-P`            | `Ctrl-P`       |
+|                                     |                    |                    |                |
+| Open File Structure/Outline         | `Cmd-Shift-O`      | `Alt-Shift-O`      |                |
+| Navigate Related/Linked File/Symb   | `Cmd-Ctrl-O`       | `Alt-Ctrl-O`       | `:A`           |
+|                                     |                    |                    |                |
+| Navigate Call Hierarchy             | `Cmd-Y`            | `Alt-Y`            | NA             |
+| Navigate Super Method               | `Cmd-Shift-Y`      | `Alt-Shift-Y`      | NA             |
+| Navigate Sub Method                 | `Cmd-Shift-H`      | `Alt-Shift-H`      | NA             |
+| Navigate Type Hierarchy             | `Cmd-Ctrl-H`       | `Alt-Ctrl-H`       | NA             |
+|                                     |                    |                    |                |
+| Next Error                          | `Ctrl-,`           | same               | `]q`           |
+| Prev Error                          | `Ctrl-Shift-,`     | same               | `[q`           |
+| Next Method                         | `Cmd-J`            | `Alt-J`            | `]m`           |
+| Prev Method                         | `Cmd-K`            | `Alt-K`            | `[m`           |
+| Open File for Edit                  | `Cmd-O`            | Open File          | `:e`           |
+|                                     |                    |                    |                |
+| Navigate Last Edit Location         | `Cmd-E`            | `Alt-E`            | `g;`           |
+| Navigate Next Edit Location         | `Cmd-Shift-E`      | `Alt-Shift-E`      | `g,`           |
 
 
 ## Editing
@@ -154,17 +164,21 @@ the right keymap.
 | Toggle Line Breakpoint         | `Ctrl-S-B`         | same               | same            |
 | Toggle Method Breakpoint       | `Cmd-S-B`          | `Alt-S-B`          | same            |
 | Step Over                      | `F6`               | same               | same            |
-| Step Over                      | `F6`               | same               | same            |
+| Force Step Over                | `Ctrl-F6`          | same               | same            |
+| Step Into                      | `F5`               | same               | same            |
+| Force Step Into                | `Ctrl-F5`          | same               | same            |
+| Step Out                       | `F7`               | same               | same            |
+| Resume                         | `F8`               | same               | same            |
          
 
 
 ## Generation
 
-| Action                        | Shortcut Key (Mac) | Shortcut Key (Win/Lin) Action | VIM |
-| --                            | ---                | --                            | --  |
-| Generate get/set/etc   Popup  | `Cmd-N`            | `Alt-N`                       |     |
-| New Class/File/Resource Popup | `Cmd-Shift-N`      | `Alt-Shift-N`                 |     |
-| Surround with (try/etc)Popup  | `Cmd-Y`            | `Alt-Y`                       |     |
+| Action                        | Shortcut Key (Mac) | Shortcut Key (Win/Lin) Action | VIM                 |
+| --                            | ---                | --                            | --                  |
+| Generate get/set/etc   Popup  | `Cmd-N`            | `Alt-N`                       |                     |
+| New Class/File/Resource Popup | `Cmd-Shift-N`      | `Alt-Shift-N`                 |                     |
+| Surround with (try/etc)Popup  | `Cmd-Shift-S`      | `Alt-Shift-S`                 | Use surround plugin |
 
 ## Completion
 
