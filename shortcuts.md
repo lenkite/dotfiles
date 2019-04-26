@@ -73,8 +73,8 @@ the right keymap.
 |                                     |                    |                    |                |
 | Navigate File                       | `Cmd-P`            | `Alt-P`            | `Ctrl-P`       |
 | Navigate Class/Type                 | `Cmd-Shift-P`      | `Alt-Shift-P`      |                |
+| Navigate Recent Files               | `Ctrl-Shift-P`     | same               | :b             |
 | Navigate Symbol                     | `Cmd-Ctrl-P`       | `Alt-Ctrl-P`       |                |
-| Navigate Recent Files               | `Cmd-P`            | `Alt-P`            | `Ctrl-P`       |
 |                                     |                    |                    |                |
 | Open File Structure/Outline         | `Cmd-Shift-O`      | `Alt-Shift-O`      |                |
 | Navigate Related/Linked File/Symb   | `Cmd-Ctrl-O`       | `Alt-Ctrl-O`       | `:A`           |
@@ -93,6 +93,9 @@ the right keymap.
 | Navigate Last Edit Location         | `Cmd-E`            | `Alt-E`            | `g;`           |
 | Navigate Next Edit Location         | `Cmd-Shift-E`      | `Alt-Shift-E`      | `g,`           |
 
+| Navigate Next Buffer/Tab            | `Ctrl-Tab`         | same               | `]b`           |
+| Navigate Prev Buffer/Tab            | `Ctrl-Shift-Tab`   | same               | `[b`           |
+
 
 ## Editing
 
@@ -107,6 +110,9 @@ the right keymap.
 |                              |                    |                    |                           |
 | Reformat Code                | `Cmd-Shift-M`      | `Alt-Shift-M`      | `gg=G`(N)                 |
 | Reformat Code (with options) | `Ctrl-Shift-M`     |                    |                           |
+|                              |                    |                    |                           |
+| Commemnt (Line Comment)      | `Ctrl-/`           | same               | same or `gcc`             |
+| Commemnt (Block Comment)     | `Ctrl-Shift-/`     | same               | same or motion `gcc`      |
 |                              |                    |                    |                           |
 | Optimize Imports             | `Ctrl-Shift-O`     | same               |                           |
 |                              |                    |                    |                           |
@@ -138,10 +144,10 @@ the right keymap.
 | Action               | Shortcut Key (Mac) | Shortcut (Win/Lin) | VIM Shortcut  |
 | --                   | --                 | --                 | --            |
 | Show Parameter Info  | `Cmd-I`            | `Alt-I`            | `<Leder>i`(N) |
-| Show Context Info    | `Cmd-Shift-I`      | `Alt-Shift-I`      | `<Leder>I`(N) |
-| External Docu Lookup | `gK`(N)            | same               | same          |
-| Quick Docu Lookup    | `K`(N)             | same               | same          |
-| External Docu Lookup | `gK`(N)            | same               | same          |
+| Show Expression Info | `Cmd-Shift-I`      | `Alt-Shift-I`      | `<Leder>I`(N) |
+| Quick Docu Lookup    | `F1`               | same               | `K`(N)        |
+| External Docu Lookup | `Shift-F1`         | same               | `gK`(N)       | 
+
 
 ## Build / Run / Debug
 
@@ -190,15 +196,11 @@ the right keymap.
 
 ## TODO
 * Make f2 shortcuts for ide bookmarks for convenience.
+* Add standard shortcut key for Context Info (very useful)
 * Other breakpoint actions, including field watches
 * Switching Buffers, Choosing diff Buffer buffers in both vim and intellij
-* Ensure there is a shortcut for quick definition (one of the gD stuff I think)
-* Debug / Run shortcuts include breakpoints, step over, step out, etc
 * Structural movement shorcuts
-* Structural Selection
 * Panel shortcuts (sidebar/run/debug panels, etc)
-* Study Intellij Structural Search/Replace and introduce shortuts
-* Commenting code, going backward/forwards
+* Structural Search/Replace and introduce shortuts
 * map backspace to most recent buffer
-* next/previous errors
-*  refactor: extract parameter shortcut was initially assinged to meta-alt-p
+* refactor: extract parameter shortcut was initially assinged to meta-alt-p

@@ -7,9 +7,7 @@ map <leader>b :action CompileDirty<CR>
 nmap <C-P> :action GotoFile<CR>
 nmap <M-P> :action GotoFile<CR>
 nmap ]q :action  GotoNextError<CR>
-nmap <C-;> :action GotoNextError<CR>
 nmap [q :action  GotoPreviousError<CR>
-nmap <C-,> :action GotoPreviousError<CR>
 
 "Buffers
 nmap ]b :action NextTab<CR>
