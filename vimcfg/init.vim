@@ -60,6 +60,7 @@ Plug 'christoomey/vim-tmux-navigator' "https://blog.bugsnag.com/tmux-and-vim/
 " Plug 'Shougo/neosnippet' "commented out due to problem with LanguageClient
 " Plug 'Shougo/neosnippet-snippets'
 " Plug 'SirVer/ultisnips'  "since LanguageClient only supports this and causes problemsiwth neosnippet
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
 Plug 'ervandew/supertab'
 " Plug 'honza/vim-snippets'
 Plug 'mdempsky/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
