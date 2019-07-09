@@ -285,6 +285,7 @@ vi_mode() {
   # See man zshzle for these functions
   bindkey -M vicmd "?" vi-history-search-forward
   bindkey -M vicmd "/" vi-history-search-backward
+  export LC_ALL=en_US.UTF-8
 }
 
 base16_shell() {
