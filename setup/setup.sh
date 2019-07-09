@@ -243,7 +243,8 @@ install_pkgs() {
  echo "- (install_pkgs) Installing packages..."
  if [[ $isMacos == true ]]; then
   brew install zsh git the_silver_searcher fortune cowsay python3 leiningen nodejs go rlwrap yarn
-  brew install --HEAD neovim
+  brew upgrade zsh
+  brew install --HEAD neovim || brew upgrade --HEAD neovim
    sudo easy_install pip 
  elif [[ $isLinux == true ]]; then
  echo "** NOTE: If RUNNING BEHIND PROXY, export http_proxy/https_proxy"
@@ -472,12 +473,10 @@ setup_sed_awk_grep() {
   if [[ $isMacos ]]; then
     local sedPath=$(which sed)
     [[ $sedPath == *"local"* ]] \
-      && brew upgrade gnu-sed --with-default-names \
-      || brew install gnu-sed --with-default-names
+      && brew upgrade gnu-sed --with-default-names || brew install gnu-sed --with-default-names
     local awkPath=$(which awk)
     [[ $sedPath == *"local"* ]] \
-      && brew upgrade gawk --with-default-names \
-      || brew install gawk --with-default-names
+      && brew upgrade gawk --with-default-names || brew install gawk --with-default-names
     local grepPath=$(which grep)
     [[ $grepPath == *"local"* ]] \
       && brew upgrade grep --with-default-names \
