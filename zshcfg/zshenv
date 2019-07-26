@@ -104,6 +104,11 @@ load_dotpaths() {
   if [[ -d ~/.fzf/bin ]]; then
     path+=( ~/.fzf/bin )
   fi
+
+  # if [[ -d /usr/local/opt/awk/libexec/gnubin ]]; then 
+  #   path=( /usr/local/opt/awk/libexec/gnubin path)
+  # fi
+
   pathsf=~/.paths
   if [[ -f $pathsf ]]; then
     #http://stackoverflow.com/questions/12651355/zsh-read-lines-from-file-into-array
@@ -115,6 +120,7 @@ load_dotpaths() {
     # setting path list sets PATH in zsh
     path+=( $FLINES )
   fi
+
   export PATH
 }
 
