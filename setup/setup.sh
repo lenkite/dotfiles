@@ -242,9 +242,19 @@ gh_download_linux_release() {
 install_pkgs() {
  echo "- (install_pkgs) Installing packages..."
  if [[ $isMacos == true ]]; then
-  brew install zsh git the_silver_searcher fortune cowsay python3 leiningen nodejs go rlwrap yarn
-  brew upgrade zsh
-  brew install --HEAD neovim || brew upgrade --HEAD neovim
+   brew install zsh || brew upgrade zsh
+   brew install git || brew upgrade git 
+   brew install the_silver_searcher || brew upgrade the_silver_searcher  
+   brew install fortune || brew upgrade fortune  
+   brew install cowsay || brew upgrade cowsay  
+   brew install python3 || brew upgrade python3  
+   brew install leiningen || brew upgrade leiningen  
+   brew install nodejs || brew upgrade nodejs  
+   brew install go || brew upgrade go  
+   brew install rlwrap || brew upgrade rlwrap  
+   brew install yarn || brew upgrade yarn
+   brew upgrade zsh
+   brew install  neovim || brew upgrade neovim
    sudo easy_install pip 
  elif [[ $isLinux == true ]]; then
  echo "** NOTE: If RUNNING BEHIND PROXY, export http_proxy/https_proxy"
@@ -473,14 +483,13 @@ setup_sed_awk_grep() {
   if [[ $isMacos ]]; then
     local sedPath=$(which sed)
     [[ $sedPath == *"local"* ]] \
-      && brew upgrade gnu-sed --with-default-names || brew install gnu-sed --with-default-names
+      && brew upgrade gnu-sed || brew install gnu-sed 
     local awkPath=$(which awk)
     [[ $sedPath == *"local"* ]] \
-      && brew upgrade gawk --with-default-names || brew install gawk --with-default-names
+      && brew upgrade gawk || brew install gawk 
     local grepPath=$(which grep)
     [[ $grepPath == *"local"* ]] \
-      && brew upgrade grep --with-default-names \
-      || brew install grep --with-default-names
+      && brew upgrade grep  || brew install grep
   fi
 }
 
