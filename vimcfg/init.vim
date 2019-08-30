@@ -19,7 +19,6 @@
 source ~/.vimrc
 " }
 
-
 " { * Terminal Config (for nvim)
 if has('nvim')
   let $VISUAL = 'nvr -cc split --remote-wait'
@@ -38,7 +37,8 @@ autocmd! bufwritepost init.vim source %
 "{ * Plugin List (Assumes you have vim-plug installed!
 call plug#begin('~/.vim/plugged')
 
-" ** Plugins: Tpope: Bracket mappings, surround, commentary, repeat {  
+" ** Plugins: Essentials: yank hl,Bracket mappings, surround, commentary, repeat {  
+Plug 'machakann/vim-highlightedyank'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-surround'
@@ -54,39 +54,8 @@ Plug 'tpope/vim-apathy'
 Plug 'ap/vim-buftabline'
 Plug 'mhinz/vim-startify' "Fancy start screen
 Plug 'christoomey/vim-tmux-navigator' "https://blog.bugsnag.com/tmux-and-vim/
+Plug 'troydm/zoomwintab.vim' "https://alex.dzyoba.com/blog/vim-revamp/, Use <C-w>o to toggle zoom
 " }
-
-" ** Plugins: Completion And Snippets {
-" Plug 'Shougo/neosnippet' "commented out due to problem with LanguageClient
-" Plug 'Shougo/neosnippet-snippets'
-" Plug 'SirVer/ultisnips'  "since LanguageClient only supports this and causes problemsiwth neosnippet
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
-Plug 'ervandew/supertab'
-" Plug 'honza/vim-snippets'
-Plug 'mdempsky/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
-Plug 'mattn/emmet-vim'
-if has('nvim')
-  Plug 'autozimu/LanguageClient-neovim', {
-			\ 'branch': 'next',
-			\ 'do': 'bash install.sh',
-			\ }
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-  Plug 'zchee/deoplete-go', { 'do': 'make'}
-  Plug 'zchee/deoplete-jedi'
-  Plug 'Shougo/deoppet.nvim', { 'do': ':UpdateRemotePlugins' }
-  Plug 'roxma/nvim-yarp'
-  Plug 'davidhalter/jedi-vim'
-  Plug 'machakann/vim-highlightedyank'
-  Plug 'tmhedberg/SimpylFold'
-
-  " Plug 'ncm2/ncm2'
-  " Plug 'ncm2/ncm2-bufword'
-  " Plug 'ncm2/ncm2-path'
-  " Plug 'ncm2/ncm2-jedi'
-  " Plug 'ncm2/ncm2-go'
-  " Plug 'mhartington/nvim-typescript'
-endif
-"}
 
 " ** Plugins: Navigation: Fuzzy Find, Vimfiler, Tags , etc {
 
@@ -113,11 +82,15 @@ Plug 'wellle/targets.vim'
 Plug 'terryma/vim-expand-region'
 "}
 
-" ** Plugins: Language, Syntax, Linting {
+" ** Plugins: Language, Linting, Completion {
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'w0rp/ale'
+Plug 'ervandew/supertab'
+Plug 'mdempsky/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh' }
+Plug 'mattn/emmet-vim'
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 Plug 'rust-lang/rust.vim'
 Plug 'udalov/kotlin-vim'
-Plug 'w0rp/ale'
 Plug 'Quramy/tsuquyomi'
 Plug 'leafgarland/typescript-vim'
 Plug 'ap/vim-css-color' "highlights CSS colors
@@ -133,7 +106,6 @@ Plug 'shime/vim-livedown'
 Plug 'vim-scripts/SyntaxRange'
 Plug 'python-mode/python-mode', { 'branch': 'develop' }
 
-"Plugins for Clojure
 Plug 'guns/vim-clojure-static' "Syntax highlighting for clojure
 Plug 'guns/vim-clojure-highlight' "Extended highlighting.
 Plug 'guns/vim-sexp' 
@@ -148,8 +120,13 @@ if executable("cargo")
 endif
 Plug 'luochen1990/rainbow'
 
-
 "}
+
+" ** Plugins: Math {
+" https://news.ycombinator.com/item?id=19448678
+Plug 'lervag/vimtex'
+Plug 'brennier/quicktex'
+" "}
 
 " ** Plugins: Search {
 Plug 'mhinz/vim-grepper'
@@ -233,11 +210,14 @@ noremap Y y$
 "inoremap <C-e> <C-o>$ "Tpops vim-rsi plugin now handles this.
 
 "Window management Commands
-"https://robots.thoughtbot.com/vim-splits-move-faster-and-more-naturally
+"https://thoughtbot.com/blog/vim-splits-move-faster-and-more-naturally
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
+" Open new split panes to right and bottom, which feels more natural than Vim’s default:
+set splitbelow
+set splitright
 "https://www.reddit.com/r/neovim/comments/6mkvo3/builtin_terminals_or_tmux/
 
 if has('nvim')
@@ -341,7 +321,6 @@ let g:rooter_use_lcd = 1
 
 
 " }
-
 
 " { * Configure: incsearch
 "From https://github.com/haya14busa/incsearch.vim
@@ -595,7 +574,17 @@ au FileType clojure set showmatch
 let g:salve_auto_start_repl=1
 
 " }
-"
+
+" * Configure: Math, Latex {
+let g:tex_flavor='latex'
+let g:vimtex_view_method='zathura'
+let g:vimtex_quickfix_mode=0
+set conceallevel=1
+let g:vimtex_view_method='skim'
+let g:vimtex_view_general_viewer='skim'
+"let g:tex_conceal='abdmg'
+" }
+
 "{ * MISC GLOBAL Variables 
 let g:skip_loading_mswin="true"  "Do not like mswin settings. Want consistent behaviour across platforms
 " Use deoplete.

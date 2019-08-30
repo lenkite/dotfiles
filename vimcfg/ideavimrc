@@ -25,19 +25,10 @@ map <Leader>u :action SurroundWith<CR>
 nmap <A-CR> :action ShowIntentionActions<CR>
 nmap <M-CR> :action ShowIntentionActions<CR>
 
-"Consistent Commenting across platforms
-nmap <C-/> :action CommentByLineComment<CR>
-nmap <C-S-/> :action CommentByBlockComment<CR>
-"See Bartoz Bialeks comment at: https://youtrack.jetbrains.com/issue/VIM-862
-vnoremap <C-/> :<bs><bs><bs><bs><bs>action VimVisualSwapSelections<cr>:action CommentByLineComment<cr>
 
 "Navigation
 nmap <C-I> :action Forward<CR>
 nmap <C-O> :action Back<CR>
-
-"Surround
-"See Bartoz Bialeks comment at: https://youtrack.jetbrains.com/issue/VIM-862
-vnoremap <leader>u :<bs><bs><bs><bs><bs>action VimVisualSwapSelections<cr>:action SurroundWith<cr>
 
 "Yank to clipboard by default
 set clipboard+=unnamed
@@ -51,7 +42,7 @@ nmap <Leader>i :action ParameterInfo<CR>
 imap <Leader>r <Esc>:action RenameElement<CR>
 nmap <Leader>r :action RenameElement<CR>
 map <Leader>R :action Refactorings.QuickListPopupAction<CR>
-vnoremap <Leader>R :<bs><bs><bs><bs><bs>action VimVisualSwapSelections<cr>:action Refactorings.QuickListPopupAction<cr>
+" vnoremap <Leader>R :<bs><bs><bs><bs><bs>action VimVisualSwapSelections<cr>:action Refactorings.QuickListPopupAction<cr>
 
 "IDE Settings
 nmap <A-,> :action ShowSettings<CR>
