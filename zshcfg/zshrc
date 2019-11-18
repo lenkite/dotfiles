@@ -20,6 +20,7 @@ main() {
   pet_config
   java_config
   python_config
+  misc_alias
   def_autoloads
   exec_autoruns
   exec_compinit
@@ -301,6 +302,12 @@ greeting() {
   command -v fortune 2>&1 >/dev/null && command -v cowsay 2>&1 >/dev/null && fortune | cowsay
 }
 
+misc_alias() {
+  alias urldecode='python -c "import sys, urllib as ul; \
+    print ul.unquote_plus(sys.argv[1])"'
+  alias urlencode='python -c "import sys, urllib as ul; \
+    print ul.quote_plus(sys.argv[1])"'
+}
 
 main
 
