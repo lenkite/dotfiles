@@ -84,6 +84,7 @@ Plug 'terryma/vim-expand-region'
 
 " ** Plugins: Language, Linting, Completion {
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'honza/vim-snippets'
 Plug 'm-pilia/vim-ccls'
 "Plug 'w0rp/ale'
 "Plug 'ervandew/supertab'
@@ -555,6 +556,8 @@ let g:vimtex_view_general_viewer='skim'
 "https://github.com/neoclide/coc.nvim
 " with modifications from https://github.com/neoclide/coc-snippets
 
+let g:coc_global_extensions = ['coc-snippets', 'coc-java', 'coc-css', 'coc-json']
+
 " Better display for messages
 set cmdheight=2
 
@@ -567,10 +570,10 @@ set shortmess+=c
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
+      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 function! s:check_back_space() abort
   let col = col('.') - 1

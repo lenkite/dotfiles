@@ -285,8 +285,10 @@ install_pkgs() {
  fi
 
  if command -v pip3 >/dev/null 2>&1 ; then
-   echo "Install python neovim modules using pip3..."
+   echo "INSTALL python neovim modules using pip3..."
    pip3 install --user pynvim
+   echo "INSTALL conan package manager ..."
+   pip3 install --user conan #conan will be added in ~/Library/Python/3.7/bin/conan. Needs new shell
    #pip3 install neovim --upgrade
    #pip3 install --user neovim-remote
  else
