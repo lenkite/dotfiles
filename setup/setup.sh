@@ -3,7 +3,7 @@
 # Supported OS'es are Windows/Cygwin, Windows/WSL, MacOS and Linux
 # Dev Note: Some funcs here are duplicated in zshcfg/0.zsh. This is by design
 
-usage() { echo "Usage: $0 [-c] [-v] [-t] [-u] [-z]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-c] [-p] [-v] [-t] [-u] [-z]" 1>&2; exit 1; }
 
 # Use getopt for simple option parsing
 # See https://stackoverflow.com/questions/16483119/example-of-how-to-use-getopts-in-bash
@@ -242,20 +242,17 @@ gh_download_linux_release() {
 install_pkgs() {
  echo "- (install_pkgs) Installing packages..."
  if [[ $isMacos == true ]]; then
-   brew install zsh || brew upgrade zsh
-   brew install git || brew upgrade git 
+   #brew install git || brew upgrade git 
    brew install the_silver_searcher || brew upgrade the_silver_searcher  
    brew install fortune || brew upgrade fortune  
    brew install cowsay || brew upgrade cowsay  
-   brew install python3 || brew upgrade python3  
+   #brew install python3 || brew upgrade python3   #now part of MacOS catalina
    brew install leiningen || brew upgrade leiningen  
    brew install nodejs || brew upgrade nodejs  
    brew install go || brew upgrade go  
    brew install rlwrap || brew upgrade rlwrap  
    brew install yarn || brew upgrade yarn
-   brew upgrade zsh
    brew install  neovim || brew upgrade neovim
-   sudo easy_install pip 
  elif [[ $isLinux == true ]]; then
  echo "** NOTE: If RUNNING BEHIND PROXY, export http_proxy/https_proxy"
  sudo -E add-apt-repository -y ppa:neovim-ppa/unstable
@@ -288,9 +285,10 @@ install_pkgs() {
  fi
 
  if command -v pip3 >/dev/null 2>&1 ; then
-   echo "Install python based module neovim-remote.."
-   pip3 install neovim --upgrade
-   pip3 install --user neovim-remote
+   echo "Install python neovim modules using pip3..."
+   pip3 install --user pynvim
+   #pip3 install neovim --upgrade
+   #pip3 install --user neovim-remote
  else
    echo "WARN: can't find pip3!"
  fi
@@ -337,18 +335,18 @@ setup_go_linux() {
 setup_maven() {
   # I would love to use pkg manager here but sadly the pkg managers are out of date!
   echo "-- setup_maven"
-	local mvnVersion="3.5.4"
-  local mvnName="apache-maven-$mvnVersion"
-  local mvnTar="$mvnName-bin.tar.gz"
-  local mvnUrl="http://www.strategylions.com.au/mirror/maven/maven-3/$mvnVersion/binaries/$mvnTar"
-  if [[ $hasCurl && $isLinux ]]; then
-		echo " (setup_maven) Downloading: $mvnUrl"
-    [[ -f /tmp/$mvnTar ]] || $(cd /tmp && curl -O -L $mvnUrl)
-    sudo tar -C /tmp -xzf /tmp/$mvnTar
-		[[ -d /opt/maven ]] && sudo rm -rf /opt/maven
-    sudo mv /tmp/$mvnName /opt/maven
-    echo " (setup_maven) done"
-  fi
+#	local mvnVersion="3.5.4"
+#  local mvnName="apache-maven-$mvnVersion"
+#  local mvnTar="$mvnName-bin.tar.gz"
+#  local mvnUrl="http://www.strategylions.com.au/mirror/maven/maven-3/$mvnVersion/binaries/$mvnTar"
+#  if [[ $hasCurl && $isLinux ]]; then
+#		echo " (setup_maven) Downloading: $mvnUrl"
+#    [[ -f /tmp/$mvnTar ]] || $(cd /tmp && curl -O -L $mvnUrl)
+#    sudo tar -C /tmp -xzf /tmp/$mvnTar
+#		[[ -d /opt/maven ]] && sudo rm -rf /opt/maven
+#    sudo mv /tmp/$mvnName /opt/maven
+#    echo " (setup_maven) done"
+#  fi
 
   if [[ $isMacos ]]; then
       brew install maven --ignore-dependencies	
@@ -362,7 +360,8 @@ setup_jdk() {
   fi
   if [[ $isMacos ]]; then
 	echo "(setup_jdk) Installing Oracle JDK 8"
-	brew cask install caskroom/versions/java8
+  brew tap homebrew/cask-versions
+  brew cask install homebrew/cask-versions/adoptopenjdk8
   fi
 }
 
@@ -529,8 +528,8 @@ setup_vim() {
 
   if command -v pip3 >/dev/null 2>&1 ; then
     echo "Install python based module neovim-remote.."
-    pip3 install neovim --upgrade
-    pip3 install --user neovim-remote
+    #pip3 install neovim --upgrade
+    #pip3 install --user neovim-remote
   else
     echo "WARN: can't find pip3!"
   fi
@@ -621,8 +620,8 @@ setup_settings() {
 
 setup_sdk() {
   echo "- setup_sdk"
-  # setup_jdk
-  # setup_maven
+  setup_jdk
+  setup_maven
   # setup_go
   # setup_cloud
   # setup_python
@@ -656,7 +655,7 @@ setup_zsh() {
   echo "Changing shell to /bin/zsh.."
   if [[ $SHELL != "/bin/zsh" ]]; then
     if [[ -z $isCygwin ]]; then
-      echo "Current shell is $SHELL. Changing to /bin/zsh"
+      echo "Current shell is $SHELL. Changing to /bin/zsh. Please install zsh view 'brew install zsh' if not present."
       sudo chsh -s /bin/zsh
     else
       echo "Shell SWITCH for cygwin not implemented yet. Please add line 'db_shell: /bin/zsh' in /etc/nsswitch.conf"

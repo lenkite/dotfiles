@@ -33,6 +33,9 @@ endif
 "{ * History, Buffers, Undo
 set history=10000               " Store lots of :cmdline history
 set autowrite                  " Writes contents of file on next rewind last first make etc
+set undodir=~/.vim/undodir  "https://alex.dzyoba.com/blog/vim-revamp/
+set undofile
+
 "}
 "
 
@@ -145,3 +148,9 @@ let loaded_matchparen = 1 "Parenthesis highlight is distracting like hell!
 " { * Autoreload vimrc
 autocmd! bufwritepost vimrc source %
 " }
+
+
+"https://alex.dzyoba.com/blog/vim-revamp/
+" C-c and C-v - Copy/Paste to global clipboard
+"vmap <C-c> "+y
+"imap <C-v> <esc>"+gpi

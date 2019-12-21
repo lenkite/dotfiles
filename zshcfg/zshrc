@@ -26,6 +26,7 @@ main() {
   exec_compinit
   vi_mode  #Keep towards  end cos plugins have bad habit of changing this
   base16_shell
+  get_cheats
   greeting
   cd ~
 }
@@ -295,6 +296,13 @@ base16_shell() {
     [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
   else
     echo "Base16 shell colors don't appear installed"
+  fi
+}
+
+get_cheats() {
+  if [[ ! -f ~/bin/cht.sh ]]; then
+    curl https://cht.sh/:cht.sh > ~/bin/cht.sh
+    chmod +x ~/bin/cht.sh
   fi
 }
 
