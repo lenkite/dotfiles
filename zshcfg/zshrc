@@ -27,6 +27,7 @@ main() {
   vi_mode  #Keep towards  end cos plugins have bad habit of changing this
   base16_shell
   get_cheats
+  source_my_zshrc
   greeting
   cd ~
 }
@@ -304,6 +305,10 @@ get_cheats() {
     curl https://cht.sh/:cht.sh > ~/bin/cht.sh
     chmod +x ~/bin/cht.sh
   fi
+}
+
+source_my_zshrc() {
+  [[ -f ~/my.zsh ]] && source ~/my.zsh
 }
 
 greeting() {
