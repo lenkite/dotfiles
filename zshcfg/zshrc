@@ -214,6 +214,7 @@ neovim_config() {
   elif [[ $hasNeovim ]]; then
     alias vim=nvim
   fi
+  alias lv='nvim -u NONE'
 }
 
 pet_config() {
