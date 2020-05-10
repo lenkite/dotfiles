@@ -134,7 +134,7 @@ Plug 'brennier/quicktex'
 " ** Plugins: Search {
 Plug 'mhinz/vim-grepper'
 Plug 'nelstrom/vim-visual-star-search'
-Plug 'haya14busa/incsearch.vim'
+"Plug 'haya14busa/incsearch.vim' "BAD SEE: https://github.com/haya14busa/incsearch.vim/issues/158
 Plug 'tmhedberg/matchit'
 Plug 'rhysd/devdocs.vim' "for devdocs.io
 Plug 'keith/investigate.vim' "opens dash on macOS
