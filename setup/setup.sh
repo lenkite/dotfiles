@@ -253,6 +253,7 @@ install_pkgs() {
    brew install rlwrap || brew upgrade rlwrap  
    brew install yarn || brew upgrade yarn
    brew install  neovim || brew upgrade neovim
+   brew cask install  skim || brew cask upgrade skim
  elif [[ $isLinux == true ]]; then
  echo "** NOTE: If RUNNING BEHIND PROXY, export http_proxy/https_proxy"
  sudo -E add-apt-repository -y ppa:neovim-ppa/unstable
