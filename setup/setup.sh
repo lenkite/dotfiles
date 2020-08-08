@@ -243,17 +243,8 @@ install_pkgs() {
  echo "- (install_pkgs) Installing packages..."
  if [[ $isMacos == true ]]; then
    #brew install git || brew upgrade git 
-   brew install the_silver_searcher || brew upgrade the_silver_searcher  
-   brew install fortune || brew upgrade fortune  
-   brew install cowsay || brew upgrade cowsay  
-   #brew install python3 || brew upgrade python3   #now part of MacOS catalina
-   brew install leiningen || brew upgrade leiningen  
-   brew install nodejs || brew upgrade nodejs  
-   brew install go || brew upgrade go  
-   brew install rlwrap || brew upgrade rlwrap  
-   brew install yarn || brew upgrade yarn
-   brew install  neovim || brew upgrade neovim
-   brew cask install  skim || brew cask upgrade skim
+    brew install the_silver_searcher fortune cowsay upgrade cowsay jenv leiningen nodejs go rlwrap yarn neovim jenv
+    brew cask install skim 
  elif [[ $isLinux == true ]]; then
  echo "** NOTE: If RUNNING BEHIND PROXY, export http_proxy/https_proxy"
  sudo -E add-apt-repository -y ppa:neovim-ppa/unstable

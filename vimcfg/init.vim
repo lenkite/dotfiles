@@ -553,9 +553,34 @@ let g:float_preview#docked = 0
 let g:float_preview#max_width = 80
 let g:float_preview#max_height = 40
 
-let g:ale_linters = {
-      \ 'clojure': ['clj-kondo', 'joker']
-      \}
+" use <tab> / <s-tab> to cycle through completions
+function! s:check_back_space() abort 
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+function ConfigureDeoplete() 
+  inoremap <silent><expr> <TAB>
+        \ pumvisible() ? "\<C-n>" :
+        \ <SID>check_back_space() ? "\<TAB>" :
+        \ deoplete#manual_complete()
+
+  inoremap <silent><expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+
+  " automatically select the first match
+  set completeopt+=noinsert
+
+  " don't insert a newline when selecting with <Enter>
+  inoremap <expr> <CR> (pumvisible() ? "\<c-y>" : "\<CR>")
+endfunction
+" From: https://github.com/Shougo/deoplete.nvim/issues/464
+" This is because we are using CoC for these file types
+autocmd FileType java,xml call deoplete#custom#buffer_option('auto_complete', v:false)
+autocmd FileType clojure call ConfigureDeoplete()
+
+" let g:ale_linters = {
+"       \ 'clojure': ['clj-kondo', 'joker']
+"       \}
 
 " }
 
@@ -693,10 +718,11 @@ function! ConfigureCoc()
   " Resume latest coc list
   nnoremap <silent> <space>cp  :<C-u>CocListResume<CR>
 
-
 endfunction
 
-
+" From https://gitter.im/neoclide/coc.nvim?at=5f131638b2dad248b6c4332b
+autocmd FileType clojure,clojurescript :call coc#config("suggest.autoTrigger", "none")
+autocmd FileType java,xml call ConfigureCoc()
 
 "}
 
