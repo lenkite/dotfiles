@@ -24,9 +24,12 @@ if has('nvim')
   let $VISUAL = 'nvr -cc split --remote-wait'
   set shell=/bin/zsh
   let $LC_ALL='C'
-  "Hit double escape to get out of terminal mode. Umm no this messes up fzf
+  "Hit double escape to get out of terminal mode. This messes up fzf
+  " https://github.com/junegunn/fzf.vim/issues/544
   "escape
 	"tnoremap <Esc><Esc> <C-\><C-n> 
+  au TermOpen * tnoremap <buffer> <Esc><Esc> <c-\><c-n>
+  au FileType fzf tunmap <buffer> <Esc><Esc>
 endif
 " }
 
@@ -138,6 +141,8 @@ if executable("cargo")
         \  'cargo build --release'}
 endif
 Plug 'luochen1990/rainbow'
+Plug 'bakpakin/fennel.vim'
+Plug 'Olical/aniseed', { 'tag': 'v3.6.1' }
 Plug 'bakpakin/fennel.vim'
 Plug 'Olical/conjure'
 
@@ -290,6 +295,7 @@ endif
 function! ConfigureFzf()
   nmap <Leader>e :Buffers<CR>
   map <C-p> :FZF<CR>
+  nnoremap <silent> <space>p :<C-u>GFiles<cr>
   autocmd! FileType fzf
   autocmd  FileType fzf set laststatus=0 noshowmode noruler
         \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler

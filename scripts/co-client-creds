@@ -1,0 +1,47 @@
+#!/bin/bash
+
+function main {
+  echo "NOTE: script uses cf cli. Please ensure you are logged into right CPI system! "
+  check_deps
+  if [[ -z $CO_APP_NAME ]]; then
+    coAppName="it-co"
+  else
+    coAppName="$CO_APP_NAME"
+  fi
+  echo "-Getting co app guid for coAppName: $coAppName..."
+  coAppGuid=$(cf app $coAppName   --guid) || die "Can't get guid for $coAppName"
+  echo "coAppGuid: $coAppGuid"
+  echo "-Getting co app env..."
+  coEnv=$(cf curl /v3/apps/$coAppGuid/env)
+  # echo "-coEnv: $coEnv"
+  clientCreds=$(echo $coEnv | jq -r '.system_env_json.VCAP_SERVICES.xsuaa[] | select(.instance_name == "it-uaa") | .credentials')
+  echo "ClientCreds: $clientCreds"
+  clientid=$(echo $clientCreds | jq -r '.clientid')
+  echo "-clientid: $clientid"
+  clientsecret=$(echo $clientCreds | jq -r '.clientsecret')
+  echo "-clientsecret: $clientsecret"
+}
+
+
+function check_deps {
+  deps=(cf curl)
+  for dep in "${deps[@]}"; do
+    installed "${dep}" || die "Missing '${dep}'"
+  done
+  echo "-check_deps OK."
+}
+
+function installed {
+  cmd=$(command -v "${1}")
+
+  [[ -n "${cmd}" ]] && [[ -f "${cmd}" ]]
+  return ${?}
+}
+
+
+function die {
+  >&2 echo "Fatal: ${@}"
+  exit 1
+}
+
+main
