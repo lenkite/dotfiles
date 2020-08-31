@@ -24,7 +24,7 @@ function main {
 
 
 function check_deps {
-  deps=(cf curl)
+  deps=(cf curl jq)
   for dep in "${deps[@]}"; do
     installed "${dep}" || die "Missing '${dep}'"
   done
