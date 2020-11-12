@@ -24,11 +24,11 @@ if has('nvim')
   let $VISUAL = 'nvr -cc split --remote-wait'
   set shell=/bin/zsh
   let $LC_ALL='C'
-  "Hit double escape to get out of terminal mode. This messes up fzf
+  "Hit double escape to get out of terminal mode. WARN: commented since This messes up fzf
   " https://github.com/junegunn/fzf.vim/issues/544
   "escape
 	"tnoremap <Esc><Esc> <C-\><C-n> 
-  au TermOpen * tnoremap <buffer> <Esc><Esc> <c-\><c-n>
+  "au TermOpen * tnoremap <buffer> <Esc><Esc> <c-\><c-n>
   au FileType fzf tunmap <buffer> <Esc><Esc>
 endif
 " }
@@ -109,14 +109,14 @@ Plug 'plasticboy/vim-markdown'
 Plug 'vhdirk/vim-cmake'
 
 " { ****  Deoplete and Preview Plugin
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-  Plug 'ncm2/float-preview.nvim'
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
+" if has('nvim')
+"   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+"   Plug 'ncm2/float-preview.nvim'
+" else
+"   " Plug 'Shougo/deoplete.nvim'
+"   Plug 'roxma/nvim-yarp'
+"   Plug 'roxma/vim-hug-neovim-rpc'
+" endif
 
 "}
 
@@ -552,37 +552,37 @@ let g:salve_auto_start_repl=1
 "{ * Configure deoplete, float, ale
 
 "https://oli.me.uk/getting-started-with-clojure-neovim-and-conjure-in-minutes/
-let g:deoplete#enable_at_startup = 1
-call deoplete#custom#option('keyword_patterns', {'clojure': '[\w!$%&*+/:<=>?@\^_~\-\.#]*'})
-set completeopt-=preview
-let g:float_preview#docked = 0
-let g:float_preview#max_width = 80
-let g:float_preview#max_height = 40
+" let g:deoplete#enable_at_startup = 1
+" call deoplete#custom#option('keyword_patterns', {'clojure': '[\w!$%&*+/:<=>?@\^_~\-\.#]*'})
+" set completeopt-=preview
+" let g:float_preview#docked = 0
+" let g:float_preview#max_width = 80
+" let g:float_preview#max_height = 40
 
-" use <tab> / <s-tab> to cycle through completions
-function! s:check_back_space() abort 
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
-endfunction
+" " use <tab> / <s-tab> to cycle through completions
+" function! s:check_back_space() abort 
+"   let col = col('.') - 1
+"   return !col || getline('.')[col - 1]  =~ '\s'
+" endfunction
 
-function ConfigureDeoplete() 
-  inoremap <silent><expr> <TAB>
-        \ pumvisible() ? "\<C-n>" :
-        \ <SID>check_back_space() ? "\<TAB>" :
-        \ deoplete#manual_complete()
+" function ConfigureDeoplete() 
+"   inoremap <silent><expr> <TAB>
+"         \ pumvisible() ? "\<C-n>" :
+"         \ <SID>check_back_space() ? "\<TAB>" :
+"         \ deoplete#manual_complete()
 
-  inoremap <silent><expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+"   inoremap <silent><expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
-  " automatically select the first match
-  set completeopt+=noinsert
+"   " automatically select the first match
+"   set completeopt+=noinsert
 
-  " don't insert a newline when selecting with <Enter>
-  inoremap <expr> <CR> (pumvisible() ? "\<c-y>" : "\<CR>")
-endfunction
-" From: https://github.com/Shougo/deoplete.nvim/issues/464
-" This is because we are using CoC for these file types
-autocmd FileType java,xml call deoplete#custom#buffer_option('auto_complete', v:false)
-autocmd FileType clojure call ConfigureDeoplete()
+"   " don't insert a newline when selecting with <Enter>
+"   inoremap <expr> <CR> (pumvisible() ? "\<c-y>" : "\<CR>")
+" endfunction
+" " From: https://github.com/Shougo/deoplete.nvim/issues/464
+" " This is because we are using CoC for these file types
+" autocmd FileType java,xml call deoplete#custom#buffer_option('auto_complete', v:false)
+" autocmd FileType clojure call ConfigureDeoplete()
 
 " let g:ale_linters = {
 "       \ 'clojure': ['clj-kondo', 'joker']
@@ -727,8 +727,7 @@ function! ConfigureCoc()
 endfunction
 
 " From https://gitter.im/neoclide/coc.nvim?at=5f131638b2dad248b6c4332b
-autocmd FileType clojure,clojurescript :call coc#config("suggest.autoTrigger", "none")
-autocmd FileType java,xml call ConfigureCoc()
+autocmd FileType java,xml,cmake call ConfigureCoc()
 
 "}
 

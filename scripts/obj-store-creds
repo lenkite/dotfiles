@@ -25,6 +25,10 @@ function main {
   echo "-managedInstanceUrl: $managedInstanceUrl"
   managedInstanceCreds=$(curl -s -u "$imUser:$imPass" $managedInstanceUrl) || die "Cannot reach $managedInstanceUrl"
   echo $managedInstanceCreds | jq '.'
+  container_uri=$(echo $managedInstanceCreds | jq -r '.credentials.container_uri')
+  sas_token=$(echo $managedInstanceCreds | jq -r '.credentials.sas_token')
+  echo "$tenantName SAS URI: $container_uri?$sas_token"
+
   # clientsecret=$(echo $clientCreds | jq -r '.clientsecret')
   # echo "-clientsecret: $clientsecret"
 }

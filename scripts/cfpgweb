@@ -1,0 +1,70 @@
+#!/bin/bash
+
+# https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
+set -euo pipefail
+
+function main {
+  echo "-NOTE: script uses cf cli,pgweb,jq,curl. Ensure you are logged into right CPI system and TENANT_NAME is set"
+  check_deps
+  coAppName=${CO_APP_NAME:-it-co}
+  tenantName=${TENANT_NAME} || die "Please set TENANT_NAME"
+  echo "-Getting list of all apps ..."
+  allAppsJson=$(cf curl '/v3/apps?per_page=5000')
+  echo "-Finding workerAppName for tenantName: $tenantName ..."
+  workerAppName=$(echo $allAppsJson | jq -r '.resources[].name | select(startswith("itw-az103"))') || die "Unable to find workerAppName for $tenantName"
+  echo "workerAppName: $workerAppName"
+  echo "-Getting guid for $workerAppName ..."
+  workerAppGuid=$(cf app --guid $workerAppName)
+  echo "workerAppGuid: $workerAppGuid"
+  echo "-Getting env for $workerAppName .."
+  workerAppEnv=$(cf curl /v3/apps/$workerAppGuid/env)
+  echo "workerAppEnv: $workerAppEnv"
+
+  # coAppGuid=$(cf app --guid $coAppName)
+  # echo "coAppGuid: $coAppGuid"
+  # echo "-Getting co app env..."
+  # coEnv=$(cf curl /v3/apps/$coAppGuid/env)
+  # # echo "-coEnv: $coEnv"
+  # imCreds=$(echo $coEnv | jq -r '.system_env_json.VCAP_SERVICES["managed-objectstore"][0].credentials')
+  # echo "imCreds: $imCreds"
+  # imUser=$(echo $imCreds | jq -r '.user')
+  # imPass=$(echo $imCreds | jq -r '.password')
+  # managedInstanceUrl=$(echo $imCreds | jq -r '.get_managed_instance_url')
+  # managedInstanceUrl=${managedInstanceUrl/\{tenant_id\}/$tenantName}
+  # # clientid=$(echo $clientCreds | jq -r '.clientid')
+  # echo "-imUser: $imUser"
+  # echo "-imPass: $imPass"
+  # echo "-managedInstanceUrl: $managedInstanceUrl"
+  # managedInstanceCreds=$(curl -s -u "$imUser:$imPass" $managedInstanceUrl) || die "Cannot reach $managedInstanceUrl"
+  # echo $managedInstanceCreds | jq '.'
+  # container_uri=$(echo $managedInstanceCreds | jq -r '.credentials.container_uri')
+  # sas_token=$(echo $managedInstanceCreds | jq -r '.credentials.sas_token')
+  # echo "$tenantName SAS URI: $container_uri?$sas_token"
+
+  # clientsecret=$(echo $clientCreds | jq -r '.clientsecret')
+  # echo "-clientsecret: $clientsecret"
+}
+
+
+function check_deps {
+  deps=(cf jq curl pgweb)
+  for dep in "${deps[@]}"; do
+    installed "${dep}" || die "Missing '${dep}'"
+  done
+  echo "-check_deps OK."
+}
+
+function installed {
+  cmd=$(command -v "${1}")
+
+  [[ -n "${cmd}" ]] && [[ -f "${cmd}" ]]
+  return ${?}
+}
+
+
+function die {
+  >&2 echo "Fatal: ${@}"
+  exit 1
+}
+
+main
