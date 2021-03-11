@@ -59,7 +59,8 @@ zsh_opts_vars() {
 
   # Add my zfuncs to fpath
   # See 9.1 Autoloading Functions at http://zsh.sourceforge.net/Doc/Release/Functions.html
-  fpath=($dotfiles/zshcfg/zfuncs $fpath)
+  [[ -d ~/.zfuncs ]] || mkdir ~/.zfuncs # for completions installed by tools
+  fpath=($dotfiles/zshcfg/zfuncs ~/.zfuncs $fpath)
 
   # zstyle
   #zstyle ':completion:*' list-prompt '%SAt %p: Hit TAB for more, or the character to insert%s'
@@ -137,6 +138,13 @@ os_specific_aliases() {
 }
 
 def_autoloads() {
+
+  # https://deno.land/manual/getting_started/setup_your_environment
+  hasDeno=$(command -v deno)
+  if [[ $hasDeno ]]; then
+    deno completions zsh > ~/.zfuncs/_deno
+  fi
+
   # Autoloads 
   # See https://unix.stackexchange.com/questions/33255/how-to-define-and-load-your-own-shell-function-in-zsh
   autoload -Uz compinit #Used for compdef function. 
