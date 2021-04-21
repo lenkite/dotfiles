@@ -14,6 +14,7 @@ main() {
   detect_util
   load_dotenv
   load_dotpaths
+  defenv_gcc_clang
   defenv_golang
   defenv_android
   defenv_flutter
@@ -104,6 +105,9 @@ load_dotpaths() {
   if [[ -d ~/.fzf/bin ]]; then
     path+=( ~/.fzf/bin )
   fi
+  if [[ -d ~/.cargo/bin ]]; then
+    path+=( ~/.cargo/bin )
+  fi
 
   # if [[ -d /usr/local/opt/awk/libexec/gnubin ]]; then 
   #   path=( /usr/local/opt/awk/libexec/gnubin path)
@@ -123,6 +127,13 @@ load_dotpaths() {
 
   export PATH
 }
+
+defenv_gcc_clang() {
+  if command -v xcrun >/dev/null 2>&1 ; then
+    export SDKROOT="`xcrun --show-sdk-path`"
+  fi
+}
+
 
 defenv_golang() {
   if [[ $GOROOT ]]; then

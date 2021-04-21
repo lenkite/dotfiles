@@ -58,7 +58,8 @@ Plug 'tpope/vim-apathy'
 "}
 
 " ** Plugins: Buffer, Window, Sessions {
-Plug 'ap/vim-buftabline'
+"Plug 'ap/vim-buftabline'
+Plug 'pacha/vem-tabline'
 Plug 'mhinz/vim-startify' "Fancy start screen
 Plug 'christoomey/vim-tmux-navigator' "https://blog.bugsnag.com/tmux-and-vim/
 Plug 'troydm/zoomwintab.vim' "https://alex.dzyoba.com/blog/vim-revamp/, Use <C-w>o to toggle zoom
@@ -207,6 +208,11 @@ call plug#end()
 " Allow quit via single keypress (Q)
 nmap ZQ :qa!<CR>
 
+"From https://www.reddit.com/r/neovim/comments/ac1i8w/whats_your_buffermanagement_setup/
+nnoremap <leader>b :ls<cr>:b
+noremap <tab> :b#<cr>
+
+
 "Save files since Cmd-S and Ctrl-S don't work well on Terminals (aaargh!)
 noremap <Leader>s :update<CR>
 inoremap <Leader>s <Esc>:update<CR>
@@ -225,9 +231,6 @@ nnoremap j gj
 nnoremap k gk
 vnoremap j gj
 vnoremap k gk
-
-
-
 
 
 " Make Y yank everything from the cursor to the end of the line. This makes Y
@@ -287,6 +290,18 @@ map <leader>Et :tabe %%
 if has('nvim')
   let $VISUAL = 'nvr -cc split --remote-wait'
 endif
+" }
+
+" { * Configure: vemtabline
+" https://github.com/pacha/vem-tabline
+set hidden
+" commented since dangerous
+" nmap <leader>h <Plug>vem_move_buffer_left-
+" nmap <leader>l <Plug>vem_move_buffer_right-
+nmap <leader>p <Plug>vem_prev_buffer-
+nmap <leader>n <Plug>vem_next_buffer-
+let g:vem_tabline_show_number='buffnr'
+
 " }
 
 " { * Configure: fzf NERDTree,  Dirvish, Tagbar Config, Rooter
