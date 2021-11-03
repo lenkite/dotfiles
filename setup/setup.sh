@@ -244,7 +244,7 @@ gh_download_linux_release() {
 install_pkgs() {
  echo "- (install_pkgs) Installing packages..."
  if [[ $isMacos == true ]]; then
-    brew install the_silver_searcher fortune cowsay jenv leiningen nodejs go rlwrap yarn neovim jenv skim 
+    brew install the_silver_searcher fortune cowsay leiningen nodejs go rlwrap yarn neovim skim cmake
  elif [[ $isLinux == true ]]; then
    if [[ $isRedhat == true ]]; then
      install_pkgs_redhat

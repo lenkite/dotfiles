@@ -211,11 +211,9 @@ defenv_neosdk() {
 }
 
 defenv_java() {
-  jvmHome=/usr/lib/jvm/java-8-oracle/
-  if [[ $isLinux && -d $jvmHome ]]; then
-    export JAVA_HOME=$jvmHome
-  elif [[ $isMacos && -f /usr/libexec/java_home ]]; then
-    export JAVA_HOME=$(/usr/libexec/java_home)
+  if [[ $isMacos && -f /usr/libexec/java_home ]]; then
+    local jh=$(/usr/libexec/java_home -v 1.8)
+    export JAVA_HOME=$jh
   fi
 }
 
