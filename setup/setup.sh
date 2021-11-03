@@ -358,7 +358,7 @@ setup_maven() {
 #  fi
 
   if [[ $isMacos ]]; then
-      brew install maven --ignore-dependencies	
+      brew install maven@3.5 --ignore-dependencies	
   fi
 }
 
