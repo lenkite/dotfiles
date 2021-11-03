@@ -244,9 +244,7 @@ gh_download_linux_release() {
 install_pkgs() {
  echo "- (install_pkgs) Installing packages..."
  if [[ $isMacos == true ]]; then
-   #brew install git || brew upgrade git 
-    brew install the_silver_searcher fortune cowsay upgrade cowsay jenv leiningen nodejs go rlwrap yarn neovim jenv
-    brew cask install skim 
+    brew install the_silver_searcher fortune cowsay jenv leiningen nodejs go rlwrap yarn neovim jenv skim 
  elif [[ $isLinux == true ]]; then
    if [[ $isRedhat == true ]]; then
      install_pkgs_redhat
@@ -364,17 +362,6 @@ setup_maven() {
   fi
 }
 
-setup_jdk() {
-  echo "-- setup_jdk"
-  if [[ $isLinux ]]; then
-    echo "(setup_jdk) NOT YET IMPLEMENTED FOR LINUX"
-  fi
-  if [[ $isMacos ]]; then
-	echo "(setup_jdk) Installing Oracle JDK 8"
-  brew tap homebrew/cask-versions
-  brew cask install homebrew/cask-versions/adoptopenjdk8
-  fi
-}
 
 setup_go() {
   echo "-- setup_go"
@@ -631,7 +618,6 @@ setup_settings() {
 
 setup_sdk() {
   echo "- setup_sdk"
-  setup_jdk
   setup_maven
   # setup_go
   # setup_cloud
