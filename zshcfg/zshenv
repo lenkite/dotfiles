@@ -242,12 +242,15 @@ defenv_nvr() {
 }
 
 defenv_maven() {
-  local mvnHome=/opt/maven
-  if [[ $isLinux && -d $mvnHome/bin ]]; then
-    typeset -gxU path PATH
-    path+=$mvnHome/bin
-    export M2_HOME=$mvnHome
-  fi
+  typeset -a mvnHomes
+  local mvnHomes=(/opt/maven /usr/local/opt/maven@3.5/)
+  for mvnHome ("$mvnHomes[@]"); do 
+    if [[ -d $mvnHome ]]; then
+      typeset -gxU path PATH
+      path+=$mvnHome/bin
+      export M2_HOME=$mvnHome
+    fi
+  done
 }
 
 defenv_zeal() {
