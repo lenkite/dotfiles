@@ -12,7 +12,6 @@ main() {
   detect_os
   detect_user
   detect_util
-  load_dotenv
   load_dotpaths
   defenv_gcc_clang
   defenv_golang
@@ -26,6 +25,7 @@ main() {
   defenv_maven
   defenv_zeal
   defenv_nvr
+  load_dotenv
   #defenv_ctags
   manpath=( $dotfiles/man /usr/local/share/man /usr/share/man )
 }
