@@ -169,14 +169,12 @@ git_config() {
       echo "Will git pull sub-directories at current branch"
     fi
     for d in */ ; do
-      echo "Changing to directory $d"
-      cd "$d"
-      if [ -d ".git" ]; then
+      if [ -d "$d/.git" ]; then
         echo "Git pulling $d ..."
-        git pull
+        git -C $d pull
         if [[ ! -z $branch ]]; then
           echo "Changing branch to $branch"
-          git checkout $branch
+          git -C $d checkout $branch
           git pull
         fi
       fi
