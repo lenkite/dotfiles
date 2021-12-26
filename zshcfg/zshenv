@@ -219,12 +219,6 @@ defenv_java() {
 
 defenv_python() {
   typeset -gxU path PATH
-  if [[ $isMacos ]]; then
-    if [[ -d ~/Library/Python ]]; then
-      local pybin=$(echo ~/Library/Python/3.*/bin | awk '{print $NF}')
-      [ -d $pybin ] && path+="$pybin" && export PATH
-    fi
-  fi
   # http://virtualenvwrapper.readthedocs.io/en/latest/_sources/install.txt
   if [[ -f /usr/bin/python3 ]]; then
     export WORKON_HOME=$HOME/.virtualenvs
