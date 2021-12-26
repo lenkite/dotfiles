@@ -21,6 +21,7 @@ main() {
   defenv_kotlin
   defenv_neosdk
   defenv_python
+  defenv_r
   defenv_java
   defenv_maven
   defenv_zeal
@@ -225,6 +226,26 @@ defenv_python() {
     export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
   fi
   #TODO: configure python environment for linux/wsl too!
+}
+
+defenv_r() {
+  typeset -gxU path PATH
+  # -    if [[ -d ~/Library/Python ]]; then
+# -      local pybin=$(echo ~/Library/Python/3.*/bin | awk '{print $NF}')
+# -      [ -d $pybin ] && path+="$pybin" && export PATH
+# -    fi
+
+  # Check if array is empty:  https://gist.github.com/fhuitelec/f900ba41fc6ed55199b2fff4dd226d4d
+  # https://unix.stackexchange.com/questions/34011/the-best-way-to-expand-glob-pattern
+  if [[ -d /usr/local/Cellar/r ]]; then
+    local rbins=($~/sr/local/Cellar/r/*/bin(N))
+    if [ ${#rbins[@]} -gt 0 ]; then
+      local rbin=${rbins[-1]}
+      path+="$rbin"
+    else
+      # echo "no rbin found!" #uncomment if needed for diagnosis 
+    fi
+  fi
 }
 
 defenv_nvr() {
