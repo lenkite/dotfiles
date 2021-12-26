@@ -127,7 +127,6 @@ else
 endif
 Plug 'shime/vim-livedown'
 Plug 'vim-scripts/SyntaxRange'
-Plug 'python-mode/python-mode', { 'branch': 'develop' }
 
 Plug 'guns/vim-clojure-static' "Syntax highlighting for clojure
 Plug 'guns/vim-clojure-highlight' "Extended highlighting.
@@ -480,17 +479,6 @@ let g:go_highlight_types = 1
 "let g:go_auto_type_info = 1
 let g:go_auto_sameids = 1
 autocmd FileType go if exists(":GoBuild") | call ConfigureVimGo() | endif
-
-" }
-
-" { * Configure Python Mode
-" https://github.com/python-mode/python-mode
-"
-function! ConfigurePythonMode()
-  setlocal nospell
-endfunction
-autocmd FileType python if exists(":PymodeVersion") | call ConfigurePythonMode() | endif
-let g:pymode_run_bind = '<leader>x'
 
 " }
 
