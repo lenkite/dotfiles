@@ -327,6 +327,7 @@ misc_alias() {
     print ul.unquote_plus(sys.argv[1])"'
   alias urlencode='python -c "import sys, urllib as ul; \
     print ul.quote_plus(sys.argv[1])"'
+  alias golistdeps="go list -deps -f '{{define \"mod\"}}{{.Path}}@{{.Version}}{{end}}{{if .Module}}{{if not .Module.Main}}{{if .Module.Replace}}{{template \"mod\" .Module.Replace}}{{else}}{{template \"mod\" .Module}}{{end}}{{\"\t\"}}{{.ImportPath}}{{end}}{{end}}' | sort"
 }
 
 main
