@@ -27,6 +27,7 @@ main() {
   vi_mode  #Keep towards  end cos plugins have bad habit of changing this
   base16_shell
   get_cheats
+  source_kube_ps1
   source_my_zshrc
   greeting
   cd ~
@@ -185,7 +186,6 @@ git_config() {
   if [[ $hasGit ]]; then
     # TODO: Agent setup is yet to be done correctly!
     git config --global credential.helper "cache --timeout=3600"  
-    git config --global credential.https://github.com/lenkite.lenkite lenkite 
   fi
 }
 
@@ -314,6 +314,12 @@ get_cheats() {
   fi
 }
 
+source_kube_ps1() {
+  kube_ps1_dir=$(brew --prefix kube-ps1)/share
+  [[ -d $kube_ps1_dir ]] && [[ -f $kube_ps1_dir/kube-ps1.sh ]] && source $kube_ps1_dir/kube-ps1.sh && PROMPT='$(kube_ps1)'$PROMPT
+}
+
+
 source_my_zshrc() {
   [[ -f ~/my.zsh ]] && source ~/my.zsh
 }
@@ -332,9 +338,4 @@ misc_alias() {
 
 main
 
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/Users/i034796/.sdkman"
-[[ -s "/Users/i034796/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/i034796/.sdkman/bin/sdkman-init.sh"
