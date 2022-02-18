@@ -29,7 +29,6 @@ main() {
   get_cheats
   source_kube_ps1
   source_my_zshrc
-  greeting
   cd ~
 }
 
@@ -322,10 +321,6 @@ source_kube_ps1() {
 
 source_my_zshrc() {
   [[ -f ~/my.zsh ]] && source ~/my.zsh
-}
-
-greeting() {
-  command -v fortune 2>&1 >/dev/null && command -v cowsay 2>&1 >/dev/null && fortune | cowsay
 }
 
 misc_alias() {
