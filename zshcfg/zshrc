@@ -28,7 +28,7 @@ main() {
   base16_shell
   get_cheats
   source_kube_ps1
-  additional_k8s_alias
+  k8s_settings 
   source_my_zshrc
   cd ~
 }
@@ -313,7 +313,10 @@ source_kube_ps1() {
   [[ -d $kube_ps1_dir ]] && [[ -f $kube_ps1_dir/kube-ps1.sh ]] && source $kube_ps1_dir/kube-ps1.sh && PROMPT='$(kube_ps1)'$PROMPT
 }
 
-additional_k8s_alias() {
+k8s_settings() {
+  # set autocompletion for kubectl
+  source <(kubectl completion zsh)
+  # aliases for kubectx plugin
   if (( $+commands[kubectx] )); then
     alias kctx="kubectx"
     alias kns="kubens"
