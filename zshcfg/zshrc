@@ -28,6 +28,7 @@ main() {
   base16_shell
   get_cheats
   source_kube_ps1
+  additional_k8s_alias
   source_my_zshrc
   cd ~
 }
@@ -90,6 +91,7 @@ zsh_plugins() {
     zgen oh-my-zsh plugins/git
     zgen oh-my-zsh plugins/vi-mode
     zgen oh-my-zsh themes/arrow
+    zgen oh-my-zsh plugins/kubectl
     # zplug docker/cli, use:contrib/completion/zsh
     # zplug docker/compose, use:contrib/completion/zsh
     #[ $isMacos ] && zgen prezto homebrew
@@ -311,6 +313,12 @@ source_kube_ps1() {
   [[ -d $kube_ps1_dir ]] && [[ -f $kube_ps1_dir/kube-ps1.sh ]] && source $kube_ps1_dir/kube-ps1.sh && PROMPT='$(kube_ps1)'$PROMPT
 }
 
+additional_k8s_alias() {
+  if (( $+commands[kubectx] )); then
+    alias kctx="kubectx"
+    alias kns="kubens"
+  fi
+}
 
 source_my_zshrc() {
   [[ -f ~/my.zsh ]] && source ~/my.zsh
