@@ -1,4 +1,4 @@
-# vim: set sw=2 ts=2 sts=2 et tw=80 foldlevel=0 foldmethod=marker spell:
+#supercrabtree vim: set sw=2 ts=2 sts=2 et tw=80 foldlevel=0 foldmethod=marker spell:
 # See ZSH startup files at http://zsh.sourceforge.net/Intro/intro_3.html
 # zshrc is sourced in interactive shells
 # It should be used to setup aliases, functions, options
@@ -60,7 +60,7 @@ zsh_opts_vars() {
   # Add my zfuncs to fpath
   # See 9.1 Autoloading Functions at http://zsh.sourceforge.net/Doc/Release/Functions.html
   [[ -d ~/.zfuncs ]] || mkdir ~/.zfuncs # for completions installed by tools
-  fpath=($dotfiles/zshcfg/zfuncs ~/.zfuncs $fpath)
+  fpath=(~/.zfuncs $dotfiles/zshcfg/zfuncs $fpath)
 
   # zstyle
   #zstyle ':completion:*' list-prompt '%SAt %p: Hit TAB for more, or the character to insert%s'
@@ -83,13 +83,6 @@ zsh_plugins() {
   ## Currently using zgen as plugin manager
   [ -f ~/.zgen/zgen.zsh ] && source ~/.zgen/zgen.zsh || echo "ERR: zgen not found. Re-run '~/dotfiles/setup/setup.sh -z'"
   if [[ -f ~/.zgen/zgen.zsh ]]; then
-    if [[ $isCygwin ]]; then
-      #zplug miekg/lean, use:prompt_lean_setup, from:github
-    else 
-      # zgen mafredri/zsh-async, from:github
-      # zplug sindresorhus/pure, use:pure.zsh, from:github, as:theme
-      zgen load supercrabtree/k
-    fi
     #zgen prezto
     #zgen prezto utility
     zgen load zsh-users/zsh-syntax-highlighting
