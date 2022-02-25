@@ -490,6 +490,12 @@ setup_sed_awk_grep() {
   fi
 }
 
+setup_sshpass() {
+  echo "-- setup_sshpass"
+  brew tap esolitos/ipa 
+  brew install esolitos/ipa/sshpass 
+}
+
 
 
 setup_rq() {
