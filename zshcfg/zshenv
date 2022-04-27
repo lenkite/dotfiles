@@ -153,7 +153,7 @@ defenv_golang() {
   fi
 
   if [[ $isMacos ]]; then
-    brewGoBaseDir=/usr/local/Cellar/go
+    brewGoBaseDir=/opt/homebrew/Cellar/go
     goDirName=$(ls -t1 $brewGoBaseDir | head -n1)
     if [[ -d  $brewGoBaseDir/$goDirName ]]; then
       typeset -gxU path PATH
@@ -274,3 +274,4 @@ main
 # See https://github.com/rupa/z/pull/200
 [[ $isWsl ]] && { unsetopt BG_NICE }
 
+. "$HOME/.cargo/env"

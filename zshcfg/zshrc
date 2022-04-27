@@ -84,17 +84,12 @@ zsh_plugins() {
   ## Currently using zgen as plugin manager
   [ -f ~/.zgen/zgen.zsh ] && source ~/.zgen/zgen.zsh || echo "ERR: zgen not found. Re-run '~/dotfiles/setup/setup.sh -z'"
   if [[ -f ~/.zgen/zgen.zsh ]]; then
-    #zgen prezto
-    #zgen prezto utility
     zgen load zsh-users/zsh-syntax-highlighting
     zgen oh-my-zsh
     zgen oh-my-zsh plugins/git
     zgen oh-my-zsh plugins/vi-mode
     zgen oh-my-zsh themes/arrow
     zgen oh-my-zsh plugins/kubectl
-    # zplug docker/cli, use:contrib/completion/zsh
-    # zplug docker/compose, use:contrib/completion/zsh
-    #[ $isMacos ] && zgen prezto homebrew
   fi
 }
 
@@ -142,7 +137,7 @@ def_autoloads() {
 
   # Autoloads 
   # See https://unix.stackexchange.com/questions/33255/how-to-define-and-load-your-own-shell-function-in-zsh
-  autoload -Uz compinit #Used for compdef function. 
+  autoload -Uz compinit && compinit #Used for compdef function. 
   autoload -U promptinit && promptinit
   autoload -U colors && colors
   # See http://www.refining-linux.org/archives/36/ZSH-Gem-1-Programmable-file-renaming/

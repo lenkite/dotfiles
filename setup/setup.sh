@@ -3,7 +3,7 @@
 # Supported OS'es are Windows/Cygwin, Windows/WSL, MacOS and Linux
 # Dev Note: Some funcs here are duplicated in zshcfg/0.zsh. This is by design
 
-usage() { echo "Usage: $0 [-c] [-p] [-v] [-t] [-u] [-z]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-c] [-g] [-p] [-v] [-t] [-u] [-z]" 1>&2; exit 1; }
 
 # Use getopt for simple option parsing
 # See https://stackoverflow.com/questions/16483119/example-of-how-to-use-getopts-in-bash
@@ -12,6 +12,9 @@ while getopts "cmpsuvtz" opt; do
   case "${opt}" in
     c)
       codeSetup=true
+      ;;
+    g)
+      golibsSetup=true
       ;;
     p)
       pkgSetup=true
@@ -45,9 +48,9 @@ while getopts "cmpsuvtz" opt; do
 done
 shift $((OPTIND-1))
 
-[ $codeSetup ] || [ $pkgSetup ] || [ $miscSetup ] || [ $utilSetup ] || [ $viSetup ] || [ $zshSetup ] || [ $sdkSetup ] || [ $settingsSetup ] || allSetup=true
+[ $codeSetup ] || [ $golibsSetup ] || [ $pkgSetup ] || [ $miscSetup ] || [ $utilSetup ] || [ $viSetup ] || [ $zshSetup ] || [ $sdkSetup ] || [ $settingsSetup ] || allSetup=true
 
-echo "codeSetup = $codeSetup, sdkSetup = $sdkSetup, viSetup = $viSetup, miscSetup = $miscSetup, zshSetup = $zshSetup, utilSetup = $utilSetup, settingsSetup = $settingsSetup, allSetup=$allSetup"
+echo "codeSetup = $codeSetup, golibsSetup = $golibsSetup, sdkSetup = $sdkSetup, viSetup = $viSetup, miscSetup = $miscSetup, zshSetup = $zshSetup, utilSetup = $utilSetup, settingsSetup = $settingsSetup, allSetup=$allSetup"
 
 setup_main() {
   initialize_vars
@@ -79,6 +82,7 @@ setup_main() {
   [[ $viSetup   || $allSetup  ]] && setup_vim
   [[ $sdkSetup  || $allSetup  ]] && setup_sdk
   [[ $codeSetup || $allSetup  ]] && setup_code
+  [[ $golibsSetup || $allSetup ]] && setup_golibs
   [[ $utilSetup || $allSetup  ]] && setup_util
   [[ $settingsSetup || $allSetup ]] && setup_settings
   [[ $allSetup  || $miscSetup ]] && setup_misc
@@ -709,6 +713,10 @@ setup_code() {
   # setup_vim
   # setup_vscode
   setup_intellij
+}
+
+setup_golibs() {
+  # todo - install ginkgo, go get gomega and other nice libraries which are going to be heavily used
 }
 
 setup_vscode() {
