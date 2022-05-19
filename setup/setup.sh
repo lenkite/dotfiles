@@ -711,43 +711,9 @@ setup_zsh() {
 setup_code() {
   echo " - setup_code"
   # setup_vim
-  # setup_vscode
   setup_intellij
 }
 
-setup_golibs() {
-  # todo - install ginkgo, go get gomega and other nice libraries which are going to be heavily used
-}
-
-setup_vscode() {
-  echo "-- setup_vscode"
-  sourceDir=$dotfilesDir/vscode
-  if [[ $isMacos == true ]]; then
-    targetDir="$HOME/Library/Application Support/Code/User"
-  elif [[ $isCygwin == true ]]; then
-    targetDir="$winHome/AppData/Roaming/Code/User"
-  elif [[ $isWsl == true ]]; then
-    targetDir="$winHome/AppData/Roaming/Code/User"
-  elif [[ $isLinux == true ]]; then
-    echo "TODO: Not sure what is VSC's target dir in real linux..check it out!"
-    exit -1
-    targetDir="$winHome/AppData/Roaming/Code/User"
-  fi
-
-  if [[ -e $targetDir/keybindings.json ]]; then
-    echo "Deleting existing vscode keybindings.json"
-    rm $targetDir/keybindings.json 2> /dev/null
-  fi
-  echo "Executing ln -s $sourceDir/keybindings.json $targetDir"
-  ln -s "$sourceDir/keybindings.json" "$targetDir"
-
-  if [[ -e $targetDir/settings.json ]]; then
-    echo "Deleting existing vscode settings.json"
-    rm $targetDir/settings.json 2> /dev/null
-  fi
-  echo "Executing ln -s $sourceDir/settings.json $targetDir"
-  ln -s "$sourceDir/settings.json" "$targetDir"
-}
 
 setup_intellij()  {
   echo "-- setup_intellij"
