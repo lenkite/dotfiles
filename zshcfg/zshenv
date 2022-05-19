@@ -216,6 +216,10 @@ defenv_java() {
     local jh=$(/usr/libexec/java_home -v 1.8)
     export JAVA_HOME=$jh
   fi
+  if [[ -f /Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home/jre ]]; then
+    export JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home/jre
+  fi
+
 }
 
 defenv_python() {
