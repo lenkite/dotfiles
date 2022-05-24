@@ -27,8 +27,8 @@ nmap <M-CR> :action ShowIntentionActions<CR>
 
 
 "Navigation
-nmap <C-I> :action Forward<CR>
-nmap <C-O> :action Back<CR>
+nmap <C-o> <Action>(Back)
+nmap <C-i> <Action>(Forward)
 
 "Yank to clipboard by default
 set clipboard+=unnamed
