@@ -68,6 +68,7 @@ zsh_opts_vars() {
   zstyle ':completion:*' list-prompt '%S%M matches%s' #from prezto
   zstyle ':completion:*' menu select
 
+
 }
 
 zsh_plugins() {
@@ -90,6 +91,7 @@ zsh_plugins() {
     zgen oh-my-zsh plugins/vi-mode
     zgen oh-my-zsh themes/arrow
     zgen oh-my-zsh plugins/kubectl
+    ZSH_HIGHLIGHT_STYLES[comment]='none' #https://github.com/zsh-users/zsh-syntax-highlighting/issues/510
   fi
 }
 
@@ -327,11 +329,15 @@ source_kube_ps1() {
 
 k8s_settings() {
   # set autocompletion for kubectl
-  source <(kubectl completion zsh)
-  # aliases for kubectx plugin
-  if (( $+commands[kubectx] )); then
-    alias kctx="kubectx"
-    alias kns="kubens"
+  #
+  hasKubectl=$(command -v kubectl)
+  if [[ $hasKubectl ]]; then
+    source <(kubectl completion zsh)
+    # aliases for kubectx plugin
+    if (( $+commands[kubectx] )); then
+      alias kctx="kubectx"
+      alias kns="kubens"
+    fi
   fi
 }
 
