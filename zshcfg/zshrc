@@ -25,7 +25,6 @@ main() {
   exec_autoruns
   exec_compinit
   vi_mode  #Keep towards  end cos plugins have bad habit of changing this
-  base16_shell
   get_cheats
   source_kube_ps1
   k8s_settings 
@@ -306,14 +305,14 @@ vi_mode() {
   export LC_ALL=en_US.UTF-8
 }
 
-base16_shell() {
-  if [[ -d ~/.config/base16-shell ]]; then
-    BASE16_SHELL=$HOME/.config/base16-shell/
-    [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
-  else
-    echo "Base16 shell colors don't appear installed"
-  fi
-}
+#base16_shell() {
+#  if [[ -d ~/.config/base16-shell ]]; then
+#    BASE16_SHELL=$HOME/.config/base16-shell/
+#    [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
+#  else
+#    echo "Base16 shell colors don't appear installed"
+#  fi
+#}
 
 get_cheats() {
   if [[ ! -f ~/bin/cht.sh ]]; then
