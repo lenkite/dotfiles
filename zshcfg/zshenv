@@ -26,6 +26,8 @@ main() {
   defenv_maven
   defenv_zeal
   defenv_nvr
+  defenv_coreutils
+
   load_dotenv
   #defenv_ctags
   manpath=( $dotfiles/man /usr/local/share/man /usr/share/man )
@@ -95,11 +97,14 @@ load_dotenv() {
 # Loads lines from ~/.paths and adds each line as 
 # path component to env PATH 
 load_dotpaths() {
-  #ensure that cygwin stuff is first in path, so that windows path doesn't take priority
-  export PATH="/bin:/usr/bin:$PATH"
   # http://zsh.sourceforge.net/Guide/zshguide02.html#l24
   typeset -gxU path PATH
-  path+=( ~/.local/bin $dotfiles/scripts ~/bin )
+
+  if [[ -d ~/Library/Application\ Support/multipass/bin ]]; then
+    path=( '$HOME//Library/Application Support/multipass/bin' $path) # needed for multi-pass alias
+  fi
+
+  path=( ~/.local/bin $dotfiles/scripts ~/bin $path)
   if [[ -d ~/src/fzf/bin ]]; then
     path+=( ~/src/fzf/bin )
   fi
@@ -251,6 +256,13 @@ defenv_r() {
 defenv_nvr() {
   export NVIM_LISTEN_ADDRESS=/tmp/nvimsocket
   if [[ $isMacos ]]; then
+  fi
+}
+
+defenv_coreutils() {
+  typeset -gxU path PATH
+  if [[ -f /opt/homebrew/Cellar/coreutils/9.1/bin ]]; then
+    path=('/opt/homebrew/Cellar/coreutils/9.1/bin'  $path)
   fi
 }
 
