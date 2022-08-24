@@ -148,8 +148,8 @@ defenv_golang() {
   if [[ $isCygwin ]]; then
     export GOPATH=`cygpath -am ~`
   else
-    export GOPATH="$HOME"
-    export GOBIN="$HOME/bin"
+    export GOPATH="$HOME/go"
+    export GOBIN="$GOPATH/bin"
   fi
   if [[ -d /usr/local/go/ ]]; then
     typeset -gxU path PATH
