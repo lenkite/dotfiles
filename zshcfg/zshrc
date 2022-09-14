@@ -17,7 +17,6 @@ main() {
   git_config
   maven_config
   neovim_config
-  pet_config
   java_config
   python_config
   misc_alias
@@ -213,11 +212,6 @@ neovim_config() {
   alias lv='nvim -u NONE'
 }
 
-pet_config() {
-  [[ -d ~/.config/pet ]] || mkdir -p ~/.config/pet
-  [[ -e ~/.config/pet/config.toml ]] || ln $dotfiles/pet/config.toml ~/.config/pet/config.toml
-  [[ -d ~/dotfiles/pet/snippets ]] || mkdir -p ~/dotfiles/pet/snippets
-}
 
 
 install_jdk17() {
