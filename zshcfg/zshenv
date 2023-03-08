@@ -104,7 +104,7 @@ load_dotpaths() {
     path=( '$HOME//Library/Application Support/multipass/bin' $path) # needed for multi-pass alias
   fi
 
-  path=( ~/.local/bin $dotfiles/scripts ~/bin $path)
+  path=( ~/.local/bin $dotfiles/scripts ~/bin ~/go/bin $path)
   if [[ -d ~/src/fzf/bin ]]; then
     path+=( ~/src/fzf/bin )
   fi
@@ -159,11 +159,17 @@ defenv_golang() {
   fi
 
   if [[ $isMacos ]]; then
-    brewGoBaseDir=/opt/homebrew/Cellar/go
-    goDirName=$(ls -t1 $brewGoBaseDir | head -n1)
-    if [[ -d  $brewGoBaseDir/$goDirName ]]; then
+    if [[ -e /usr/local/go/bin/go ]]; then
+      export GOROOT=/usr/local/go
+    else
+      brewGoBaseDir=/opt/homebrew/Cellar/go
+      goDirName=$(ls -t1 $brewGoBaseDir | head -n1)
+      if [[ -d  $brewGoBaseDir/$goDirName ]]; then
+        export GOROOT=$brewGoBaseDir/$goDirName/libexec
+      fi
+    fi
+    if [[ ! -z $GOROOT ]]; then
       typeset -gxU path PATH
-      export GOROOT=$brewGoBaseDir/$goDirName/libexec
       path+=$GOROOT/bin
       export PATH
     fi
