@@ -60,3 +60,5 @@ nmap <Leader>Gc :action GenerateConstructor<CR>
 
 "surround
 set surround
+
+autocmd FileType css,html set iskeyword+=-
