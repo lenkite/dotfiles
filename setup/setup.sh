@@ -526,7 +526,6 @@ setup_vim() {
   ln $dotfilesVimCfgDir/ideavimrc $trueHome/.ideavimrc
   # Must fix this for windows, where it is ~/AppData/Local/nvim/init.vim
   ln $dotfilesVimCfgDir/init.vim $nvimConfigDir/init.vim 
-  ln $dotfilesVimCfgDir/coc-settings.json $nvimConfigDir/coc-settings.json
   echo "Setup Dir $dotfilesSetupDir"
 
   curl -fLo $trueHome/.vim/autoload/plug.vim --create-dirs \
