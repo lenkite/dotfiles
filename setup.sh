@@ -60,8 +60,6 @@ setup_main() {
 	fi
 
 
-  export dotfilesSetupDir="$dotfilesDir/setup"
-
   if [[ -d $dotfilesDir ]]; then
     echo "Dotfiles dir already exists. Updating..."
     git -C $dotfilesDir pull
@@ -71,21 +69,17 @@ setup_main() {
   fi
 
 
-  if [[ ! -d $dotfilesSetupDir ]]; then
-    echo "Error: $dotfilesSetupDir does not exist! Have you checked out dotfiles correctly?"
-    exit -1
-  fi
   echo "Dotfiles Dir: $dotfilesDir"
 
   [[ $allSetup  || $pkgSetup  ]] && install_pkgs
   [[ $allSetup  || $zshSetup  ]] && setup_zsh
-  [[ $viSetup   || $allSetup  ]] && setup_vim
   [[ $sdkSetup  || $allSetup  ]] && setup_sdk
-  [[ $codeSetup || $allSetup  ]] && setup_code
-  [[ $golibsSetup || $allSetup ]] && setup_golibs
+ # [[ $golibsSetup || $allSetup ]] && setup_golibs
   [[ $utilSetup || $allSetup  ]] && setup_util
   [[ $settingsSetup || $allSetup ]] && setup_settings
   [[ $allSetup  || $miscSetup ]] && setup_misc
+  [[ $codeSetup || $allSetup  ]] && setup_code
+  [[ $viSetup   || $allSetup  ]] && setup_vim
   
 }
 
@@ -248,7 +242,7 @@ gh_download_linux_release() {
 install_pkgs() {
  echo "- (install_pkgs) Installing packages..."
  if [[ $isMacos == true ]]; then
-    brew install coreutils gnu-sed gnu-tar grep fd jq ctags the_silver_searcher fortune cowsay leiningen node go rlwrap yarn neovim skim cmake deno ripgrep
+    brew install coreutils gnu-sed gnu-tar grep fd jq ctags the_silver_searcher fortune cowsay  node go rlwrap yarn neovim skim cmake deno ripgrep delve kubectl krew kube-ps1 gardener/tap/gardenctl-v2 docker openvpn
  elif [[ $isLinux == true ]]; then
    if [[ $isRedhat == true ]]; then
      install_pkgs_redhat
@@ -286,12 +280,7 @@ install_pkgs() {
 
  if command -v pip3 >/dev/null 2>&1 ; then
    echo "INSTALL python neovim modules using pip3..."
-   pip3 install --user pynvim
-   echo "INSTALL conan package manager ..."
-   # pip3 install --user conan #conan will be added in ~/Library/Python/3.7/bin/conan. Needs new shell
-   pip3 install conan
-   #pip3 install neovim --upgrade
-   #pip3 install --user neovim-remote
+   pip3 install --user --upgrade pynvim
  else
    echo "WARN: can't find pip3!"
  fi
@@ -332,31 +321,6 @@ setup_go_linux() {
     echo "WARNING: Curl not found or not in PATH. Kindly install the same!"
   fi
 
-  if [[ $isMacos == true ]]; then
-      # TODO check for upgrade option too
-      [[ $hasGo ]] && brew upgrade golang || brew install golang
-  fi
-}
-
-setup_maven() {
-  # I would love to use pkg manager here but sadly the pkg managers are out of date!
-  echo "-- setup_maven"
-#	local mvnVersion="3.5.4"
-#  local mvnName="apache-maven-$mvnVersion"
-#  local mvnTar="$mvnName-bin.tar.gz"
-#  local mvnUrl="http://www.strategylions.com.au/mirror/maven/maven-3/$mvnVersion/binaries/$mvnTar"
-#  if [[ $hasCurl && $isLinux ]]; then
-#		echo " (setup_maven) Downloading: $mvnUrl"
-#    [[ -f /tmp/$mvnTar ]] || $(cd /tmp && curl -O -L $mvnUrl)
-#    sudo tar -C /tmp -xzf /tmp/$mvnTar
-#		[[ -d /opt/maven ]] && sudo rm -rf /opt/maven
-#    sudo mv /tmp/$mvnName /opt/maven
-#    echo " (setup_maven) done"
-#  fi
-
-  if [[ $isMacos ]]; then
-      brew install maven@3.5 --ignore-dependencies	
-  fi
 }
 
 
@@ -365,15 +329,6 @@ setup_go() {
   [[ $isLinux ]] && setup_go_linux
 }
 
-setup_cloud() {
-  echo "-- setup_cloud"
-  if [[ $isMacos ]]; then
-    echo " Installing CF-CLI..."
-    [[ $isMacos ]] && brew install cloudfoundry/tap/cf-cli
-    echo " Installing Docker..."
-    brew install docker
-  fi
-}
 
 setup_python() {
   echo "-- setup_python"
@@ -384,17 +339,6 @@ setup_python() {
   fi
 }
 
-setup_clojure() {
-  echo "-- setup_clojure"
-  hasClj=$(command -v clj)
-  hasLein=$(command -v lein)
-  if [[ $isMacos ]]; then
-    echo " Installing clojure..."
-    [[ $hasClj ]] && brew upgrade clojure || brew install clojure
-    echo " Installing lein..."
-    [[ $hasLein ]] && brew upgrade leiningen|| brew install leiningen
-  fi
-}
 
 setup_fzf() {
   echo "-- setup_fzf"
@@ -436,11 +380,13 @@ setup_vim() {
   rm $trueHome/.ideavimrc 2> /dev/null
   rm $nvimConfig 2> /dev/null
 
-  echo "Linking nvimConfig: $nvimConfig->nvimConfigDotfiles: $nvimConfigDotfiles"
-  ln -s $nvimConfigDotfiles $nvimConfig
-
   echo "Linking ideavimrc"
   ln $dotfilesDir/ideavimrc $trueHome/.ideavimrc
+
+  echo "Cloning Astrovim..."
+  rm -rf $trueHome/.config/nvim
+  git clone --depth 1 https://github.com/AstroNvim/AstroNvim $trueHome/.config/nvim
+
 
 }
 
@@ -450,38 +396,35 @@ setup_misc() {
 
 setup_util() {
   echo "- setup_util"
-  setup_sed_awk_grep
-  #setup_rq
-  #[[ $GOPATH ]] || export GOPATH=$trueHome
-  #if ! command -v go >/dev/null 2>&1 ; then
-  # export PATH=$PATH:/usr/local/go/bin
-  #fi
+  [[ -d $trueHome/.zfuncs ]] || mkdir $trueHome/.zfuncs # for completions installed by tools
 
-  if command -v go >/dev/null 2>&1 ; then
-    echo "Installing neosdkurls..."
-    go get -v github.com/lenkite/mycliutil/neosdkurls
-    echo "Installing delve..."
-    go get -u github.com/derekparker/delve/cmd/dlv
-    echo "Installing yolo..."
-    go get github.com/azer/yolo
-    echo "Installing zlook..."
-    go get github.com/elankath/zlook/cmd/zlook
-  else
-    echo "WARNING: Go not found or not in PATH. Kindly correct so lovely utilities can be installed"
+  if command -v kubectl &> /dev/null; then
+     echo "- setup_util: kubectl completion zsh > $trueHome/.zfuncs/_kubectl"
+     kubectl completion zsh >  $trueHome/.zfuncs/_kubectl
   fi
 
-  ##See https://github.com/ratishphilip/nvmsharp
-  #if [[ $isCygwin || $isWsl ]]; then
-  #  local nvmsharpUrl="https://raw.githubusercontent.com/ratishphilip/nvmsharp/master/nvmsharp_executable.zip"
-  #  if [[ $hasCurl && $hasUnzip ]]; then
-  #    echo "Installing nvmsharp..."
-  #    curl -L -C - $nvmsharpUrl -o /tmp/nvmsharp.zip
-  #    rm -rf /tmp/nvmsharp_executable
-  #    unzip /tmp/nvmsharp.zip -d /tmp
-  #    [[ -d ~/bin ]] || mkdir ~/bin
-  #    cp /tmp/nvmsharp_executable/* ~/bin
-  #  fi
-  #fi
+  if command -v gardenctl &> /dev/null; then
+    echo "- setup_util: gardenctl completion zsh >  $trueHome/.zfuncs/_gardenctl"
+    gardenctl completion zsh >  $trueHome/.zfuncs/_gardenctl
+  fi
+
+  if command -v kubebuilder &> /dev/null; then
+    echo "- setup_util: kubebuilder completion zsh >  $trueHome/.zfuncs/_kubebuilder"
+    kubebuilder completion zsh >  $trueHome/.zfuncs/_kubebuilder
+  fi
+
+  coreutils_dir=$(brew --prefix coreutils)
+  if [[ -d $coreutils_dir ]]; then
+    ln -fs $(which gbase64) ~/bin/base64 && ln -fs $(which gsed) ~/bin/sed && ln -fs $(which gtar) ~/bin/tar
+  fi
+  unset coreutils_dir
+
+
+  hasDeno=$(command -v deno)
+  if [[ $hasDeno ]]; then
+    deno completions zsh > ~/.zfuncs/_deno
+  fi
+
 }
 
 setup_settings() {
@@ -500,10 +443,6 @@ setup_settings() {
     defaults write -g InitialKeyRepeat -int 12
   fi
 
-  tmuxCfg=$trueHome/.tmux.conf
-  [[ -f  $tmuxCfg ]] && rm $tmuxCfg
-  echo "Linking $tmuxCfg to $dotfilesDir/tmux.conf ..."
-  ln $dotfilesDir/tmux.conf $tmuxCfg
 
   sshCfg=$trueHome/.ssh/config 
   [[ -f $sshCfg ]] && rm $sshCfg
@@ -514,8 +453,7 @@ setup_settings() {
 }
 
 setup_sdk() {
-  echo "- setup_sdk"
-  echo "TODO: install go sdk from https://go.dev/doc/install"
+  echo "- setup_sdk (TODO)"
 }
 
 setup_zsh() {
@@ -581,8 +519,8 @@ setup_zsh() {
 setup_code() {
   echo " - setup_code"
   echo "TODO: not yet implemented"
-  # setup_vim
-  setup_intellij
+# setup_intellij
+# setup_vim
 }
 
 

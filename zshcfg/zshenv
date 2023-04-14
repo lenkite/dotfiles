@@ -13,6 +13,7 @@ main() {
   detect_user
   detect_util
   load_dotpaths
+  defenv_brew
   defenv_gcc_clang
   defenv_golang
   defenv_android
@@ -133,6 +134,11 @@ load_dotpaths() {
   export PATH
 }
 
+defenv_brew() {
+ eval "$(/opt/homebrew/bin/brew shellenv)"
+ export PATH="$HOME/bin:${KREW_ROOT:-$HOME/.krew}/bin:$(brew --prefix openvpn)/sbin:$PATH"
+}
+
 defenv_gcc_clang() {
   if command -v xcrun >/dev/null 2>&1 ; then
     export SDKROOT="`xcrun --show-sdk-path`"
@@ -173,6 +179,7 @@ defenv_golang() {
       export PATH
     fi
   fi
+  export GODEBUG=x509sha1=1
 }
 
 defenv_android() {
