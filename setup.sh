@@ -248,7 +248,7 @@ gh_download_linux_release() {
 install_pkgs() {
  echo "- (install_pkgs) Installing packages..."
  if [[ $isMacos == true ]]; then
-    brew install the_silver_searcher fortune cowsay leiningen nodejs go rlwrap yarn neovim skim cmake
+    brew install coreutils gnu-sed gnu-tar grep fd jq ctags the_silver_searcher fortune cowsay leiningen node go rlwrap yarn neovim skim cmake deno ripgrep
  elif [[ $isLinux == true ]]; then
    if [[ $isRedhat == true ]]; then
      install_pkgs_redhat
@@ -295,13 +295,6 @@ install_pkgs() {
  else
    echo "WARN: can't find pip3!"
  fi
-
- #https://stackoverflow.com/questions/592620/check-if-a-program-exists-from-a-bash-script
- #zplug install https://github.com/zplug/zplug
- # if command -v zsh >/dev/null 2>&1 ; then
- #  echo "Installing zplug..."
- #  curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh 
- # fi
 
 }
 
@@ -390,6 +383,7 @@ setup_python() {
     pip3 install --upgrade jedi 
   fi
 }
+
 setup_clojure() {
   echo "-- setup_clojure"
   hasClj=$(command -v clj)
@@ -400,8 +394,8 @@ setup_clojure() {
     echo " Installing lein..."
     [[ $hasLein ]] && brew upgrade leiningen|| brew install leiningen
   fi
-
 }
+
 setup_fzf() {
   echo "-- setup_fzf"
   if [[ $hasGit ]]; then
@@ -414,85 +408,7 @@ setup_fzf() {
   fi
 }
 
-setup_ctags() {
-  echo "-- setup_ctags"
-  if [[ $isMacos ]]; then
-    # https://github.com/universal-ctags/homebrew-universal-ctags
-    brew install --HEAD universal-ctags/universal-ctags/universal-ctags
-  fi
 
-  if [[ $isLinux ]]; then
-    [[ -d ~/src ]] || mkdir -p ~/src
-    git -C ~/src clone --depth 1 https://github.com/universal-ctags/ctags.git
-    pushd ~/src/ctags
-    ./autogen.sh
-    ./configure
-    make
-    sudo make install
-    popd
-  fi
-}
-
-setup_ripgrep() {
-  echo "-- setup_ripgrep"
-	if [[ $isLinux ]]; then
-		echo "(setup_ripgrep) Downloading ripgrep Linux release ..."
-		pkg=$(gh_download_linux_release "BurntSushi" "ripgrep" "amd64")
-		if [[ $? == 0 ]]; then
-			echo "(setup_ripgrep) Downloaded as $pkg. Installing..."
-			sudo dpkg -i $pkg
-		fi
-	fi
-	if [[ $isMacos ]]; then
-	  brew tap burntsushi/ripgrep https://github.com/BurntSushi/ripgrep.git
-   	  brew install ripgrep-bin
-	fi
-}
-
-setup_jq() {
-  echo "-- setup_jq"
-	if [[ $isLinux ]]; then
-		echo "(setup_jq) Downloading jq Linux release ..."
-		binary=$(gh_download_linux_release "stedolan" "jq" "linux64")
-		if [[ $? == 0 ]]; then
-			echo "(setup_jq) Downloaded as $binary. Installing..."
-			chmod +x $binary
-			sudo cp $binary /usr/local/bin/jq
-		fi
-	fi
-	if [[ $isMacos == true ]]; then
-		brew install jq
-	fi
-}
-
-setup_fd() {
-  echo "-- setup_fd"
-	if [[ $isLinux ]]; then
-		echo "(setup_fd) Downloading fd Linux release ..."
-		pkg=$(gh_download_linux_release "sharkdp" "fd" 'fd_.*amd64.deb')
-		if [[ $? == 0 ]]; then
-			echo "(setup_fd) Downloaded as $pkg. Installing..."
-			sudo dpkg -i $pkg
-		fi
-	fi
-  [[ $isMacos ]] && brew install fd
-}
-
-setup_sed_awk_grep() {
-  echo "-- setup_sed_awk_grep"
-  export HOMEBREW_NO_AUTO_UPDATE=1
-  if [[ $isMacos ]]; then
-    local sedPath=$(which sed)
-    [[ $sedPath == *"local"* ]] \
-      && brew upgrade gnu-sed || brew install gnu-sed 
-    local awkPath=$(which awk)
-    [[ $sedPath == *"local"* ]] \
-      && brew upgrade gawk || brew install gawk 
-    local grepPath=$(which grep)
-    [[ $grepPath == *"local"* ]] \
-      && brew upgrade grep  || brew install grep
-  fi
-}
 
 setup_sshpass() {
   echo "-- setup_sshpass"
@@ -509,38 +425,23 @@ setup_rq() {
 setup_vim() {
   initialize_vars
   echo "-- setup_vim"
-  export dotfilesVimCfgDir=$dotfilesDir/vimcfg
-  local nvimConfigDir=$trueHome/.config/nvim
-  echo "dotfilesVimCfgDir: $dotfilesVimCfgDir"
-  echo "nvimConfigDir: $dotfilesVimCfgDir"
+
+  nvimConfigDotfiles=$dotfilesDir/nvim
+
+  nvimConfig=$trueHome/.config/nvim
+  rm $vimConfig 2> /dev/null
 
   rm $trueHome/.vimrc 2> /dev/null
   rm $trueHome/_vimrc 2> /dev/null
   rm $trueHome/.ideavimrc 2> /dev/null
-  rm $nvimConfigDir/init.vim 2> /dev/null
+  rm $nvimConfig 2> /dev/null
 
-  echo "nvimConfigDir :$nvimConfigDir"
-  [[ -d  $nvimConfigDir ]] || mkdir -p $nvimConfigDir
-  rm $trueHome/.config/nvim
-  ln $dotfilesVimCfgDir/vimrc $trueHome/.vimrc
-  ln $dotfilesVimCfgDir/ideavimrc $trueHome/.ideavimrc
-  # Must fix this for windows, where it is ~/AppData/Local/nvim/init.vim
-  ln $dotfilesVimCfgDir/init.vim $nvimConfigDir/init.vim 
-  echo "Setup Dir $dotfilesSetupDir"
+  echo "Linking nvimConfig: $nvimConfig->nvimConfigDotfiles: $nvimConfigDotfiles"
+  ln -s $nvimConfigDotfiles $nvimConfig
 
-  curl -fLo $trueHome/.vim/autoload/plug.vim --create-dirs \
-      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  echo "Linking ideavimrc"
+  ln $dotfilesDir/ideavimrc $trueHome/.ideavimrc
 
-  if command -v pip3 >/dev/null 2>&1 ; then
-    echo "Install python based module neovim-remote.."
-    #pip3 install neovim --upgrade
-    #pip3 install --user neovim-remote
-  else
-    echo "WARN: can't find pip3!"
-  fi
-  vim +PlugInstall +qall
 }
 
 setup_misc() {
@@ -549,11 +450,6 @@ setup_misc() {
 
 setup_util() {
   echo "- setup_util"
-  setup_ctags
-  setup_fzf
-  setup_ripgrep
-  setup_jq
-  setup_fd
   setup_sed_awk_grep
   #setup_rq
   #[[ $GOPATH ]] || export GOPATH=$trueHome
@@ -564,8 +460,6 @@ setup_util() {
   if command -v go >/dev/null 2>&1 ; then
     echo "Installing neosdkurls..."
     go get -v github.com/lenkite/mycliutil/neosdkurls
-    echo "Installing pet..."
-    go get -v github.com/knqyf263/pet
     echo "Installing delve..."
     go get -u github.com/derekparker/delve/cmd/dlv
     echo "Installing yolo..."
@@ -594,7 +488,7 @@ setup_settings() {
   echo "- setup_settings"
   hasTmux=$(command -v tmux)
   if [[ $isMacos ]]; then
-    [[ $hasTmux ]] && brew upgrade tmux || brew install tmux
+    [[ $hasTmux ]] && brew install tmux
   elif [[ $isLinux ]]; then
     [[ $hasTmux ]] || sudo -E apt-get --yes install tmux
   else
@@ -616,22 +510,12 @@ setup_settings() {
   echo "Linking $sshCfg to $dotfilesDir/sshcfg/config ..."
   ln $dotfilesDir/sshcfg/config $sshCfg
 
-  # Setup lein profile
-  [[ -d $trueHome/.lein ]] || mkdir -p $trueHome/.lein
-  local leinCfg=$trueHome/.lein/profiles.clj
-  echo "Linking lein profiles.clj to $leinCfg"
-  [[ -f $leinCfg ]] && rm $leinCfg
-  ln $dotfilesDir/leincfg/profiles.clj $leinCfg
 
 }
 
 setup_sdk() {
   echo "- setup_sdk"
-  setup_maven
-  # setup_go
-  # setup_cloud
-  # setup_python
-  setup_clojure
+  echo "TODO: install go sdk from https://go.dev/doc/install"
 }
 
 setup_zsh() {
@@ -696,6 +580,7 @@ setup_zsh() {
 
 setup_code() {
   echo " - setup_code"
+  echo "TODO: not yet implemented"
   # setup_vim
   setup_intellij
 }

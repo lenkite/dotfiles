@@ -5,30 +5,31 @@
 
 == Overview
 
-My new standalone cross-platform dotfiles (works on MacOS/Windows) that configures ZSH and VIM. It
-Removed all dependencies from all ZSH frameworks as they are slow and suck at cross XP support
-(linux/MacOS/WindowsCygwin/WSL).
+My cross-platform dotfiles (works on MacOS/Windows) that configures ZSH and neovim. 
 
 == Pre-Requisites: Needs Manual Setup 
+
+=== MacOS 
+- Install link:Homebrew[https://brew.sh/]
+- Install ZSH `brew install zsh zsh-completions`
+
 === Windows
 - Install link:https://chocolatey.org/[Chocolatey], the fantastic windows package manager for software.
 - If you are on Windows 10 with at-least the Creators Update please install the https://msdn.microsoft.com/commandline/wsl["Windows Subsystem for Linux"] which is also called by the terrible name of "Bash on Ubuntu on Windows". Refer to the https://msdn.microsoft.com/en-us/commandline/wsl/install_guide[Installation Guide]. 
 - After installing WSL, install wsltty for a better console: https://github.com/mintty/wsltty
 
-=== MacOS 
-- Install link:Homebrew[https://brew.sh/]
-- Install ZSH `brew install zsh zsh-completions`
 
 == Run Setup Script
 Open a shell and execute the following command:
 .Execute this
 [source,shell]
 ----
-curl -sfL  https://raw.github.com/lenkite/dotfiles/master/setup/setup.sh | bash
+curl -sfL  https://raw.github.com/lenkite/dotfiles/master/setup.sh | bash
 ----
 
 
 == Customize Path and Environment Variables
+
 === Personal environment variables
 Create optional file `~.env`. This is sourced by `~/.zshenv` . You should
 put environment variable definitions here apart from those affecting the `PATH`
@@ -44,17 +45,20 @@ This file is sourced by `~/.zshrc` at the end.
 == autorun Cotributions
 Put your contributions with a `.zsh' extension in `dotfiles/zshcfg/autorun`. These will be sourced by `zshrc`.
 
-== Setup of SDK and Utilities 
+== Setup of neovim, SDK and Utilities 
 Enter fresh shell instance
 ----
-./setup/setup.sh -s # For SDK's
+./setup.sh -v  # For neovim setup (recreates symlinks)
+./setup.sh -s  # For SDK's
 # Now Exit and Relaunch your Shell
-./setup/setup.sh -u  # For utilities tools
+./setup.sh -u  # For utilities tools
 ----
 
 == Setup For Coding 
-Setup VIM , Intellij and VS Code
-Enter fresh shell instance and `cd ~/dotfiles && ./setup/setup.sh -c`
+TODO: not yet implementation
+single stop config for neovim, Intellij and vscode
+Enter fresh shell instance and `cd ~/dotfiles && ./setup.sh -c`
 
-== Setup of Misc App Settings 
-Setup App Settings for tmux, SSH, etc
+== Keyboard Shortscuts
+
+See link:shortcuts.md[Keyboard Shortcuts]
