@@ -27,7 +27,7 @@ main() {
   cloud_sdk
   prompt_setup
   source_my_zshrc
-  defenv_coreutils
+  defenv_utils # add coreutils, gnu gzip, gnu grep, gnu sed, gnu tar, etc first to path
   post_hacks
   cd ~
 }

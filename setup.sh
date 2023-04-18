@@ -242,7 +242,7 @@ gh_download_linux_release() {
 install_pkgs() {
  echo "- (install_pkgs) Installing packages..."
  if [[ $isMacos == true ]]; then
-    brew install coreutils gnu-sed gnu-tar grep fd jq ctags the_silver_searcher fortune cowsay  node go rlwrap yarn neovim skim cmake deno ripgrep delve kubectl krew kube-ps1 gardener/tap/gardenctl-v2 docker openvpn
+    brew install coreutils iproute2mac gnu-sed gnu-tar grep gzip fd jq ctags the_silver_searcher fortune cowsay  node go rlwrap yarn neovim skim cmake deno ripgrep delve kubectl krew kube-ps1 gardener/tap/gardenctl-v2 docker openvpn
  elif [[ $isLinux == true ]]; then
    if [[ $isRedhat == true ]]; then
      install_pkgs_redhat
@@ -412,11 +412,11 @@ setup_util() {
     kubebuilder completion zsh >  $trueHome/.zfuncs/_kubebuilder
   fi
 
-  coreutils_dir=$(brew --prefix coreutils)
-  if [[ -d $coreutils_dir ]]; then
-    ln -fs $(which gbase64) ~/bin/base64 && ln -fs $(which gsed) ~/bin/sed && ln -fs $(which gtar) ~/bin/tar
-  fi
-  unset coreutils_dir
+  #coreutils_dir=$(brew --prefix coreutils)
+  #if [[ -d $coreutils_dir ]]; then
+  #  ln -fs $(which gbase64) ~/bin/base64 && ln -fs $(which gsed) ~/bin/sed && ln -fs $(which gtar) ~/bin/tar
+  #fi
+  #unset coreutils_dir
 
 
   hasDeno=$(command -v deno)

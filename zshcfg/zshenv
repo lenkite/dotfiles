@@ -266,11 +266,14 @@ defenv_nvr() {
   fi
 }
 
-defenv_coreutils() {
+defenv_utils() {
   typeset -gxU path PATH
-  if [[ -d /opt/homebrew/opt/coreutils/libexec/gnubin  ]]; then
-    path=(/opt/homebrew/opt/coreutils/libexec/gnubin $path)
-  fi
+  local brewDir=$(brew --prefix)
+  # See https://github.com/gardener/gardener/blob/master/docs/development/local_setup.md
+  path=($brewDir/opt/coreutils/libexec/gnubin $brewDir/opt/gnu-sed/libexec/gnubin \
+    $brewDir/opt/gnu-tar/libexec/gnubin  $brewDir/opt/grep/libexec/gnubin \
+    $brewDir/opt/gzip/bin/ \
+    $path)
 }
 
 defenv_maven() {
