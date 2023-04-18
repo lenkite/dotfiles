@@ -386,8 +386,7 @@ setup_vim() {
   echo "Cloning Astrovim..."
   rm -rf $trueHome/.config/nvim
   git clone --depth 1 https://github.com/AstroNvim/AstroNvim $trueHome/.config/nvim
-
-
+  git clone https://github.com/lenkite/astronvim_config.git ~/.config/nvim/lua/user
 }
 
 setup_misc() {

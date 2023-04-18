@@ -38,10 +38,6 @@ hacks() {
   # Fix https://github.com/ohmyzsh/ohmyzsh/issues/11416
 }
 
-diff() {
-  $diff_path --color $*
-}
-
 zsh_opts_vars() {
   #  Increase history size
   ## See http://zsh.sourceforge.net/Guide/zshguide02.html#l16
@@ -156,7 +152,7 @@ git_config() {
     local branch=$1
     if [[ ! -z $branch ]]; then
       echo "Will git pull sub-directories for branch $branch" 
-    else
+    # else
       echo "Will git pull sub-directories at current branch"
     fi
     for d in */ ; do
@@ -288,7 +284,6 @@ get_cheats() {
     chmod +x ~/bin/cht.sh
   fi
 }
-
 
 
 cloud_sdk() {

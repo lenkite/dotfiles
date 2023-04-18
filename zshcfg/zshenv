@@ -269,8 +269,8 @@ defenv_nvr() {
 
 defenv_coreutils() {
   typeset -gxU path PATH
-  if [[ -f /opt/homebrew/Cellar/coreutils/9.1/bin ]]; then
-    path=('/opt/homebrew/Cellar/coreutils/9.1/bin'  $path)
+  if [[ -d /opt/homebrew/opt/coreutils/libexec/gnubin  ]]; then
+    path=(/opt/homebrew/opt/coreutils/libexec/gnubin $path)
   fi
 }
 
