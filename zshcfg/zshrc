@@ -27,6 +27,7 @@ main() {
   cloud_sdk
   prompt_setup
   source_my_zshrc
+  defenv_coreutils
   post_hacks
   cd ~
 }

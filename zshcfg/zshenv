@@ -27,7 +27,6 @@ main() {
   defenv_maven
   defenv_zeal
   defenv_nvr
-  defenv_coreutils
 
   load_dotenv
   #defenv_ctags
