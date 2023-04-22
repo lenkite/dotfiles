@@ -242,7 +242,7 @@ gh_download_linux_release() {
 install_pkgs() {
  echo "- (install_pkgs) Installing packages..."
  if [[ $isMacos == true ]]; then
-    brew install coreutils iproute2mac gnu-sed gnu-tar grep gzip fd jq ctags the_silver_searcher fortune cowsay  node go rlwrap yarn neovim skim cmake deno ripgrep delve kubectl krew kube-ps1 gardener/tap/gardenctl-v2 docker openvpn
+    brew install coreutils parallel iproute2mac gnu-sed gnu-tar grep gzip fd jq ctags the_silver_searcher fortune cowsay  node go rlwrap yarn neovim skim cmake deno ripgrep delve kubectl krew kube-ps1 gardener/tap/gardenctl-v2 docker openvpn
  elif [[ $isLinux == true ]]; then
    if [[ $isRedhat == true ]]; then
      install_pkgs_redhat
@@ -386,7 +386,7 @@ setup_vim() {
   echo "Cloning Astrovim..."
   rm -rf $trueHome/.config/nvim
   git clone --depth 1 https://github.com/AstroNvim/AstroNvim $trueHome/.config/nvim
-  git clone https://github.com/lenkite/astronvim_config.git ~/.config/nvim/lua/user
+  git clone https://github.com/lenkite/astronvim_config.git ~/.config/astronvim/lua/user
 }
 
 setup_misc() {

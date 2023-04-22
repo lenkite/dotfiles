@@ -311,10 +311,6 @@ post_hacks() {
   fi
 }
 
-function diff() {
-  # diff_path is set in zshenv
-  $diff_path --color $*
-}
 
 misc_alias() {
   alias urldecode='python -c "import sys, urllib as ul; \
