@@ -252,9 +252,10 @@ gh_download_linux_release() {
 install_pkgs() {
 	echo "- (install_pkgs) Installing packages..."
 	if [[ $isMacos == true ]]; then
-		brew install coreutils parallel iproute2mac gnu-sed gnu-tar grep gzip fd jq ctags the_silver_searcher fortune cowsay node go rlwrap yarn neovim skim cmake deno ripgrep delve kubectl krew kube-ps1 gardener/tap/gardenctl-v2 docker openvpn lazygit k9s
+		brew install coreutils parallel iproute2mac gnu-sed gnu-tar grep gzip fd jq ctags the_silver_searcher fortune cowsay node go rlwrap yarn neovim skim cmake deno ripgrep delve kubectl krew kube-ps1 gardener/tap/gardenctl-v2 docker openvpn lazygit k9s tree-sitter bottom gdu luarocks
 		brew tap johanhaleby/kubetail && brew install kubetail
 		brew tap homebrew/cask-fonts && brew install --cask font-jetbrains-mono-nerd-font --cask font-symbols-only-nerd-font
+		npm install -g browser-sync
 	elif [[ $isLinux == true ]]; then
 		if [[ $isRedhat == true ]]; then
 			install_pkgs_redhat
@@ -395,10 +396,24 @@ setup_vim() {
 	[[ -d $nvimState ]] && echo "deleing $nvimState.." && rm -rf $nvimState
 	[[ -d $nvimCache ]] && echo "deleing $nvimCache.." && rm -rf $nvimCache
 
-	echo "Installing nvchad.."
-	git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1
-	git clone https://github.com/lenkite/nvchad_custom_config ~/.config/nvim/lua/custom
-	NVCHAD_EXAMPLE_CONFIG=n nvim --headless +"TSUpdate vimdoc" +"q"
+	echo "Installing Astronvim.."
+	git clone --depth 1 https://github.com/AstroNvim/AstroNvim ~/.config/nvim
+
+	nvim --headless +"TSUpdate vimdoc" +"q"
+	local userConfigDir="$trueHome/.config/astronvim/lua/user"
+	if [[ -d "$userConfigDir" ]]; then
+		git -C "$userConfigDir" pull
+	else
+		git clone https://github.com/lenkite/astronvim_config.git "$userConfigDir"
+	fi
+	echo "-- setup_vim mostly done. Launch neovim to continue further."
+	# git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1
+	#  if [[ -d $trueHome/.config/nvim/lua/custom ]]; then
+	# 	git -C $trueHome/.config/nvim/lua/custom pull
+	#  else
+	#   git clone https://github.com/lenkite/nvchad_custom_config ~/.config/nvim/lua/custom
+	#  fi
+	# NVCHAD_EXAMPLE_CONFIG=n nvim --headless +"TSUpdate vimdoc" +"q"
 
 }
 
@@ -528,6 +543,5 @@ setup_code() {
 setup_intellij() {
 	echo "-- setup_intellij"
 }
-
 
 setup_main
