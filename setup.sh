@@ -8,7 +8,6 @@ declare codeSetup golibsSetup pkgSetup miscSetup sdkSetup viSetup zshSetup setti
 declare done_detect_os done_set_uservars done_set_homevars
 declare isCygwin isWsl isLinux
 declare trueHome dotfilesDir
-declare isSetupSourced
 
 usage() {
 	echo "Usage: $0 [-c] [-g] [-p] [-v] [-t] [-u] [-z]" 1>&2
@@ -530,6 +529,5 @@ setup_intellij() {
 	echo "-- setup_intellij"
 }
 
-[[ "${BASH_SOURCE[0]}" != "${0}" ]] && isSetupSourced=true
 
 setup_main
