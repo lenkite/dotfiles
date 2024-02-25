@@ -24,9 +24,7 @@ Open a shell and execute the following commands:
 .Execute this
 [source,shell]
 ----
-git clone https://github.com/lenkite/dotfiles ~/dotfiles
-cd ~/dotfiles
-./setup.sh
+curl -sfL https://raw.github.com/lenkite/dotfiles/master/setup.sh | bash
 ----
 
 
@@ -48,8 +46,9 @@ This file is sourced by `~/.zshrc` at the end.
 Put your contributions with a `.zsh' extension in `dotfiles/zshcfg/autorun`. These will be sourced by `zshrc`.
 
 == Setup of neovim, SDK and Utilities 
-Enter fresh shell instance
+This section assumes you have successfully run `setup.sh` once as described earlier. Enter fresh shell instance:
 ----
+cd ~/dotfiles
 ./setup.sh -v  # For neovim setup (recreates symlinks)
 ./setup.sh -s  # For SDK's
 # Now Exit and Relaunch your Shell
