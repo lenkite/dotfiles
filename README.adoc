@@ -20,11 +20,13 @@ My cross-platform dotfiles (works on MacOS/Windows) that configures ZSH and neov
 
 
 == Run Setup Script
-Open a shell and execute the following command:
+Open a shell and execute the following commands:
 .Execute this
 [source,shell]
 ----
-curl -sfL  https://raw.github.com/lenkite/dotfiles/master/setup.sh | bash
+git clone https://github.com/lenkite/dotfiles ~/dotfiles
+cd ~/dotfiles
+./setup.sh
 ----
 
 

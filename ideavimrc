@@ -24,6 +24,7 @@ nmap <A-W> :action CloseContent<CR>
 map <Leader>u :action SurroundWith<CR>
 nmap <A-CR> :action ShowIntentionActions<CR>
 nmap <M-CR> :action ShowIntentionActions<CR>
+set ideajoin "https://github.com/JetBrains/ideavim/blob/master/doc/ideajoin-examples.md
 
 
 "Navigation
@@ -62,3 +63,5 @@ nmap <Leader>Gc :action GenerateConstructor<CR>
 set surround
 
 autocmd FileType css,html set iskeyword+=-
+
+packadd matchit

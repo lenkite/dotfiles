@@ -3,6 +3,12 @@
 # Supported OS'es are Windows/Cygwin, Windows/WSL, MacOS and Linux
 # Dev Note: Some funcs here are duplicated in zshcfg/0.zsh. This is by design
 
+set -euo pipefail # See https://bertvv.github.io/cheat-sheets/Bash.html
+declare codeSetup golibsSetup pkgSetup miscSetup sdkSetup viSetup zshSetup settingsSetup utilSetup allSetup
+declare done_detect_os done_set_uservars done_set_homevars
+declare isCygwin isWsl isLinux
+declare trueHome dotfilesDir
+
 usage() {
 	echo "Usage: $0 [-c] [-g] [-p] [-v] [-t] [-u] [-z]" 1>&2
 	exit 1
@@ -129,12 +135,13 @@ detect_dotfilesdir() {
 }
 
 detect_util() {
+	local hasCurl hasZip hasUnzip hasGit hasGo
+
 	hasCurl=$(command -v curl)
 	hasZip=$(command -v zip)
 	hasUnzip=$(command -v unzip)
 	hasGit=$(command -v git)
 	hasGo=$(command -v go)
-	ctags --help >/dev/null 2>&1
 	[[ $? -ge 0 ]] && hasCtags=false || hasCtags=true
 	[[ hasCurl ]] || echo "WARN: 'curl' not found. Setup may be incomplete"
 	[[ hasCtags ]] || echo "WARN: 'ctags' not found or GNU version not installed"
@@ -245,7 +252,9 @@ gh_download_linux_release() {
 install_pkgs() {
 	echo "- (install_pkgs) Installing packages..."
 	if [[ $isMacos == true ]]; then
-		brew install coreutils parallel iproute2mac gnu-sed gnu-tar grep gzip fd jq ctags the_silver_searcher fortune cowsay node go rlwrap yarn neovim skim cmake deno ripgrep delve kubectl krew kube-ps1 gardener/tap/gardenctl-v2 docker openvpn
+		brew install coreutils parallel iproute2mac gnu-sed gnu-tar grep gzip fd jq ctags the_silver_searcher fortune cowsay node go rlwrap yarn neovim skim cmake deno ripgrep delve kubectl krew kube-ps1 gardener/tap/gardenctl-v2 docker openvpn lazygit k9s
+		brew tap johanhaleby/kubetail && brew install kubetail
+		brew tap homebrew/cask-fonts && brew install --cask font-jetbrains-mono-nerd-font --cask font-symbols-only-nerd-font
 	elif [[ $isLinux == true ]]; then
 		if [[ $isRedhat == true ]]; then
 			install_pkgs_redhat
@@ -366,23 +375,31 @@ setup_vim() {
 	initialize_vars
 	echo "-- setup_vim"
 
-	nvimConfigDotfiles=$dotfilesDir/nvimcfg
+	local nvimConfigDotfiles=$dotfilesDir/nvimcfg
 
-	nvimConfig=$trueHome/.config/nvim
-	rm $vimConfig 2>/dev/null
+	local nvimConfig=$trueHome/.config/nvim
+	local nvimShare=$trueHome/.local/share/nvim
+	local nvimState=$trueHome/.local/state/nvim
+	local nvimCache=$trueHome/.cache/nvim
 
-	rm $trueHome/.vimrc 2>/dev/null
-	rm $trueHome/_vimrc 2>/dev/null
-	rm $trueHome/.ideavimrc 2>/dev/null
-	rm $nvimConfig 2>/dev/null
+	[[ -e "$trueHome/.vimrc" ]] && rm "$trueHome/.vimrc"
+	[[ -e "$trueHome/_vimrc" ]] && rm "$trueHome/_vimrc"
+	[[ -e "$trueHome/.ideavimrc" ]] && rm $trueHome/.ideavimrc
 
 	echo "Linking ideavimrc"
 	ln $dotfilesDir/ideavimrc $trueHome/.ideavimrc
 
-	echo "Cloning LazyVim..."
-	rm -rf $trueHome/.config/nvim
-	git clone https://github.com/LazyVim/starter ~/.config/nvim
-	ln -sf $nvimConfigDotfiles/customize.lua $nvimConfig/lua/plugins/customize.lua
+	echo "Deleting (if present) $nvimConfig, $nvimShare, $nvimState, $nvimCache"
+	[[ -d $nvimConfig ]] && echo "deleing $nvimConfig.." && rm -rf $nvimConfig
+	[[ -d $nvimShare ]] && echo "deleing $nvimShare.." && rm -rf $nvimShare
+	[[ -d $nvimState ]] && echo "deleing $nvimState.." && rm -rf $nvimState
+	[[ -d $nvimCache ]] && echo "deleing $nvimCache.." && rm -rf $nvimCache
+
+	echo "Installing nvchad.."
+	git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1
+	git clone https://github.com/lenkite/nvchad_custom_config ~/.config/nvim/lua/custom
+	NVCHAD_EXAMPLE_CONFIG=n nvim --headless +"TSUpdate vimdoc" +"q"
+
 }
 
 setup_misc() {
@@ -422,7 +439,7 @@ setup_util() {
 }
 
 setup_settings() {
-	echo "- setup_settings"
+	echo "- setup_settings (OS settings)"
 	hasTmux=$(command -v tmux)
 	if [[ $isMacos ]]; then
 		[[ $hasTmux ]] && brew install tmux
@@ -451,13 +468,15 @@ setup_sdk() {
 setup_zsh() {
 	initialize_vars
 	echo "- setup_zsh"
+	echo "Copying zsh history to /tmp..."
+	cp $trueHome/.zsh_history /tmp
 	echo "Deleting all existing .z* files from home directory.."
-	rm $trueHome/.zshrc 2>/dev/null
-	rm $trueHome/.zprofile 2>/dev/null
-	rm $trueHome/.zshenv 2>/dev/null
-	rm $trueHome/.zlogin 2>/dev/null
-	rm $trueHome/.zlogout 2>/dev/null
-	rm $trueHome/.zpreztorc 2>/dev/null
+	[[ -f "$trueHome/.zshrc" ]] && rm $trueHome/.zshrc
+	[[ -f "$trueHome/.zprofile" ]] && rm $trueHome/.zprofile 2>/dev/null
+	[[ -f "$trueHome/.zshenv" ]] && rm $trueHome/.zshenv 2>/dev/null
+	[[ -f "$trueHome/.zlogin" ]] && rm $trueHome/.zlogin 3>/dev/null
+	[[ -f "$trueHome/.zlogout" ]] && rm $trueHome/.zlogout 2>/dev/null
+	[[ -f "$trueHome/.zpreztorc" ]] && rm $trueHome/.zpreztorc 2>/dev/null
 	echo "Deleted all existing .z* files from home directory.."
 
 	zshCfgDir=$dotfilesDir/zshcfg
@@ -486,23 +505,16 @@ setup_zsh() {
 		rm -rf $trueHome/.zgen
 	fi
 
-	# if [[ $hasCurl ]]; then
-	#   echo "Installing antigen"
-	#   local antigenDir=$trueHome/.antigen
-	#   [[ -d $antigenDir ]] || mkdir -p $antigenDir
-	#   local antigenLoc=$antigenDir/antigen.zsh
-	#   [[ -f $antigenLoc ]] && rm -f $antigenLoc
-	#   curl -L git.io/antigen > $antigenLoc
-	# else
-	#   echo "ERROR: Could not find git and hence couldn't clone zgen :("
-	# fi
-
 	if [ -d $trueHome/.zgen -a -d $trueHome/.zgen/.git ]; then
 		git -C $trueHome/.zgen reset --hard
 		git -C $trueHome/.zgen pull
 	else
 		git clone https://github.com/tarjoilija/zgen.git "${trueHome}/.zgen"
 	fi
+	echo "Coping back .zsh_history to $trueHome..."
+	cp /tmp/.zsh_history $trueHome/
+
+	echo "--setup_zsh is done"
 
 }
 
