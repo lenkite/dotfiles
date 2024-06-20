@@ -226,11 +226,8 @@ defenv_neosdk() {
 
 defenv_java() {
   if [[ $isMacos && -f /usr/libexec/java_home ]]; then
-    local jh=$(/usr/libexec/java_home -v 1.8)
+    local jh=$(/usr/libexec/java_home)
     export JAVA_HOME=$jh
-  fi
-  if [[ -f /Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home/jre ]]; then
-    export JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home/jre
   fi
 
 }
