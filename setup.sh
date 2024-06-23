@@ -141,10 +141,10 @@ detect_util() {
 	hasZip=$(command -v zip)
 	hasUnzip=$(command -v unzip)
 	hasGit=$(command -v git)
-	hasGo=$(command -v go)
-	[[ $? -ge 0 ]] && hasCtags=false || hasCtags=true
+#	hasGo=$(command -v go)
+#	[[ $? -ge 0 ]] && hasCtags=false || hasCtags=true
 	[[ hasCurl ]] || echo "WARN: 'curl' not found. Setup may be incomplete"
-	[[ hasCtags ]] || echo "WARN: 'ctags' not found or GNU version not installed"
+#	[[ hasCtags ]] || echo "WARN: 'ctags' not found or GNU version not installed"
 	[[ hasZip ]] || echo "WARN: 'zip' not found. Setup may be incomplete"
 	[[ hasUnzip ]] || echo "WARN: 'unzip' not found. Setup may be incomplete"
 	[[ hasGit ]] || echo "WARN: 'git' not found. Setup may be incomplete and need to be rerun"
@@ -252,7 +252,7 @@ gh_download_linux_release() {
 install_pkgs() {
 	echo "- (install_pkgs) Installing packages..."
 	if [[ $isMacos == true ]]; then
-		brew install coreutils parallel iproute2mac gnu-sed gnu-tar grep gzip fd jq ctags the_silver_searcher fortune cowsay node go rlwrap yarn neovim skim cmake deno ripgrep delve kubectl krew kube-ps1 gardener/tap/gardenctl-v2 docker openvpn lazygit k9s tree-sitter bottom gdu luarocks
+		brew install coreutils parallel iproute2mac gnu-sed gnu-tar grep gzip fd jq yq ctags the_silver_searcher fortune cowsay node go rlwrap yarn neovim skim cmake deno ripgrep delve kubectl krew kube-ps1 gardener/tap/gardenctl-v2 int128/kubelogin/kubelogin gardener/tap/gardenlogin openvpn lazygit k9s tree-sitter bottom gdu luarocks rectangle watch gh
 		brew tap johanhaleby/kubetail && brew install kubetail
 		brew tap homebrew/cask-fonts && brew install --cask font-jetbrains-mono-nerd-font --cask font-symbols-only-nerd-font
 		npm install -g browser-sync
@@ -291,12 +291,12 @@ install_pkgs() {
 		fi
 	fi
 
-	if command -v pip3 >/dev/null 2>&1; then
-		echo "INSTALL python neovim modules using pip3..."
-		pip3 install --user --upgrade pynvim
-	else
-		echo "WARN: can't find pip3!"
-	fi
+#	if command -v pip3 >/dev/null 2>&1; then
+#		echo "INSTALL python neovim modules using pip3..."
+#		pip3 install --user --upgrade pynvim
+#	else
+#		echo "WARN: can't find pip3!"
+#	fi
 
 }
 
