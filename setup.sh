@@ -391,10 +391,10 @@ setup_vim() {
 	ln $dotfilesDir/ideavimrc $trueHome/.ideavimrc
 
 	echo "Deleting (if present) $nvimConfig, $nvimShare, $nvimState, $nvimCache"
-	[[ -d $nvimConfig ]] && echo "deleing $nvimConfig.." && rm -rf $nvimConfig
-	[[ -d $nvimShare ]] && echo "deleing $nvimShare.." && rm -rf $nvimShare
-	[[ -d $nvimState ]] && echo "deleing $nvimState.." && rm -rf $nvimState
-	[[ -d $nvimCache ]] && echo "deleing $nvimCache.." && rm -rf $nvimCache
+	[[ -d $nvimConfig ]] && echo "deleting $nvimConfig.." && rm -rf $nvimConfig
+	[[ -d $nvimShare ]] && echo "deleting $nvimShare.." && rm -rf $nvimShare
+	[[ -d $nvimState ]] && echo "deleting $nvimState.." && rm -rf $nvimState
+	[[ -d $nvimCache ]] && echo "deleting $nvimCache.." && rm -rf $nvimCache
 
 	echo "Installing Astronvim.."
 	git clone https://github.com/lenkite/astronvim-template ~/.config/nvim
@@ -521,7 +521,9 @@ setup_zsh() {
 }
 
 setup_code() {
+
 	echo " - setup_code"
+
 	echo "TODO: not yet implemented"
 	# setup_intellij
 	# setup_vim
