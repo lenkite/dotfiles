@@ -399,7 +399,7 @@ setup_vim() {
 	echo "Installing Astronvim.."
 	git clone https://github.com/lenkite/astronvim-template ~/.config/nvim
 
-	nvim --headless +"TSUpdate vimdoc" +"LspInstall pyright" +"q"
+	nvim --headless +"LspInstall pyright" +"LspInstall gopls" +"LspInstall bashls" +"LspInstall typos_lsp"  +"TSUpdate vimdoc" +"q"
 	echo "-- setup_vim mostly done. Launch neovim to continue further."
 
 }
