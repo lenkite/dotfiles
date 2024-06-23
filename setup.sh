@@ -397,23 +397,10 @@ setup_vim() {
 	[[ -d $nvimCache ]] && echo "deleing $nvimCache.." && rm -rf $nvimCache
 
 	echo "Installing Astronvim.."
-	git clone --depth 1 https://github.com/AstroNvim/AstroNvim ~/.config/nvim
+	git clone https://github.com/lenkite/astronvim-template ~/.config/nvim
 
-	nvim --headless +"TSUpdate vimdoc" +"q"
-	local userConfigDir="$trueHome/.config/astronvim/lua/user"
-	if [[ -d "$userConfigDir" ]]; then
-		git -C "$userConfigDir" pull
-	else
-		git clone https://github.com/lenkite/astronvim_config.git "$userConfigDir"
-	fi
+	nvim --headless +"TSUpdate vimdoc" +"LspInstall pyright" +"q"
 	echo "-- setup_vim mostly done. Launch neovim to continue further."
-	# git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1
-	#  if [[ -d $trueHome/.config/nvim/lua/custom ]]; then
-	# 	git -C $trueHome/.config/nvim/lua/custom pull
-	#  else
-	#   git clone https://github.com/lenkite/nvchad_custom_config ~/.config/nvim/lua/custom
-	#  fi
-	# NVCHAD_EXAMPLE_CONFIG=n nvim --headless +"TSUpdate vimdoc" +"q"
 
 }
 
