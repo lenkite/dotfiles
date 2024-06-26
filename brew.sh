@@ -71,7 +71,8 @@ bottom \ # https://github.com/ClementTsang/bottom
 rectangle \
 watch \
 cmake \
-trash
+trash \
+htop
 
 # editors
 # -----------------------------------------
@@ -85,7 +86,8 @@ brew install skim
 # git utilities
 # -----------------------------------------
 brew install lazygit \
-gh
+gh \
+diff-so-fancy # once this is installed git should be configured to use diff-so-fancy instead of vanilla diff.
 
 # fonts
 # ------------------------------------------
