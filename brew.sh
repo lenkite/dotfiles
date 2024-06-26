@@ -9,8 +9,6 @@ brew update
 # -----------------------------------------
 brew upgrade
 
-BREW_INSTALL_PATH=$(brew --prefix)
-
 # GNU command line utilities
 # -----------------------------------------
 brew install coreutils \
@@ -72,7 +70,8 @@ tree-sitter \ # parser generator tool
 bottom \ # https://github.com/ClementTsang/bottom
 rectangle \
 watch \
-cmake
+cmake \
+trash
 
 # editors
 # -----------------------------------------
@@ -136,7 +135,6 @@ fonts_list=(
   font-proggy-clean-tt-nerd-font
   font-roboto-mono-nerd-font
   font-sauce-code-pro-nerd-font
-  font-shure-tech-mono-nerd-font
   font-space-mono-nerd-font
   font-terminess-ttf-nerd-font
   font-tinos-nerd-font
