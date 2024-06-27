@@ -252,9 +252,7 @@ gh_download_linux_release() {
 install_pkgs() {
 	echo "- (install_pkgs) Installing packages..."
 	if [[ $isMacos == true ]]; then
-		brew install coreutils parallel iproute2mac gnu-sed gnu-tar grep gzip fd jq yq ctags the_silver_searcher fortune cowsay node go rlwrap yarn neovim skim cmake deno ripgrep delve kubectl krew kube-ps1 gardener/tap/gardenctl-v2 int128/kubelogin/kubelogin gardener/tap/gardenlogin openvpn lazygit k9s tree-sitter bottom gdu luarocks rectangle watch gh
-		brew tap johanhaleby/kubetail && brew install kubetail
-		brew tap homebrew/cask-fonts && brew install --cask font-jetbrains-mono-nerd-font --cask font-symbols-only-nerd-font
+		source ./brew.sh
 		npm install -g browser-sync
 	elif [[ $isLinux == true ]]; then
 		if [[ $isRedhat == true ]]; then

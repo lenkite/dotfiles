@@ -38,7 +38,8 @@ cowsay
 brew install node \
 go \
 lua \
-deno
+deno \
+openjdk
 
 # package managers
 # -----------------------------------------

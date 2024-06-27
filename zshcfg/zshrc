@@ -192,26 +192,9 @@ neovim_config() {
 }
 
 
-
-install_jdk17() {
-  local jdkUrl=https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_macos-x64_bin.tar.gz
-  local jdkDir=~/sdk/jdk-17.0.2.jdk
-  local cacheLoc=/tmp/jdk17.tar.gz
-  echo "jdkDir: $jdkDir"
-  if [[ -d $jdkDir ]]; then 
-    echo "Skipping since JDK Dir: $jdkDir exists"
-    return 1
-  else
-    curl -C - -kL -o $cacheLoc $jdkUrl
-    echo "JDK 17 Downloaded at $cacheLoc"
-    tar -C ~/sdk -xzf $cacheLoc
-    echo "Check JDK install @ $jdkDir"
-  fi
-}
-
 java_config() {
   if [[ $isMacos ]]; then
-    javahome8() {
+    javahome() {
       if [[ -f /usr/libexec/java_home ]]; then
         local jh=$(/usr/libexec/java_home -v 1.8)
         echo "Setting JAVA_HOME to $jh"
