@@ -222,11 +222,12 @@ defenv_neosdk() {
 }
 
 defenv_java() {
-  if [[ $isMacos && -f /usr/libexec/java_home ]]; then
+  if [[ $isMacos ]]; then
+    hasJava=$(/usr/libexec/java_home)
+    [[ hasJava ]] || ln -s /opt/homebrew/Cellar/openjdk/22.0.1/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-22.jdk
     local jh=$(/usr/libexec/java_home)
     export JAVA_HOME=$jh
   fi
-
 }
 
 defenv_r() {

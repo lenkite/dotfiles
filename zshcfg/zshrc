@@ -196,7 +196,6 @@ neovim_config() {
 }
 
 
-
 exec_autoruns() {
   if [[ -d $dotfiles ]] ; then
     for file in $dotfiles/zshcfg/autorun/*.{sh,zsh}; do
