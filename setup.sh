@@ -268,7 +268,7 @@ install_pkgs() {
 			sudo apt-get install -y nodejs
 			# END : Nodejs install
 			sudo -E apt-get --yes install git curl zsh silversearcher-ag netcat-openbsd dh-autoreconf \
-				autoconf pkg-config tmux fortune-mod cowsay zip unzip python3 python3-pip ruby \
+				autoconf pkg-config tmux fortune-mod cowsay zip unzip python3 pipx ruby \
 				vim neovim nodejs rar unrar oracle-java8-installer rlwrap yarn
 			sudo apt-get -y autoremove
 		fi
@@ -336,19 +336,6 @@ setup_go_linux() {
 
 }
 
-setup_go() {
-	echo "-- setup_go"
-	[[ $isLinux ]] && setup_go_linux
-}
-
-setup_python() {
-	echo "-- setup_python"
-	if [[ $isMacos ]]; then
-		echo " Installing pipenv..."
-		pip3 install pipenv
-		pip3 install --upgrade jedi
-	fi
-}
 
 setup_fzf() {
 	echo "-- setup_fzf"

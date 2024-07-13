@@ -21,13 +21,11 @@ main() {
   defenv_git
   defenv_kotlin
   defenv_neosdk
-  defenv_python
   defenv_r
   defenv_java
   defenv_maven
   defenv_zeal
   defenv_nvr
-
   load_dotenv
   #defenv_ctags
   manpath=( $dotfiles/man /usr/local/share/man /usr/share/man )
@@ -144,7 +142,6 @@ defenv_gcc_clang() {
   fi
 }
 
-
 defenv_golang() {
   if [[ $GOROOT ]]; then
     [[ $isCygwin ]] && { export GOROOT=`cygpath -am $GOROOT` }
@@ -230,16 +227,6 @@ defenv_java() {
     export JAVA_HOME=$jh
   fi
 
-}
-
-defenv_python() {
-  typeset -gxU path PATH
-  # http://virtualenvwrapper.readthedocs.io/en/latest/_sources/install.txt
-  if [[ -f /usr/bin/python3 ]]; then
-    export WORKON_HOME=$HOME/.virtualenvs
-    export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
-  fi
-  #TODO: configure python environment for linux/wsl too!
 }
 
 defenv_r() {
