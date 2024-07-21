@@ -5,9 +5,6 @@
 # Update to the latest version of homebrew
 # -----------------------------------------
 brew update
-# Upgrade already installed formulae.
-# -----------------------------------------
-brew upgrade
 
 # GNU command line utilities
 # -----------------------------------------
@@ -26,7 +23,9 @@ jq \
 yq \
 ctags \
 the_silver_searcher \
-ripgrep
+ripgrep \
+rga \
+poppler
 
 # fortune-cookie-generator for some fun
 # -----------------------------------------
