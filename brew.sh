@@ -72,7 +72,9 @@ rectangle \
 watch \
 cmake \
 trash \
-htop
+htop \
+bat \
+tmux
 
 # editors
 # -----------------------------------------
