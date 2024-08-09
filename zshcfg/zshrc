@@ -25,7 +25,7 @@ main() {
   cloud_sdk
   prompt_setup
   source_my_zshrc
-#  defenv_python
+  defenv_python
   post_hacks
   cd ~
 }
@@ -33,13 +33,11 @@ main() {
 defenv_python() {
   if [[ -f "/opt/homebrew/bin/python3" ]]; then
     export PATH="/opt/homebrew/bin:$PATH"
-    if [[ ! -d ~/.venv ]]; then
-      /opt/homebrew/bin/python3 -m venv ~/.venv
-    fi
-    if [[ -d ~/.venv/bin ]]; then
-#      export VIRTUAL_ENV_DISABLE_PROMPT=1
-      source ~/.venv/bin/activate 
-    fi
+#     if [[ ! -d ~/.venv ]]; then
+#       /opt/homebrew/bin/python3 -m venv ~/.venv
+#     fi
+#     if [[ -d ~/.venv/bin ]]; then
+# #      export VIRTUAL_ENV_DISABLE_PROMPT=1
   fi
 }
 
