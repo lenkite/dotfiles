@@ -74,7 +74,8 @@ cmake \
 trash \
 htop \
 bat \
-tmux
+tmux \
+derlin/bitdowntoc/bitdowntoc
 
 # editors
 # -----------------------------------------
