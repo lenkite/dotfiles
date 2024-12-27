@@ -9,7 +9,6 @@
 
 
 main() {
-  hacks
   zsh_opts_vars
   zsh_plugins
   onthefly_setup #Keep this lightweight and move to setup.sh when big
@@ -25,7 +24,7 @@ main() {
   cloud_sdk
   prompt_setup
   source_my_zshrc
-  defenv_python
+#  defenv_python
   post_hacks
   cd ~
 }
@@ -41,12 +40,6 @@ defenv_python() {
   fi
 }
 
-hacks() {
-  # See https://github.com/rupa/z/pull/200
-  [[ $isWsl ]] && { echo "Running in WSL. unset BG_NICE"; unsetopt BG_NICE }
-
-  # Fix https://github.com/ohmyzsh/ohmyzsh/issues/11416
-}
 
 zsh_opts_vars() {
   #  Increase history size
@@ -203,11 +196,11 @@ neovim_config() {
 
 exec_autoruns() {
   if [[ -d $dotfiles ]] ; then
-    for file in $dotfiles/zshcfg/autorun/*.{sh,zsh}; do
-      if [[ -f $file ]] ; then
+    if ls $dotfiles/zshcfg/autorun/*.(sh|zsh) &>/dev/null; then
+      for file in $dotfiles/zshcfg/autorun/*.(sh|zsh); do
         source "$file"
-      fi
-    done
+      done
+    fi
   fi
 }
 

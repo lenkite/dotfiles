@@ -150,7 +150,8 @@ defenv_golang() {
     export GOPATH=`cygpath -am ~`
   else
     export GOPATH="$HOME/go"
-    export GOBIN="$GOPATH/bin"
+    #export GOBIN="$GOPATH/bin"
+    export GOBIN="$HOME/bin"
   fi
   if [[ -d /usr/local/go/ ]]; then
     typeset -gxU path PATH
@@ -283,9 +284,6 @@ defenv_zeal() {
 export PATH
 main
 
-# See https://github.com/rupa/z/pull/200
-[[ $isWsl ]] && { unsetopt BG_NICE }
-
 if [[ -f "$HOME/.cargo/env" ]]; then
-  . "$HOME/.cargo/env"
-fi
+  fi
+. "$HOME/.cargo/env"

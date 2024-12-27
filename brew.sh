@@ -14,7 +14,8 @@ iproute2mac \
 gnu-sed \
 gnu-tar \
 grep \
-gzip
+gzip \
+zoxide
 
 # search and parsing utilities
 # -----------------------------------------
