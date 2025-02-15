@@ -1,12 +1,11 @@
 #!/bin/bash
 # Setups up dotfiles for use on various OS'es.
-# Supported OS'es are Windows/Cygwin, Windows/WSL, MacOS and Linux
-# Dev Note: Some funcs here are duplicated in zshcfg/0.zsh. This is by design
+# Supported OS'es are Windows/WSL, MacOS and Linux
 
-set -euo pipefail # See https://bertvv.github.io/cheat-sheets/Bash.html
+set -eo pipefail # See https://bertvv.github.io/cheat-sheets/Bash.html
 declare codeSetup golibsSetup pkgSetup miscSetup sdkSetup viSetup zshSetup settingsSetup utilSetup allSetup
 declare done_detect_os done_set_uservars done_set_homevars
-declare isCygwin isWsl isLinux
+declare isWsl isLinux
 declare trueHome dotfilesDir
 
 usage() {
@@ -122,7 +121,7 @@ detect_os() {
 	if [[ -f $osreleaseFile ]]; then
 		osrelease=$(cat $osreleaseFile)
 		echo "Linux OS release is $osrelease"
-		if [[ $osrelease == *Microsoft* ]]; then
+		if [[ $osrelease == *microsoft* ]]; then
 			echo "Running in WSL: Windows Subystem for Linux"
 			export isWsl=true
 		fi
@@ -135,6 +134,7 @@ detect_dotfilesdir() {
 }
 
 detect_util() {
+	set +e
 	local hasCurl hasZip hasUnzip hasGit hasGo
 
 	hasCurl=$(command -v curl)
@@ -148,6 +148,7 @@ detect_util() {
 	[[ hasZip ]] || echo "WARN: 'zip' not found. Setup may be incomplete"
 	[[ hasUnzip ]] || echo "WARN: 'unzip' not found. Setup may be incomplete"
 	[[ hasGit ]] || echo "WARN: 'git' not found. Setup may be incomplete and need to be rerun"
+	echo "--detect util end"
 
 }
 
@@ -210,7 +211,7 @@ replace_linux_home_shell() {
 		echo "Linux user is $linUser. Windows User is $winUser"
 		echo "Replacing linux home directory: '$linHome' with windows home dir: '$winHome'"
 		echo "Need priv to execute: sed -i.bak -e s_${linHome}_${winHome}_ -e s_/bin/bash_/bin/zsh_ /etc/passwd"
-		sudo sed -i.bak -e "s_${linHome}_${winHome}_" -e s_/bin/bash_/bin/zsh_ /etc/passwd
+		sudo sed -i.bak -e "s_${linHome}_${winHome}_" -e s_/bin/bash_/usr/bin/zsh_ /etc/passwd
 		echo "Kindly check /etc/passwd to see if its ok"
 	fi
 }
@@ -259,42 +260,25 @@ install_pkgs() {
 			install_pkgs_redhat
 		else
 			echo "** NOTE: If RUNNING BEHIND PROXY, export http_proxy/https_proxy"
+			set +e
 			sudo -E add-apt-repository -y ppa:neovim-ppa/unstable
-			sudo -E add-apt-repository ppa:webupd8team/java
-			# BEGIN: Nodejs install. Taken from https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions
-			curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-			sudo apt-get install -y nodejs
-			# END : Nodejs install
-			sudo -E apt-get --yes install git curl zsh silversearcher-ag netcat-openbsd dh-autoreconf \
-				autoconf pkg-config tmux fortune-mod cowsay zip unzip python3 pipx ruby \
-				vim neovim nodejs rar unrar oracle-java8-installer rlwrap yarn
+			# install kubectl see: https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#install-using-native-package-management
+			curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.32/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+sudo chmod 644 /etc/apt/keyrings/kubernetes-apt-keyring.gpg # allow unprivileged APT programs to read this keyring
 			sudo apt-get -y autoremove
-		fi
-	elif [[ $isCygwin == true ]]; then
-		if [[ -f /tmp/apt-cyg ]]; then
-			rm /tmp/apt-cyg
-		fi
-		echo "Attempting download of apt-cyg via wget.."
-		$(cd /tmp && curl -L https://rawgit.com/transcode-open/apt-cyg/master/apt-cyg -O)
-		if [[ -f /tmp/apt-cyg ]]; then
-			install /tmp/apt-cyg /bin
-			echo "installed apt-cyg"
-			apt-cyg install zsh
-			apt-cyg install tmux
-			apt-cyg install fortune
-			apt-cyg install cowsay
-			apt-cyg install the_silver_searcher
-		else
-			echo "Could not download apt-cyg. Please download and install manually"
+			echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.32/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+			# This overwrites any existing configuration in /etc/apt/sources.list.d/kubernetes.list
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.32/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+sudo chmod 644 /etc/apt/sources.list.d/kubernetes.list   # helps tools such as command-not-found to work correctly
+			sudo apt-get update
+			sudo -E apt-get --yes install git curl zsh silversearcher-ag netcat-openbsd dh-autoreconf \
+				autoconf tmux fortune-mod cowsay zip unzip python3 pipx jq yq exuberant-ctags \
+				vim neovim nodejs rar unrar default-jdk rlwrap yarn zoxide ripgrep kubectl kubetail \
+				btop bat gcc g++
+			curl -fsSL https://deno.land/install.sh | sh
 		fi
 	fi
 
-#	if command -v pip3 >/dev/null 2>&1; then
-#		echo "INSTALL python neovim modules using pip3..."
-#		pip3 install --user --upgrade pynvim
-#	else
-#		echo "WARN: can't find pip3!"
-#	fi
 
 }
 

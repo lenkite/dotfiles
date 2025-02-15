@@ -132,8 +132,10 @@ load_dotpaths() {
 }
 
 defenv_brew() {
- eval "$(/opt/homebrew/bin/brew shellenv)"
- export PATH="$HOME/bin:${KREW_ROOT:-$HOME/.krew}/bin:$(brew --prefix openvpn)/sbin:$PATH"
+	if [[ -d "/opt/homebrew" ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+    export PATH="$HOME/bin:${KREW_ROOT:-$HOME/.krew}/bin:$(brew --prefix openvpn)/sbin:$PATH"
+	fi
 }
 
 defenv_gcc_clang() {
