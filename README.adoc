@@ -9,19 +9,27 @@ My cross-platform dotfiles (works on MacOS/Windows) that configures ZSH and neov
 
 == Pre-Requisites: Needs Manual Setup 
 
+
 === MacOS 
 - Install link:Homebrew[https://brew.sh/]
-- Install ZSH `brew install zsh zsh-completions`
 
-=== Windows
+
+
+=== Windows - WSL
 - Install link:https://chocolatey.org/[Chocolatey], the fantastic windows package manager for software.
-- If you are on Windows 10 with at-least the Creators Update please install the https://msdn.microsoft.com/commandline/wsl["Windows Subsystem for Linux"] which is also called by the terrible name of "Bash on Ubuntu on Windows". Refer to the https://msdn.microsoft.com/en-us/commandline/wsl/install_guide[Installation Guide]. 
-- After installing WSL, install wsltty for a better console: https://github.com/mintty/wsltty
+- link:https://learn.microsoft.com/en-us/windows/wsl/install[Install WSL - Windows Subsystem for Linux]
+- Download  link:https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip[Jetbrains Mono Nerdfonts]
+- Extract the downloaded zip into a folder, open the folde in Windows Explorer, select all fonts in the folder, right-click and click `Install`
+- To use the JetbrainsMono Nerd Font in our Windows Terminal:
+    ** Open up Settings ctrl ,
+    ** Open the tray by clicking the three-lines icon on the top left
+    ** Click Ubuntu under Profiles to open its profile settings
+    ** Scroll down to Additional Settings and click Appearance
+    ** Change Font face to JetBrainsMono Nerd Font
 
 
-== Run Setup Script
-Open a shell and execute the following commands:
-.Execute this
+== Checkout project and Run Setup Script
+Open a bash shell and execute the following commands:
 [source,shell]
 ----
 curl -sfL https://raw.github.com/lenkite/dotfiles/master/setup.sh | bash
