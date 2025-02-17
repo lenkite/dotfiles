@@ -1,3 +1,5 @@
+# Add deno completions to search path
+if [[ ":$FPATH:" != *":/mnt/c/Users/I034796/.zsh/completions:"* ]]; then export FPATH="/mnt/c/Users/I034796/.zsh/completions:$FPATH"; fi
 #supercrabtree vim: set sw=2 ts=2 sts=2 et tw=80 foldlevel=0 foldmethod=marker spell:
 # See ZSH startup files at http://zsh.sourceforge.net/Intro/intro_3.html
 # zshrc is sourced in interactive shells
@@ -93,6 +95,8 @@ zsh_plugins() {
     zgen oh-my-zsh plugins/vi-mode
     zgen oh-my-zsh themes/arrow
     zgen oh-my-zsh plugins/kubectl
+    zgen load jeffreytse/zsh-vi-mode
+    zgen load jonmosco/kube-ps1
     ZSH_HIGHLIGHT_STYLES[comment]='none' #https://github.com/zsh-users/zsh-syntax-highlighting/issues/510
   fi
 }
@@ -132,7 +136,7 @@ def_autoloads() {
 
   # Autoloads 
   # See https://unix.stackexchange.com/questions/33255/how-to-define-and-load-your-own-shell-function-in-zsh
-  autoload -Uz compinit && compinit #Used for compdef function. 
+  autoload -Uz compinit && compinit -u #Used for compdef function. 
   autoload -U promptinit && promptinit
   autoload -U colors && colors
   # See http://www.refining-linux.org/archives/36/ZSH-Gem-1-Programmable-file-renaming/
@@ -262,12 +266,17 @@ cloud_sdk() {
   if [[ -e "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc" ]]; then
     source "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
   fi
+  if [[ -z "$TERMINAL" || -z "$GCTL_SESSION_ID" ]]; then
+    export GCTL_SESSION_ID="my-dev"
+  fi
   eval $(gardenctl kubectl-env zsh)
 }
 
 prompt_setup() {
+	if [[ -d "/opt/homebrew" ]]; then
   kube_ps1_dir=$(/opt/homebrew/bin/brew --prefix kube-ps1)/share
   [[ -d $kube_ps1_dir ]] && [[ -f $kube_ps1_dir/kube-ps1.sh ]] && source $kube_ps1_dir/kube-ps1.sh && PROMPT='$(kube_ps1)'$PROMPT
+	fi
 }
 
 source_my_zshrc() {
@@ -294,3 +303,4 @@ misc_alias() {
 main
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+. "/mnt/c/Users/I034796/.deno/env"

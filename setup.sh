@@ -263,7 +263,9 @@ install_pkgs() {
 			set +e
 			sudo -E add-apt-repository -y ppa:neovim-ppa/unstable
 			# install kubectl see: https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#install-using-native-package-management
-			curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.32/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+			if [[ ! -f "/etc/apt/keyrings/kubernetes-apt-keyring.gpg" ]]; then
+			  curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.32/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+			fi
 sudo chmod 644 /etc/apt/keyrings/kubernetes-apt-keyring.gpg # allow unprivileged APT programs to read this keyring
 			sudo apt-get -y autoremove
 			echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.32/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
@@ -274,8 +276,11 @@ sudo chmod 644 /etc/apt/sources.list.d/kubernetes.list   # helps tools such as c
 			sudo -E apt-get --yes install git curl zsh silversearcher-ag netcat-openbsd dh-autoreconf \
 				autoconf tmux fortune-mod cowsay zip unzip python3 pipx jq yq exuberant-ctags \
 				vim neovim nodejs rar unrar default-jdk rlwrap yarn zoxide ripgrep kubectl kubetail \
-				btop bat gcc g++
+				btop bat gcc g++ gh
+			echo "Installing Deno..."
 			curl -fsSL https://deno.land/install.sh | sh
+			echo "Installing Rust..."
+			curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 		fi
 	fi
 

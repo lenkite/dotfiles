@@ -287,5 +287,5 @@ export PATH
 main
 
 if [[ -f "$HOME/.cargo/env" ]]; then
-  fi
-. "$HOME/.cargo/env"
+  . "$HOME/.cargo/env"
+fi
