@@ -261,7 +261,7 @@ install_pkgs() {
 		else
 			echo "** NOTE: If RUNNING BEHIND PROXY, export http_proxy/https_proxy"
 			set +e
-			sudo -E add-apt-repository -y ppa:neovim-ppa/unstable
+			sudo -E add-apt-repository -y ppa:neovim-ppa/stable
 			# install kubectl see: https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#install-using-native-package-management
 			if [[ ! -f "/etc/apt/keyrings/kubernetes-apt-keyring.gpg" ]]; then
 			  curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.32/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg

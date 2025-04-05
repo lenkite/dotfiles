@@ -39,7 +39,7 @@ curl -sfL https://raw.github.com/lenkite/dotfiles/master/setup.sh | bash
 == Customize Path and Environment Variables
 
 === Personal environment variables
-Create optional file `~.env`. This is sourced by `~/.zshenv` . You should
+Create optional file `~.env`. This is sourced by `~/.zprofile` . You should
 put environment variable definitions here apart from those affecting the `PATH`
 
 === Personal additions to PATH 

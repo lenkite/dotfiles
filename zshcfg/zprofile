@@ -1,9 +1,10 @@
 # vim: set sw=2 ts=2 sts=2 et tw=80 foldmarker={,} foldlevel=0 foldmethod=marker spell:
 # See ZSH startup files: http://zsh.sourceforge.net/Intro/intro_3.html
-# Link this to ~/.zshenv
-# .zshenv is sourced on all invocations.
+# Link this to ~/.zprofile
+# .zprofile is sourced on all login shells
 # All env variables including path should be set here.
-# Should not produce output or aassume that shell is attached to tty.
+
+# Earlier this file was zshenv but caused issues on newer macOS due to macOS stupid path_helper util which overrides paths. See https://gist.github.com/Linerre/f11ad4a6a934dcf01ee8415c9457e7b2
 
 [ -d ~/dotfiles ] && export dotfiles=~/dotfiles || echo "Could not locate dotfiles at ~/dotfiles"
 
@@ -19,13 +20,9 @@ main() {
   defenv_android
   defenv_flutter
   defenv_git
-  defenv_kotlin
-  defenv_neosdk
   defenv_r
   defenv_java
-  defenv_maven
-  defenv_zeal
-  defenv_nvr
+  defenv_utils
   load_dotenv
   #defenv_ctags
   manpath=( $dotfiles/man /usr/local/share/man /usr/share/man )
@@ -205,31 +202,14 @@ defenv_git() {
   export GIT_EDITOR=$VISUAL
 }
 
-defenv_kotlin() {
-  local konanbin=$HOME/src/kotlin-native/dist/bin
-  if [[ -d $konanbin ]]; then
-    export PATH=$PATH:$konanbin
-  fi
-}
-
-defenv_neosdk() {
-  typeset -gxU path PATH
-  local neoweb=$HOME/sdk/neoweb
-  local neoee=$HOME/sdk/neoee
-  if [[ -d $neoweb ]]; then
-    path+=$neoweb/tools
-  fi
-  if [[ -d $neoee ]]; then
-    path+=$neoee/tools
-  fi
-}
 
 defenv_java() {
   if [[ $isMacos ]]; then
-    hasJava=$(/usr/libexec/java_home)
-    [[ hasJava ]] || ln -s /opt/homebrew/Cellar/openjdk/22.0.1/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-22.jdk
-    local jh=$(/usr/libexec/java_home)
-    export JAVA_HOME=$jh
+    if [[ -d /opt/homebrew/Cellar/openjdk ]]; then
+      jh=$(ls -td  /opt/homebrew/Cellar/openjdk/*/ | head -n 1)
+      export JAVA_HOME=$jh
+      export PATH=$PATH:$JAVA_HOME/bin
+    fi
   fi
 }
 
@@ -248,12 +228,6 @@ defenv_r() {
   fi
 }
 
-defenv_nvr() {
-  export NVIM_LISTEN_ADDRESS=/tmp/nvimsocket
-  if [[ $isMacos ]]; then
-  fi
-}
-
 defenv_utils() {
   typeset -gxU path PATH
   local brewDir=$(brew --prefix)
@@ -262,25 +236,7 @@ defenv_utils() {
     $brewDir/opt/gnu-tar/libexec/gnubin  $brewDir/opt/grep/libexec/gnubin \
     $brewDir/opt/gzip/bin/ \
     $path)
-}
-
-defenv_maven() {
-  typeset -a mvnHomes
-  local mvnHomes=(/opt/maven /usr/local/opt/maven@3.5/)
-  for mvnHome ("$mvnHomes[@]"); do 
-    if [[ -d $mvnHome ]]; then
-      typeset -gxU path PATH
-      path+=$mvnHome/bin
-      export M2_HOME=$mvnHome
-    fi
-  done
-}
-
-defenv_zeal() {
-  if [[ -d "/mnt/c/Program Files/Zeal" ]]; then
-    typeset -gxU path PATH
-    path+=/mnt/c/Program\ Files/Zeal
-  fi
+  export PATH
 }
 
 export PATH

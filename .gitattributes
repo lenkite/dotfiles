@@ -5,7 +5,7 @@
 *.spl binary
 zshrc text eol=lf
 zshenv text eol=lf
-
+zshprofile text eol=lf
 # Declare binary files
 *.jar	binary
 *.class binary

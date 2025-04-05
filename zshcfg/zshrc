@@ -7,7 +7,7 @@ if [[ ":$FPATH:" != *":/mnt/c/Users/I034796/.zsh/completions:"* ]]; then export 
 # key-bindings, etc
 #
 
-[[ -z $dotfiles ]] && echo "ERROR: dotfiles variable not set! Check zshenv"
+[[ -z $dotfiles ]] && echo "ERROR: dotfiles variable not set! Check ~/.zprofile"
 
 
 main() {
@@ -26,20 +26,8 @@ main() {
   cloud_sdk
   prompt_setup
   source_my_zshrc
-#  defenv_python
   post_hacks
   cd ~
-}
-
-defenv_python() {
-  if [[ -f "/opt/homebrew/bin/python3" ]]; then
-    export PATH="/opt/homebrew/bin:$PATH"
-#     if [[ ! -d ~/.venv ]]; then
-#       /opt/homebrew/bin/python3 -m venv ~/.venv
-#     fi
-#     if [[ -d ~/.venv/bin ]]; then
-# #      export VIRTUAL_ENV_DISABLE_PROMPT=1
-  fi
 }
 
 
@@ -303,4 +291,3 @@ misc_alias() {
 main
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-. "/mnt/c/Users/I034796/.deno/env"
