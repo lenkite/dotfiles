@@ -254,9 +254,9 @@ cloud_sdk() {
   if [[ -e "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc" ]]; then
     source "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
   fi
-  if [[ -z "$TERMINAL" || -z "$GCTL_SESSION_ID" ]]; then
-    export GCTL_SESSION_ID="my-dev"
-  fi
+  # if [[ -z "$TERMINAL" || -z "$GCTL_SESSION_ID" ]]; then
+  #   export GCTL_SESSION_ID="my-dev"
+  # fi
   eval $(gardenctl kubectl-env zsh)
 }
 
