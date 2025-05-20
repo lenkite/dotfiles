@@ -71,7 +71,7 @@ tree-sitter \ # parser generator tool
 bottom \ # https://github.com/ClementTsang/bottom
 rectangle \
 watch \
-cmake \
+make \
 trash \
 htop \
 bat \
