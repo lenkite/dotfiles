@@ -76,6 +76,7 @@ trash \
 htop \
 bat \
 tmux \
+fzf \
 derlin/bitdowntoc/bitdowntoc
 
 # editors

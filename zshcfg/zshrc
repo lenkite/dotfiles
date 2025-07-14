@@ -257,6 +257,7 @@ cloud_sdk() {
   # if [[ -z "$TERMINAL" || -z "$GCTL_SESSION_ID" ]]; then
   #   export GCTL_SESSION_ID="my-dev"
   # fi
+  [ -n "$GCTL_SESSION_ID" ] || [ -n "$TERM_SESSION_ID" ] || export GCTL_SESSION_ID=$(uuidgen)
   eval $(gardenctl kubectl-env zsh)
 }
 
